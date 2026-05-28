@@ -66,7 +66,7 @@ input,textarea{font-family:inherit;}
 .cat-blue{color:var(--blue);}
 .cat-gray{color:var(--text-s);}
 .task-name{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.task-right{display:flex;align-items:center;gap:2px;flex-shrink:0;}
+.task-right{display:flex;align-items:center;gap:10px;flex-shrink:0;}
 .dl-badge{font-size:9px;padding:1px 5px;border-radius:6px;white-space:nowrap;}
 .dl-normal{background:var(--blue-l);color:var(--blue);}
 .dl-near{background:#FFF7ED;color:#C2410C;}
@@ -197,7 +197,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
 .cat-btn.sel-r{background:var(--red-l);border-color:#FCA5A5;color:var(--red);}
 .subtask-list{display:flex;flex-direction:column;gap:5px;margin-bottom:8px;}
 .subtask-row{display:flex;gap:6px;}
-.subtask-row input{flex:1;}
+.subtask-row input{flex:1;padding:12px 11px;font-size:14px;}
 .subtask-del{background:none;border:none;color:var(--text-s);font-size:18px;line-height:1;padding:0 2px;}
 .add-sub-btn{display:flex;align-items:center;gap:5px;background:none;border:1px dashed var(--border);border-radius:var(--radius-s);padding:6px 10px;color:var(--text-s);font-size:13px;width:100%;margin-bottom:4px;}
 .section-title{font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;margin-top:12px;}
@@ -379,7 +379,6 @@ textarea{resize:none;height:56px;line-height:1.5;}
   </div>
   <!-- まとめ -->
   <div class="subtab-content" id="sc-matome">
-    <button class="excel-btn" onclick="exportExcel()"><i class="ti ti-file-spreadsheet"></i>Excelに出力（.csv）</button>
     <!-- 時間外勤務グラフ -->
     <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:8px;">📊 時間外勤務の推移（過去5ヶ月）</div>
     <div class="card" style="padding:14px;">
@@ -396,6 +395,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
     </div>
     <div class="cal-outer" id="cal-outer"></div>
     <hr class="reset-divider">
+    <button class="excel-btn" onclick="exportExcel()"><i class="ti ti-file-download" style="font-size:16px;"></i>データを出力（CSV）</button>
     <button class="import-btn" onclick="document.getElementById('import-file').click()">
       <i class="ti ti-upload" style="font-size:16px;"></i>
       データをインポート（CSV）
