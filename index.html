@@ -242,9 +242,18 @@ textarea{resize:none;height:56px;line-height:1.5;}
 .lunch-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
 .lunch-s-label{font-size:13px;color:var(--text-s);flex:1;}
 .lunch-s-val{font-size:13px;font-weight:600;}
-/* リセット */
+/* リセット・インポート */
 .reset-divider{border:none;border-top:1px solid var(--border);margin:20px 0 16px;}
 .reset-btn{display:flex;align-items:center;justify-content:center;gap:6px;background:transparent;border:1.5px solid #FCA5A5;border-radius:var(--radius-s);padding:10px 14px;width:100%;font-size:13px;color:var(--red);}
+.import-btn{display:flex;align-items:center;justify-content:center;gap:6px;background:transparent;border:1.5px solid var(--green-b);border-radius:var(--radius-s);padding:10px 14px;width:100%;font-size:13px;color:var(--green);margin-bottom:8px;}
+/* インポートモーダル */
+.preview-table{width:100%;border-collapse:collapse;font-size:11px;margin-bottom:12px;}
+.preview-table th{background:var(--green-l);color:var(--green-d);padding:5px 6px;text-align:left;border-bottom:1.5px solid var(--green-b);font-weight:600;}
+.preview-table td{padding:5px 6px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top;}
+.preview-table tr:last-child td{border-bottom:none;}
+.preview-wrap{max-height:240px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--radius-s);margin-bottom:12px;}
+.import-summary{background:var(--green-l);border:1.5px solid var(--green-b);border-radius:var(--radius-s);padding:10px 14px;margin-bottom:12px;font-size:13px;color:var(--green-d);}
+.import-warning{background:var(--amber-l);border:1.5px solid var(--amber-b);border-radius:var(--radius-s);padding:10px 14px;margin-bottom:12px;font-size:12px;color:#7A4B08;}
 /* リセットモーダル */
 .modal-icon{font-size:40px;text-align:center;margin-bottom:12px;}
 .modal-center-title{font-size:17px;font-weight:700;text-align:center;margin-bottom:8px;}
@@ -387,6 +396,11 @@ textarea{resize:none;height:56px;line-height:1.5;}
     </div>
     <div class="cal-outer" id="cal-outer"></div>
     <hr class="reset-divider">
+    <button class="import-btn" onclick="document.getElementById('import-file').click()">
+      <i class="ti ti-upload" style="font-size:16px;"></i>
+      データをインポート（CSV）
+    </button>
+    <input type="file" id="import-file" accept=".csv" style="display:none;" onchange="handleImportFile(event)">
     <button class="reset-btn" onclick="openM('modal-reset1')">
       <i class="ti ti-trash" style="font-size:16px;"></i>
       全てのデータをリセット
@@ -603,6 +617,22 @@ textarea{resize:none;height:56px;line-height:1.5;}
     <div class="modal-center-title">リセット完了</div>
     <div class="modal-center-body">全てのデータを削除しました。</div>
     <button class="btn-gray" style="width:100%;" onclick="closeM('modal-reset-done');location.reload();">閉じる</button>
+  </div>
+</div>
+
+<!-- modal: インポートプレビュー -->
+<div class="modal-bg" id="modal-import" onclick="closeBg('modal-import',event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title">📥 データのインポート</div>
+    <div class="import-summary" id="import-summary"></div>
+    <div class="import-warning">⚠ 同じ日付の日次記録は上書きされます。同じIDのタスクは上書きされます。</div>
+    <div style="font-size:12px;font-weight:600;color:var(--text-s);margin-bottom:6px;">プレビュー（先頭10件）</div>
+    <div class="preview-wrap"><table class="preview-table" id="preview-table"></table></div>
+    <div class="btn-row">
+      <button class="btn-gray" onclick="closeM('modal-import')">キャンセル</button>
+      <button class="btn-primary" style="flex:1;margin-top:0;" id="btn-import-exec" onclick="execImport()">インポート実行</button>
+    </div>
   </div>
 </div>
 
@@ -1435,6 +1465,161 @@ async function saveDaily() {
     await apiPost({ action:'saveDaily', data: record });
     showSync('✅ 今日の記録を保存しました');
   } catch(e) { showSync('✅ ローカルに保存しました'); }
+}
+
+// =============================================
+// CSVインポート
+// =============================================
+let importData = { tasks: [], daily: [] };
+
+function handleImportFile(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      parseImportCSV(e.target.result);
+    } catch(err) {
+      alert('CSVの読み込みに失敗しました。形式を確認してください。\n' + err.message);
+    }
+    // ファイル選択をリセット（同じファイルを再度選べるように）
+    event.target.value = '';
+  };
+  reader.readAsText(file, 'UTF-8');
+}
+
+function parseImportCSV(text) {
+  // BOM除去
+  if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
+  const lines = text.split(/\r?\n/).filter(l => l.trim());
+  if (lines.length < 2) { alert('データが見つかりません'); return; }
+
+  // ヘッダー解析
+  const headers = parseCSVLine(lines[0]);
+
+  importData = { tasks: [], daily: [] };
+  const previewRows = [];
+
+  for (let i = 1; i < lines.length; i++) {
+    const row = parseCSVLine(lines[i]);
+    if (!row.length) continue;
+    const obj = {};
+    headers.forEach((h, idx) => { obj[h] = row[idx] || ''; });
+
+    // 種類で振り分け
+    const type = obj['種類'] || '';
+    if (type === 'タスク完了' || obj['名前'] || obj['タスク名']) {
+      // タスクデータ
+      const task = {
+        id:       obj['id'] || obj['タスクID'] || 'imp_' + Date.now() + '_' + i,
+        name:     obj['名前'] || obj['タスク名'] || obj['カテゴリ'] || '',
+        color:    obj['カテゴリ色'] || obj['color'] || 'gray',
+        subs:     (obj['詳細'] || obj['やること'] || '').split('\n').filter(Boolean),
+        deadline: obj['締切'] || obj['締切日'] || '',
+        pinned:   false,
+        done:     obj['完了'] === 'TRUE' || type === 'タスク完了',
+        doneDate: obj['完了日'] || obj['日付'] || '',
+        time:     obj['かかった時間'] || '',
+        when:     obj['いつ行ったか'] || '',
+      };
+      if (task.name) importData.tasks.push(task);
+    } else if (type === '日次記録' || obj['しんどさ'] || obj['昼休み']) {
+      // 日次記録データ
+      const daily = {
+        date:  obj['日付'] || obj['date'] || '',
+        mood:  obj['しんどさ'] || obj['mood'] || '',
+        lunch: obj['昼休み'] || obj['lunch'] || '',
+        ot:    Number(obj['勤務時間外（分）'] || obj['ot'] || 0),
+        memo:  obj['メモ'] || '',
+      };
+      if (daily.date) importData.daily.push(daily);
+    }
+
+    if (previewRows.length < 10) previewRows.push(row);
+  }
+
+  // サマリー
+  const summary = document.getElementById('import-summary');
+  summary.innerHTML = `
+    📋 タスクデータ：<strong>${importData.tasks.length}件</strong>　
+    📅 日次記録：<strong>${importData.daily.length}件</strong>`;
+
+  // プレビューテーブル
+  const table = document.getElementById('preview-table');
+  const maxCols = Math.min(headers.length, 6);
+  table.innerHTML = `
+    <thead><tr>${headers.slice(0,maxCols).map(h=>`<th>${h}</th>`).join('')}</tr></thead>
+    <tbody>${previewRows.map(r=>`<tr>${r.slice(0,maxCols).map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody>`;
+
+  // ボタン制御
+  const execBtn = document.getElementById('btn-import-exec');
+  const total = importData.tasks.length + importData.daily.length;
+  execBtn.disabled = total === 0;
+  execBtn.textContent = total > 0 ? `インポート実行（${total}件）` : 'データなし';
+
+  openM('modal-import');
+}
+
+function parseCSVLine(line) {
+  const result = [];
+  let current = '';
+  let inQuotes = false;
+  for (let i = 0; i < line.length; i++) {
+    const ch = line[i];
+    if (ch === '"') {
+      if (inQuotes && line[i+1] === '"') { current += '"'; i++; }
+      else inQuotes = !inQuotes;
+    } else if (ch === ',' && !inQuotes) {
+      result.push(current.trim()); current = '';
+    } else {
+      current += ch;
+    }
+  }
+  result.push(current.trim());
+  return result;
+}
+
+async function execImport() {
+  closeM('modal-import');
+  showSync('インポート中...');
+
+  // タスクをマージ（既存IDは上書き、新規は追加）
+  importData.tasks.forEach(imp => {
+    const idx = tasks.findIndex(t => String(t.id) === String(imp.id));
+    if (idx >= 0) tasks[idx] = imp;
+    else tasks.push(imp);
+  });
+
+  // 日次記録をマージ
+  const daily = JSON.parse(localStorage.getItem('mamoru_daily') || '[]');
+  importData.daily.forEach(imp => {
+    const idx = daily.findIndex(d => d.date === imp.date);
+    if (idx >= 0) daily[idx] = imp;
+    else daily.push(imp);
+  });
+
+  saveLocalTasks();
+  localStorage.setItem('mamoru_daily', JSON.stringify(daily));
+  renderTasks();
+
+  // スプレッドシートにも同期
+  let synced = 0;
+  for (const t of importData.tasks) {
+    try {
+      await apiPost({ action: 'saveTask', data: t });
+      synced++;
+    } catch(e) {}
+  }
+  for (const d of importData.daily) {
+    try {
+      await apiPost({ action: 'saveDaily', data: d });
+      synced++;
+    } catch(e) {}
+  }
+
+  const total = importData.tasks.length + importData.daily.length;
+  showSync(`✅ ${total}件インポート完了（スプレッドシート同期：${synced}件）`);
+  importData = { tasks: [], daily: [] };
 }
 
 // =============================================
