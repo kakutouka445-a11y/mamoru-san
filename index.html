@@ -215,7 +215,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
 .dl-name{font-size:14px;font-weight:600;}
 .dl-sub-text{font-size:11px;color:var(--text-s);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .no-data{text-align:center;padding:40px 14px;color:var(--text-s);}
-.excel-btn{display:flex;align-items:center;gap:8px;background:var(--coral);color:#fff;border:none;border-radius:var(--radius-s);padding:11px 14px;width:100%;font-size:14px;font-weight:600;margin-bottom:12px;}
+.excel-btn{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--coral);color:#fff;border:none;border-radius:var(--radius-s);padding:11px 14px;width:100%;font-size:14px;font-weight:600;margin-bottom:8px;}
 .cal-outer{overflow-x:auto;padding-bottom:4px;margin-bottom:12px;}
 .cal-months{display:flex;gap:12px;width:max-content;}
 .cal-month{background:var(--bg-card);border-radius:var(--radius);padding:10px;min-width:230px;}
@@ -395,7 +395,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
     </div>
     <div class="cal-outer" id="cal-outer"></div>
     <hr class="reset-divider">
-    <button class="excel-btn" onclick="exportExcel()"><i class="ti ti-file-download" style="font-size:16px;"></i>データを出力（CSV）</button>
+    <button class="excel-btn" onclick="exportExcel()"><i class="ti ti-file-spreadsheet" style="font-size:16px;"></i>Excelに出力（.xlsx）</button>
     <button class="import-btn" onclick="document.getElementById('import-file').click()">
       <i class="ti ti-upload" style="font-size:16px;"></i>
       データをインポート（CSV）
@@ -1391,22 +1391,123 @@ function renderOtChart() {
 // =============================================
 function exportExcel() {
   const daily = JSON.parse(localStorage.getItem('mamoru_daily') || '[]');
-  const doneTasks = tasks.filter(t => t.done);
-  const rows = [['種類','日付','内容','時間','しんどさ','昼休み','メモ']];
-  doneTasks.forEach(t => {
-    rows.push(['タスク完了', t.doneDate||'', t.name + (t.subs&&t.subs.length?' / '+t.subs.join('・'):''), t.time||'', '', '', '']);
+  const allTasks = tasks.filter(t => t.done);
+
+  if (allTasks.length === 0 && daily.length === 0) {
+    alert('出力するデータがありません');
+    return;
+  }
+
+  // SheetJSを動的に読み込んでからExcel生成
+  if (typeof XLSX === 'undefined') {
+    showSync('ライブラリを読み込み中...');
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
+    script.onload = () => { showSync(''); doExport(allTasks, daily); };
+    script.onerror = () => { showSync('⚠ 読み込み失敗。CSVで出力します', true); exportCSVFallback(allTasks, daily); };
+    document.head.appendChild(script);
+  } else {
+    doExport(allTasks, daily);
+  }
+}
+
+function doExport(allTasks, daily) {
+  const wb = XLSX.utils.book_new();
+  const today = todayStr();
+
+  // ── シート1：タスク記録 ──
+  const taskHeaders = ['タスク名','カテゴリ','完了日','かかった時間','いつ行ったか','締切日','やること（詳細）'];
+  const taskRows = allTasks
+    .sort((a,b) => (a.doneDate||'') > (b.doneDate||'') ? -1 : 1)
+    .map(t => [
+      t.name || '',
+      t.name || '',
+      t.doneDate || '',
+      t.time ? t.time.split(' · ')[0] : '',
+      t.time && t.time.includes(' · ') ? t.time.split(' · ').slice(1).join(' · ') : '',
+      t.deadline || '',
+      (t.subs || []).join('・'),
+    ]);
+  const taskSheet = XLSX.utils.aoa_to_sheet([taskHeaders, ...taskRows]);
+  // 列幅設定
+  taskSheet['!cols'] = [
+    {wch:20},{wch:14},{wch:12},{wch:16},{wch:22},{wch:12},{wch:30}
+  ];
+  XLSX.utils.book_append_sheet(wb, taskSheet, 'タスク記録');
+
+  // ── シート2：日次記録 ──
+  const dailyHeaders = ['日付','曜日','しんどさ','昼休み','勤務時間外（分）','メモ'];
+  const days = ['日','月','火','水','木','金','土'];
+  const dailyRows = daily
+    .filter(d => d.date)
+    .sort((a,b) => a.date > b.date ? -1 : 1)
+    .map(d => {
+      const dow = d.date ? days[new Date(d.date).getDay()] : '';
+      const moodLabel = {great:'😄 快調', ok:'🙂 まあまあ', hard:'😓 しんどい', limit:'🚨 限界'}[d.mood] || d.mood || '';
+      const lunchLabel = {ok:'🍱 取れた（20分以上）', half:'🥡 少し（10分程度）', ng:'😞 取れなかった'}[d.lunch] || d.lunch || '';
+      return [d.date, dow, moodLabel, lunchLabel, d.ot || 0, d.memo || ''];
+    });
+  const dailySheet = XLSX.utils.aoa_to_sheet([dailyHeaders, ...dailyRows]);
+  dailySheet['!cols'] = [
+    {wch:14},{wch:6},{wch:18},{wch:22},{wch:16},{wch:24}
+  ];
+  XLSX.utils.book_append_sheet(wb, dailySheet, '日次記録');
+
+  // ── シート3：月次まとめ ──
+  const monthMap = {};
+  daily.filter(d => d.date).forEach(d => {
+    const key = d.date.slice(0, 7); // YYYY-MM
+    if (!monthMap[key]) monthMap[key] = { great:0, ok:0, hard:0, limit:0, lok:0, lhalf:0, lng:0, otTotal:0, days:0 };
+    const m = monthMap[key];
+    m.days++;
+    m.otTotal += Number(d.ot) || 0;
+    if (d.mood === 'great') m.great++;
+    else if (d.mood === 'ok') m.ok++;
+    else if (d.mood === 'hard') m.hard++;
+    else if (d.mood === 'limit') m.limit++;
+    if (d.lunch === 'ok') m.lok++;
+    else if (d.lunch === 'half') m.lhalf++;
+    else if (d.lunch === 'ng') m.lng++;
   });
-  daily.forEach(d => {
-    rows.push(['日次記録', d.date||'', '', '', d.mood||'', d.lunch||'', d.memo||'']);
+  const monthHeaders = [
+    '年月','記録日数',
+    '時間外合計（時間）','1日平均（分）',
+    '😄快調','🙂まあまあ','😓しんどい','🚨限界',
+    '🍱昼休み取れた','🥡少し','😞取れなかった'
+  ];
+  const monthRows = Object.entries(monthMap)
+    .sort((a,b) => a[0] > b[0] ? -1 : 1)
+    .map(([key, m]) => {
+      const otH = Math.round(m.otTotal / 60 * 10) / 10;
+      const otAvg = m.days > 0 ? Math.round(m.otTotal / m.days) : 0;
+      const [yr, mo] = key.split('-');
+      return [`${yr}年${parseInt(mo)}月`, m.days, otH, otAvg, m.great, m.ok, m.hard, m.limit, m.lok, m.lhalf, m.lng];
+    });
+  const monthSheet = XLSX.utils.aoa_to_sheet([monthHeaders, ...monthRows]);
+  monthSheet['!cols'] = [
+    {wch:12},{wch:10},{wch:16},{wch:14},
+    {wch:8},{wch:10},{wch:10},{wch:8},
+    {wch:14},{wch:8},{wch:12}
+  ];
+  XLSX.utils.book_append_sheet(wb, monthSheet, '月次まとめ');
+
+  // ダウンロード
+  XLSX.writeFile(wb, `まもるさん_${today}.xlsx`);
+  showSync('✅ Excelファイルを出力しました');
+}
+
+// CSVフォールバック（SheetJS読み込み失敗時）
+function exportCSVFallback(allTasks, daily) {
+  const rows = [['タスク名','カテゴリ','完了日','かかった時間','いつ行ったか','締切日','やること']];
+  allTasks.forEach(t => {
+    rows.push([t.name||'', t.name||'', t.doneDate||'', t.time||'', '', t.deadline||'', (t.subs||[]).join('・')]);
   });
-  if (rows.length <= 1) { alert('出力するデータがありません'); return; }
   const bom = '\uFEFF';
   const csv = bom + rows.map(r => r.map(c => `"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
-  const blob = new Blob([csv], {type: 'text/csv;charset=utf-8;'});
-  const url = URL.createObjectURL(blob);
   const a = document.createElement('a');
-  a.href = url; a.download = `まもるさん_${todayStr()}.csv`; a.click();
-  URL.revokeObjectURL(url);
+  a.href = URL.createObjectURL(new Blob([csv], {type:'text/csv;charset=utf-8;'}));
+  a.download = `まもるさん_${todayStr()}.csv`;
+  a.click();
 }
 
 // =============================================
