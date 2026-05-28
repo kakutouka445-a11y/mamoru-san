@@ -329,12 +329,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
   <div class="header">
     <div class="header-row">
       <div class="header-title">🌙 <strong>ふりかえり</strong></div>
-      <div style="display:flex;align-items:center;gap:8px;">
-        <div class="date-badge" id="review-badge"></div>
-        <button class="settings-btn" onclick="openM('modal-settings')" title="設定">
-          <i class="ti ti-settings"></i>
-        </button>
-      </div>
+      <div class="date-badge" id="review-badge"></div>
     </div>
   </div>
   <div class="subtab-row">
@@ -444,6 +439,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
   <button class="tab active" id="tab-home" onclick="switchTab('home')"><i class="ti ti-home"></i><span>ホーム</span></button>
   <button class="tab" id="tab-deadline" onclick="switchTab('deadline')"><i class="ti ti-calendar-due"></i><span>締切</span></button>
   <button class="tab" id="tab-review" onclick="switchTab('review')"><i class="ti ti-moon"></i><span>ふりかえり</span></button>
+  <button class="tab" id="tab-settings" onclick="openM('modal-settings')"><i class="ti ti-settings"></i><span>設定</span></button>
   <button class="tab-add" onclick="openAddTask()"><i class="ti ti-plus"></i><span>タスクを追加</span></button>
 </div>
 
