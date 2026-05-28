@@ -699,11 +699,90 @@ textarea{resize:none;height:56px;line-height:1.5;}
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
     <div class="modal-title">📖 アプリの使い方</div>
-    <div class="howto-item"><div class="howto-icon">🏠</div><div><div class="howto-title">ホーム</div><div class="howto-desc">タスク一覧。タップで編集、▶で開始・完了記録。📌でピン固定。ドラッグで並べ替え。</div></div></div>
-    <div class="howto-item"><div class="howto-icon">📅</div><div><div class="howto-title">締切</div><div class="howto-desc">締切日のあるタスクを一覧表示。期限超過・3日以内は色で警告。</div></div></div>
-    <div class="howto-item"><div class="howto-icon">🌙</div><div><div class="howto-title">ふりかえり</div><div class="howto-desc">今日のしんどさ・昼休みを記録。今週・今月の統計を確認。</div></div></div>
-    <div class="howto-item"><div class="howto-icon">➕</div><div><div class="howto-title">タスクを追加</div><div class="howto-desc">通常タスク（カテゴリ・締切・やること）または突発対応を記録。</div></div></div>
-    <div class="howto-item"><div class="howto-icon">⚙️</div><div><div class="howto-title">設定</div><div class="howto-desc">Excelに出力・スプレッドシート確認・データリセットなど。</div></div></div>
+
+    <div class="howto-item">
+      <div class="howto-icon">🏠</div>
+      <div>
+        <div class="howto-title">ホーム画面</div>
+        <div class="howto-desc">タスクの一覧が表示されます。<br>
+          <b>▶ボタン</b>：タスクを開始・完了します。完了時にかかった時間・いつ行ったかを記録できます。<br>
+          <b>📌ボタン</b>：ピン固定してリスト先頭に表示します。<br>
+          <b>タップ</b>：タスク名をタップするとその場で編集できます。<br>
+          <b>ドラッグ</b>：左端の「≡」を長押しして並べ替えができます。<br>
+          完了したタスクは薄く表示され、翌日に自動で非表示になります。</div>
+      </div>
+    </div>
+
+    <div class="howto-item">
+      <div class="howto-icon">📅</div>
+      <div>
+        <div class="howto-title">締切</div>
+        <div class="howto-desc">締切日のあるタスクを一覧表示します。<br>
+          🔴 期限超過・🟠 3日以内・🔵 今後の締切、の3段階で色分けされます。</div>
+      </div>
+    </div>
+
+    <div class="howto-item">
+      <div class="howto-icon">🌙</div>
+      <div>
+        <div class="howto-title">ふりかえり</div>
+        <div class="howto-desc">
+          <b>今日</b>：今日完了したタスクの一覧と、しんどさ・昼休みを記録します。「今日の記録を保存する」を忘れずに。<br>
+          <b>今週・今月</b>：勤務時間外・しんどさ・カテゴリ別時間を集計して表示します。<br>
+          <b>まとめ</b>：過去5ヶ月の時間外推移グラフとしんどさカレンダー。<br>
+          <b>（忘れていた）昨日までの記録</b>：日付を選んで過去の記録を後から入力できます。</div>
+      </div>
+    </div>
+
+    <div class="howto-item">
+      <div class="howto-icon">➕</div>
+      <div>
+        <div class="howto-title">タスクを追加</div>
+        <div class="howto-desc">
+          <b>通常タスク</b>：カテゴリ・締切日・やること（複数可）を設定します。<br>
+          <b>⚡突発対応</b>：予定外の対応を素早く記録します。時間・いつ・メモを入力します。</div>
+      </div>
+    </div>
+
+    <div class="howto-item">
+      <div class="howto-icon">📊</div>
+      <div>
+        <div class="howto-title">スプレッドシートで確認（自動同期中）</div>
+        <div class="howto-desc">
+          アプリで入力したデータは、Googleスプレッドシートに<b>リアルタイムで自動保存</b>されます。<br>
+          ✅ データが消えにくい（クラウド保存）<br>
+          ✅ PCからも確認・編集できる<br>
+          ✅ 将来の「みえるさん」連携の土台になる<br>
+          「設定→スプレッドシートで確認」でGoogleドライブが開きます。</div>
+      </div>
+    </div>
+
+    <div class="howto-item">
+      <div class="howto-icon">📄</div>
+      <div>
+        <div class="howto-title">Excelに出力 との違い</div>
+        <div class="howto-desc">
+          スプレッドシートとExcel出力は<b>目的が違います</b>。<br><br>
+          <b>スプレッドシート（自動同期）</b><br>
+          　→ 日々のデータ蓄積・バックアップ用<br>
+          　→ 常に最新データが反映される<br>
+          　→ 書式なし・シンプルな一覧<br><br>
+          <b>Excelに出力（.xlsx）</b><br>
+          　→ 月末・学期末のまとめ・報告書用<br>
+          　→ ボタンを押した時点のデータを出力<br>
+          　→ 色分け・月次まとめシート付きの完成版<br>
+          　→ 管理職への報告・労働組合への相談資料に活用できます</div>
+      </div>
+    </div>
+
+    <div class="howto-item">
+      <div class="howto-icon">⚙️</div>
+      <div>
+        <div class="howto-title">設定メニュー</div>
+        <div class="howto-desc">タブバーの⚙️から開きます。データの出力・サンプルの投入・削除・リセットなどができます。</div>
+      </div>
+    </div>
+
     <button class="btn-cancel" onclick="closeM('modal-howto')">閉じる</button>
   </div>
 </div>
