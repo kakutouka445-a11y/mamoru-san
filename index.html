@@ -216,6 +216,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
 .dl-sub-text{font-size:11px;color:var(--text-s);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .no-data{text-align:center;padding:40px 14px;color:var(--text-s);}
 .excel-btn{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--coral);color:#fff;border:none;border-radius:var(--radius-s);padding:11px 14px;width:100%;font-size:14px;font-weight:600;margin-bottom:8px;}
+.sheet-btn{display:flex;align-items:center;justify-content:center;gap:8px;background:#1A73E8;color:#fff;border:none;border-radius:var(--radius-s);padding:11px 14px;width:100%;font-size:14px;font-weight:600;margin-bottom:12px;}
 .cal-outer{overflow-x:auto;padding-bottom:4px;margin-bottom:12px;}
 .cal-months{display:flex;gap:12px;width:max-content;}
 .cal-month{background:var(--bg-card);border-radius:var(--radius);padding:10px;min-width:230px;}
@@ -242,18 +243,35 @@ textarea{resize:none;height:56px;line-height:1.5;}
 .lunch-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
 .lunch-s-label{font-size:13px;color:var(--text-s);flex:1;}
 .lunch-s-val{font-size:13px;font-weight:600;}
-/* リセット・インポート */
+/* mini stat */
+.mini-stat-row{display:flex;gap:8px;margin-bottom:10px;}
+.mini-stat-box{flex:1;background:var(--gray-l);border-radius:var(--radius);padding:8px 10px;text-align:center;}
+.mini-stat-num{font-size:16px;font-weight:700;color:var(--text);}
+.mini-stat-label{font-size:10px;color:var(--text-s);margin-top:2px;}
+/* リセット */
 .reset-divider{border:none;border-top:1px solid var(--border);margin:20px 0 16px;}
 .reset-btn{display:flex;align-items:center;justify-content:center;gap:6px;background:transparent;border:1.5px solid #FCA5A5;border-radius:var(--radius-s);padding:10px 14px;width:100%;font-size:13px;color:var(--red);}
-.import-btn{display:flex;align-items:center;justify-content:center;gap:6px;background:transparent;border:1.5px solid var(--green-b);border-radius:var(--radius-s);padding:10px 14px;width:100%;font-size:13px;color:var(--green);margin-bottom:8px;}
-/* インポートモーダル */
-.preview-table{width:100%;border-collapse:collapse;font-size:11px;margin-bottom:12px;}
-.preview-table th{background:var(--green-l);color:var(--green-d);padding:5px 6px;text-align:left;border-bottom:1.5px solid var(--green-b);font-weight:600;}
-.preview-table td{padding:5px 6px;border-bottom:1px solid var(--border);color:var(--text);vertical-align:top;}
-.preview-table tr:last-child td{border-bottom:none;}
-.preview-wrap{max-height:240px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--radius-s);margin-bottom:12px;}
-.import-summary{background:var(--green-l);border:1.5px solid var(--green-b);border-radius:var(--radius-s);padding:10px 14px;margin-bottom:12px;font-size:13px;color:var(--green-d);}
-.import-warning{background:var(--amber-l);border:1.5px solid var(--amber-b);border-radius:var(--radius-s);padding:10px 14px;margin-bottom:12px;font-size:12px;color:#7A4B08;}
+.sample-btn{display:flex;align-items:center;justify-content:center;gap:6px;background:transparent;border:1.5px solid var(--green-b);border-radius:var(--radius-s);padding:10px 14px;width:100%;font-size:13px;color:var(--green);margin-bottom:8px;}
+/* 日付選択ボタン */
+.yday-date-btn{flex:1;padding:10px 6px;border-radius:var(--radius-s);border:1.5px solid var(--border);background:var(--gray-l);font-size:13px;font-weight:600;color:var(--text-s);text-align:center;line-height:1.5;}
+.yday-date-btn.active{background:var(--green-l);border-color:var(--green-b);color:var(--green-d);}
+/* 設定ボタン（ヘッダー右） */
+.settings-btn{background:transparent;border:none;color:var(--green-d);font-size:20px;width:28px;height:28px;display:flex;align-items:center;justify-content:center;padding:0;}
+.settings-section-label{font-size:11px;font-weight:600;color:var(--text-s);letter-spacing:.06em;margin:16px 0 6px;padding:0 2px;}
+.settings-section-label.danger-section{color:var(--red);}
+.settings-item-btn{display:flex;align-items:center;gap:12px;width:100%;background:var(--gray-l);border:none;border-radius:var(--radius-s);padding:12px 14px;margin-bottom:6px;text-align:left;cursor:pointer;}
+.settings-item-btn.danger-item{background:var(--red-l);}
+.settings-item-icon{font-size:20px;flex-shrink:0;width:24px;text-align:center;}
+.settings-item-text{flex:1;min-width:0;}
+.settings-item-title{font-size:14px;font-weight:600;color:var(--text);}
+.settings-item-sub{font-size:11px;color:var(--text-s);margin-top:1px;}
+.settings-item-arrow{font-size:16px;color:var(--text-s);flex-shrink:0;}
+.howto-item{display:flex;gap:12px;padding:10px 0;border-bottom:1px solid var(--border);}
+.howto-item:last-of-type{border:none;}
+.howto-icon{font-size:22px;flex-shrink:0;width:28px;text-align:center;}
+.howto-title{font-size:13px;font-weight:600;color:var(--text);margin-bottom:3px;}
+.howto-desc{font-size:12px;color:var(--text-s);line-height:1.6;}
+
 /* リセットモーダル */
 .modal-icon{font-size:40px;text-align:center;margin-bottom:12px;}
 .modal-center-title{font-size:17px;font-weight:700;text-align:center;margin-bottom:8px;}
@@ -311,7 +329,12 @@ textarea{resize:none;height:56px;line-height:1.5;}
   <div class="header">
     <div class="header-row">
       <div class="header-title">🌙 <strong>ふりかえり</strong></div>
-      <div class="date-badge" id="review-badge"></div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <div class="date-badge" id="review-badge"></div>
+        <button class="settings-btn" onclick="openM('modal-settings')" title="設定">
+          <i class="ti ti-settings"></i>
+        </button>
+      </div>
     </div>
   </div>
   <div class="subtab-row">
@@ -346,7 +369,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <button class="mood-btn" id="mb-limit" onclick="selMood('limit')">🚨<br>限界</button>
     </div>
     <button class="save-btn-lg" onclick="saveDaily()">今日の記録を保存する</button>
-    <button class="yday-btn" onclick="openM('modal-yday')"><i class="ti ti-clock-minus" style="font-size:18px;"></i>　（忘れていた）昨日の記録を保存する</button>
+    <button class="yday-btn" onclick="openYdayModal()"><i class="ti ti-clock-minus" style="font-size:18px;"></i>　（忘れていた）昨日までの記録を保存する</button>
     <div class="consult-wrap">
       <hr class="consult-divider">
       <button class="consult-btn" onclick="openM('modal-consult')">
@@ -357,25 +380,41 @@ textarea{resize:none;height:56px;line-height:1.5;}
   </div>
   <!-- 今週 -->
   <div class="subtab-content" id="sc-week">
-    <div class="stat-grid">
-      <div class="stat-box"><div class="stat-num">18</div><div class="stat-sub">完了タスク</div></div>
-      <div class="stat-box"><div class="stat-num warn">12</div><div class="stat-sub">突発対応</div></div>
-      <div class="stat-box"><div class="stat-num danger">9h</div><div class="stat-sub">勤務時間外（週計）</div></div>
-      <div class="stat-box"><div class="stat-num warn">2h</div><div class="stat-sub">昼休み業務</div></div>
+    <!-- 大：勤務時間外 -->
+    <div class="avg-box" style="margin-top:10px;"><div class="avg-label">勤務時間外（週計）</div><div class="avg-val" id="week-ot-total">—</div></div>
+    <div class="avg-box"><div class="avg-label">1日平均 勤務時間外</div><div class="avg-val" id="week-ot-avg">—</div></div>
+    <!-- 小：完了タスク・突発対応 -->
+    <div class="mini-stat-row">
+      <div class="mini-stat-box"><div class="mini-stat-num" id="week-task-done">—</div><div class="mini-stat-label">完了タスク</div></div>
+      <div class="mini-stat-box"><div class="mini-stat-num" id="week-tokk">—</div><div class="mini-stat-label">突発対応</div></div>
     </div>
-    <div class="avg-box"><div class="avg-label">1日平均 勤務時間外</div><div class="avg-val">1時間48分</div></div>
+    <!-- 小：しんどさ -->
     <div class="card">
-      <div class="card-title">昼休みの状況（今週）</div>
-      <div class="lunch-summary"><div class="lunch-dot" style="background:#97C459;"></div><div class="lunch-s-label">🍱 取れた</div><div class="lunch-s-val" style="color:#3B6B0C;">2日</div></div>
-      <div class="lunch-summary"><div class="lunch-dot" style="background:#EF9F27;"></div><div class="lunch-s-label">🥡 少し</div><div class="lunch-s-val" style="color:#7A4B08;">2日</div></div>
-      <div class="lunch-summary"><div class="lunch-dot" style="background:#F09595;"></div><div class="lunch-s-label">😞 取れなかった</div><div class="lunch-s-val" style="color:#891616;">1日</div></div>
+      <div class="card-title">しんどさ（今週）</div>
+      <div id="week-mood-content"><div style="font-size:12px;color:var(--text-s);">記録がありません</div></div>
     </div>
+    <!-- カテゴリ別時間 -->
     <div class="card-title">カテゴリ別時間</div>
     <div class="bar-chart" id="week-bar"></div>
   </div>
   <!-- 今月 -->
   <div class="subtab-content" id="sc-month">
-    <div id="month-content"><div class="no-data">今月のデータがありません</div></div>
+    <!-- 大：勤務時間外 -->
+    <div class="avg-box" style="margin-top:10px;" id="month-ot-total-box"><div class="avg-label">勤務時間外（月計）</div><div class="avg-val" id="month-ot-total">—</div></div>
+    <div class="avg-box" id="month-ot-avg-box"><div class="avg-label">1日平均 勤務時間外</div><div class="avg-val" id="month-ot-avg">—</div></div>
+    <!-- 小：完了タスク・突発対応 -->
+    <div class="mini-stat-row">
+      <div class="mini-stat-box"><div class="mini-stat-num" id="month-task-done">—</div><div class="mini-stat-label">完了タスク</div></div>
+      <div class="mini-stat-box"><div class="mini-stat-num" id="month-rec-days">—</div><div class="mini-stat-label">記録日数</div></div>
+    </div>
+    <!-- 小：しんどさ -->
+    <div class="card">
+      <div class="card-title">しんどさ（今月）</div>
+      <div id="month-mood-content"><div style="font-size:12px;color:var(--text-s);">記録がありません</div></div>
+    </div>
+    <!-- カテゴリ別時間 -->
+    <div class="card-title">カテゴリ別時間</div>
+    <div class="bar-chart" id="month-bar"></div>
   </div>
   <!-- まとめ -->
   <div class="subtab-content" id="sc-matome">
@@ -394,17 +433,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <div class="cal-legend-item"><div class="cal-swatch" style="background:var(--red-l);"></div>🚨限界</div>
     </div>
     <div class="cal-outer" id="cal-outer"></div>
-    <hr class="reset-divider">
-    <button class="excel-btn" onclick="exportExcel()"><i class="ti ti-file-spreadsheet" style="font-size:16px;"></i>Excelに出力（.xlsx）</button>
-    <button class="import-btn" onclick="document.getElementById('import-file').click()">
-      <i class="ti ti-upload" style="font-size:16px;"></i>
-      データをインポート（CSV）
-    </button>
-    <input type="file" id="import-file" accept=".csv" style="display:none;" onchange="handleImportFile(event)">
-    <button class="reset-btn" onclick="openM('modal-reset1')">
-      <i class="ti ti-trash" style="font-size:16px;"></i>
-      全てのデータをリセット
-    </button>
+
   </div>
 </div>
 
@@ -582,6 +611,131 @@ textarea{resize:none;height:56px;line-height:1.5;}
   </div>
 </div>
 
+<!-- modal: 設定 -->
+<div class="modal-bg" id="modal-settings" onclick="closeBg('modal-settings',event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title">⚙️ 設定</div>
+
+    <div class="settings-section-label">データ</div>
+    <button class="settings-item-btn" onclick="closeM('modal-settings');openSpreadsheet()">
+      <i class="ti ti-table settings-item-icon" style="color:#1A73E8;"></i>
+      <div class="settings-item-text">
+        <div class="settings-item-title">スプレッドシートで確認</div>
+        <div class="settings-item-sub">自動同期中 · Googleドライブを開く</div>
+      </div>
+      <i class="ti ti-chevron-right settings-item-arrow"></i>
+    </button>
+    <button class="settings-item-btn" onclick="closeM('modal-settings');exportExcel()">
+      <i class="ti ti-file-spreadsheet settings-item-icon" style="color:var(--coral);"></i>
+      <div class="settings-item-text">
+        <div class="settings-item-title">Excelに出力</div>
+        <div class="settings-item-sub">日次記録・月次まとめを .xlsx で保存</div>
+      </div>
+      <i class="ti ti-chevron-right settings-item-arrow"></i>
+    </button>
+
+    <div class="settings-section-label">サンプル</div>
+    <button class="settings-item-btn" onclick="closeM('modal-settings');openM('modal-sample')">
+      <i class="ti ti-database-import settings-item-icon" style="color:var(--green);"></i>
+      <div class="settings-item-text">
+        <div class="settings-item-title">サンプルデータを投入</div>
+        <div class="settings-item-sub">前月・前々月分のサンプルを追加</div>
+      </div>
+      <i class="ti ti-chevron-right settings-item-arrow"></i>
+    </button>
+    <button class="settings-item-btn" onclick="closeM('modal-settings');openM('modal-sample-del')">
+      <i class="ti ti-database-minus settings-item-icon" style="color:var(--amber);"></i>
+      <div class="settings-item-text">
+        <div class="settings-item-title">サンプルデータを削除</div>
+        <div class="settings-item-sub">ID が S で始まるデータを削除</div>
+      </div>
+      <i class="ti ti-chevron-right settings-item-arrow"></i>
+    </button>
+
+    <div class="settings-section-label">アプリ</div>
+    <button class="settings-item-btn" onclick="closeM('modal-settings');openM('modal-howto')">
+      <i class="ti ti-help-circle settings-item-icon" style="color:var(--blue);"></i>
+      <div class="settings-item-text">
+        <div class="settings-item-title">アプリの使い方</div>
+        <div class="settings-item-sub">基本的な操作方法</div>
+      </div>
+      <i class="ti ti-chevron-right settings-item-arrow"></i>
+    </button>
+    <button class="settings-item-btn" onclick="closeM('modal-settings');openM('modal-account')">
+      <i class="ti ti-user settings-item-icon" style="color:var(--gray);"></i>
+      <div class="settings-item-text">
+        <div class="settings-item-title">アカウント</div>
+        <div class="settings-item-sub">同期先・ユーザー情報</div>
+      </div>
+      <i class="ti ti-chevron-right settings-item-arrow"></i>
+    </button>
+
+    <div class="settings-section-label danger-section">危険な操作</div>
+    <button class="settings-item-btn danger-item" onclick="closeM('modal-settings');openM('modal-reset1')">
+      <i class="ti ti-trash settings-item-icon" style="color:var(--red);"></i>
+      <div class="settings-item-text">
+        <div class="settings-item-title" style="color:var(--red);">全てのデータをリセット</div>
+        <div class="settings-item-sub">タスク・記録をすべて削除（取り消し不可）</div>
+      </div>
+      <i class="ti ti-chevron-right settings-item-arrow"></i>
+    </button>
+
+    <button class="btn-cancel" onclick="closeM('modal-settings')">閉じる</button>
+  </div>
+</div>
+
+<!-- modal: サンプルデータ削除 -->
+<div class="modal-bg center" id="modal-sample-del" onclick="closeBg('modal-sample-del',event)">
+  <div class="modal-center" onclick="event.stopPropagation()">
+    <div class="modal-icon">🗑️</div>
+    <div class="modal-center-title">サンプルデータを削除</div>
+    <div class="modal-center-body">IDが「S」から始まるサンプルデータを削除します。<br>自分で入力したデータは残ります。</div>
+    <div class="btn-row">
+      <button class="btn-gray" onclick="closeM('modal-sample-del')">キャンセル</button>
+      <button class="btn-danger" onclick="deleteSampleData()">削除する</button>
+    </div>
+  </div>
+</div>
+
+<!-- modal: アプリの使い方 -->
+<div class="modal-bg" id="modal-howto" onclick="closeBg('modal-howto',event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title">📖 アプリの使い方</div>
+    <div class="howto-item"><div class="howto-icon">🏠</div><div><div class="howto-title">ホーム</div><div class="howto-desc">タスク一覧。タップで編集、▶で開始・完了記録。📌でピン固定。ドラッグで並べ替え。</div></div></div>
+    <div class="howto-item"><div class="howto-icon">📅</div><div><div class="howto-title">締切</div><div class="howto-desc">締切日のあるタスクを一覧表示。期限超過・3日以内は色で警告。</div></div></div>
+    <div class="howto-item"><div class="howto-icon">🌙</div><div><div class="howto-title">ふりかえり</div><div class="howto-desc">今日のしんどさ・昼休みを記録。今週・今月の統計を確認。</div></div></div>
+    <div class="howto-item"><div class="howto-icon">➕</div><div><div class="howto-title">タスクを追加</div><div class="howto-desc">通常タスク（カテゴリ・締切・やること）または突発対応を記録。</div></div></div>
+    <div class="howto-item"><div class="howto-icon">⚙️</div><div><div class="howto-title">設定</div><div class="howto-desc">Excelに出力・スプレッドシート確認・データリセットなど。</div></div></div>
+    <button class="btn-cancel" onclick="closeM('modal-howto')">閉じる</button>
+  </div>
+</div>
+
+<!-- modal: アカウント -->
+<div class="modal-bg" id="modal-account" onclick="closeBg('modal-account',event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title">👤 アカウント</div>
+    <div class="card" style="margin-top:8px;">
+      <div class="card-title">同期先スプレッドシート</div>
+      <div style="font-size:12px;color:var(--text-s);margin-bottom:8px;">データの保存・同期先</div>
+      <button class="sheet-btn" style="margin-bottom:0;" onclick="openSpreadsheet()">
+        <i class="ti ti-table" style="font-size:15px;"></i>Googleドライブを開く
+      </button>
+    </div>
+    <div class="card">
+      <div class="card-title">アプリ情報</div>
+      <div style="font-size:13px;color:var(--text-s);line-height:1.8;">
+        <div>アプリ名：私のタスク　まもるさん</div>
+        <div>対象：山口県教職員</div>
+        <div style="font-size:11px;margin-top:8px;color:var(--text-s);">将来的には「みんなのタスク みえるさん」と連携予定</div>
+      </div>
+    </div>
+    <button class="btn-cancel" onclick="closeM('modal-account')">閉じる</button>
+  </div>
+</div>
+
 <!-- modal: リセット Step1 -->
 <div class="modal-bg center" id="modal-reset1" onclick="closeBg('modal-reset1',event)">
   <div class="modal-center" onclick="event.stopPropagation()">
@@ -620,42 +774,55 @@ textarea{resize:none;height:56px;line-height:1.5;}
   </div>
 </div>
 
-<!-- modal: インポートプレビュー -->
-<div class="modal-bg" id="modal-import" onclick="closeBg('modal-import',event)">
-  <div class="modal" onclick="event.stopPropagation()">
-    <div class="modal-handle"></div>
-    <div class="modal-title">📥 データのインポート</div>
-    <div class="import-summary" id="import-summary"></div>
-    <div class="import-warning">⚠ 同じ日付の日次記録は上書きされます。同じIDのタスクは上書きされます。</div>
-    <div style="font-size:12px;font-weight:600;color:var(--text-s);margin-bottom:6px;">プレビュー（先頭10件）</div>
-    <div class="preview-wrap"><table class="preview-table" id="preview-table"></table></div>
-    <div class="btn-row">
-      <button class="btn-gray" onclick="closeM('modal-import')">キャンセル</button>
-      <button class="btn-primary" style="flex:1;margin-top:0;" id="btn-import-exec" onclick="execImport()">インポート実行</button>
-    </div>
-  </div>
-</div>
-
-<!-- modal: 昨日の記録 -->
+<!-- modal: 昨日までの記録 -->
 <div class="modal-bg" id="modal-yday" onclick="closeBg('modal-yday',event)">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
-    <div class="modal-title" id="yday-title">昨日の記録</div>
-    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:7px;">🍱 昨日の昼休み</div>
+    <div class="modal-title">（忘れていた）記録を保存する</div>
+
+    <!-- 日付選択 -->
+    <div class="field-label">📅 いつの記録ですか？</div>
+    <div style="display:flex;gap:8px;margin-bottom:14px;">
+      <button class="yday-date-btn active" id="ydatebtn-yday" onclick="selectYdayDate('yday')">
+        昨日<br><span id="yday-date-label" style="font-size:11px;font-weight:400;"></span>
+      </button>
+      <button class="yday-date-btn" id="ydatebtn-pick" onclick="selectYdayDate('pick')">
+        日付を選ぶ<br><span style="font-size:11px;font-weight:400;">カレンダー</span>
+      </button>
+    </div>
+    <div id="yday-date-picker-wrap" class="hidden" style="margin-bottom:12px;">
+      <input type="date" id="yday-date-input" onchange="onYdayDateChange()">
+    </div>
+    <div id="yday-selected-date" style="font-size:12px;color:var(--green-d);font-weight:600;background:var(--green-l);padding:6px 12px;border-radius:var(--radius-s);margin-bottom:14px;"></div>
+
+    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:7px;">🍱 昼休み</div>
     <div class="lunch-row" style="margin-bottom:12px;">
       <button class="lunch-btn" id="ylb-ok" onclick="selYLunch('ok')">🍱 取れた<br><span style="font-size:10px;font-weight:400;">20分以上</span></button>
       <button class="lunch-btn" id="ylb-half" onclick="selYLunch('half')">🥡 少し<br><span style="font-size:10px;font-weight:400;">10分程度</span></button>
       <button class="lunch-btn" id="ylb-ng" onclick="selYLunch('ng')">😞 取れなかった<br><span style="font-size:10px;font-weight:400;">0〜5分</span></button>
     </div>
-    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:7px;">昨日のしんどさ</div>
+    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:7px;">しんどさ</div>
     <div class="mood-row" style="margin-bottom:16px;">
       <button class="mood-btn" id="ymb-great" onclick="selYMood('great')">😄<br>快調</button>
       <button class="mood-btn" id="ymb-ok" onclick="selYMood('ok')">🙂<br>まあまあ</button>
       <button class="mood-btn" id="ymb-hard" onclick="selYMood('hard')">😓<br>しんどい</button>
       <button class="mood-btn" id="ymb-limit" onclick="selYMood('limit')">🚨<br>限界</button>
     </div>
-    <button class="btn-primary" onclick="saveYday()">昨日の記録を保存する</button>
+    <button class="btn-primary" onclick="saveYday()">記録を保存する</button>
     <button class="btn-cancel" onclick="closeM('modal-yday')">キャンセル</button>
+  </div>
+</div>
+
+<!-- modal: サンプルデータ投入 -->
+<div class="modal-bg center" id="modal-sample" onclick="closeBg('modal-sample',event)">
+  <div class="modal-center" onclick="event.stopPropagation()">
+    <div class="modal-icon">📦</div>
+    <div class="modal-center-title">サンプルデータを投入</div>
+    <div class="modal-center-body">前月・前々月分のタスクと日次記録のサンプルデータを追加します。<br><br><strong style="color:var(--amber);">既存のデータには上書きしません。</strong></div>
+    <div class="btn-row">
+      <button class="btn-gray" onclick="closeM('modal-sample')">キャンセル</button>
+      <button class="btn-primary" style="flex:1;margin-top:0;" onclick="insertSampleData()">投入する</button>
+    </div>
   </div>
 </div>
 
@@ -1192,10 +1359,93 @@ function buildCal(){
 
 function renderBar(id,data){
   const el=document.getElementById(id); if(!el) return;
-  const max=Math.max(...data.map(d=>d.h));
+  if(!data||!data.length){el.innerHTML='<div style="font-size:12px;color:var(--text-s);padding:8px 0;">データがありません</div>';return;}
+  const max=Math.max(...data.map(d=>d.h),1);
   el.innerHTML=data.map(d=>`<div class="bar-row"><div class="bar-lbl">${d.l}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(d.h/max*100)}%;background:${d.c};"><span>${d.h}h</span></div></div></div>`).join('');
 }
-const barData=[{l:'授業準備',h:6,c:'#1D9E75'},{l:'会議',h:5,c:'#5DCAA5'},{l:'生徒対応',h:4,c:'#2563EB'},{l:'保護者対応',h:3,c:'#EA580C'},{l:'校務分掌',h:3,c:'#DC2626'}];
+
+// カテゴリ別時間をタスクデータから集計
+const CAT_COLORS = {'分掌':'#DC2626','保護者対応':'#EA580C','生徒指導':'#F59E0B','学年':'#2563EB','学級':'#7C3AED','会議':'#5DCAA5','授業':'#1D9E75'};
+function getCatBarData(targetTasks) {
+  const catMap = {};
+  targetTasks.forEach(t => {
+    if (!t.done) return;
+    const timeStr = t.time ? t.time.split(' · ')[0] : '';
+    let min = 0;
+    const mH = timeStr.match(/(\d+)時間/); const mM = timeStr.match(/(\d+)分/);
+    if (mH) min += parseInt(mH[1]) * 60;
+    if (mM) min += parseInt(mM[1]);
+    if (!catMap[t.name]) catMap[t.name] = 0;
+    catMap[t.name] += min;
+  });
+  return Object.entries(catMap)
+    .filter(([,v])=>v>0)
+    .sort((a,b)=>b[1]-a[1])
+    .map(([name,min])=>({l:name, h:Math.round(min/60*10)/10, c:CAT_COLORS[name]||'#6B7280'}));
+}
+
+// =============================================
+// 今週の表示
+// =============================================
+function renderWeekContent() {
+  const daily = JSON.parse(localStorage.getItem('mamoru_daily') || '[]');
+  const now = new Date();
+  // 今週の月曜〜今日
+  const dayOfWeek = now.getDay() === 0 ? 6 : now.getDay() - 1;
+  const monday = new Date(now); monday.setDate(now.getDate() - dayOfWeek); monday.setHours(0,0,0,0);
+
+  const weekDates = [];
+  for (let i = 0; i <= dayOfWeek; i++) {
+    const d = new Date(monday); d.setDate(monday.getDate() + i);
+    weekDates.push(`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`);
+  }
+
+  const weekDaily = daily.filter(d => weekDates.includes(d.date));
+  const weekTasks = tasks.filter(t => t.done && t.doneDate && weekDates.includes(t.doneDate));
+
+  // 勤務時間外
+  const otTotal = weekDaily.reduce((s,d)=>s+(Number(d.ot)||0),0);
+  const otH = Math.floor(otTotal/60), otM = otTotal%60;
+  const otStr = otTotal>0 ? `${otH>0?otH+'時間':''}${otM>0?otM+'分':''}` : '0分';
+  const otAvg = weekDates.length>0 ? Math.round(otTotal/weekDates.length) : 0;
+
+  const el = (id, val) => { const e=document.getElementById(id); if(e) e.textContent=val; };
+  el('week-ot-total', otStr);
+  el('week-ot-avg', `${Math.floor(otAvg/60)>0?Math.floor(otAvg/60)+'時間':''}${otAvg%60}分`);
+  el('week-task-done', weekTasks.length);
+  el('week-tokk', '—');
+
+  // しんどさ
+  const moodCount = {great:0,ok:0,hard:0,limit:0};
+  weekDaily.forEach(d=>{if(d.mood&&moodCount[d.mood]!==undefined)moodCount[d.mood]++;});
+  const moodEl = document.getElementById('week-mood-content');
+  if (moodEl) {
+    if (weekDaily.length===0) {
+      moodEl.innerHTML='<div style="font-size:12px;color:var(--text-s);">記録がありません</div>';
+    } else {
+      moodEl.innerHTML = moodMiniHtml(moodCount);
+    }
+  }
+
+  // カテゴリ別
+  renderBar('week-bar', getCatBarData(weekTasks));
+}
+
+function moodMiniHtml(mc) {
+  const items = [
+    {key:'great',emoji:'😄',label:'快調',color:'#1E3A8A'},
+    {key:'ok',emoji:'🙂',label:'まあまあ',color:'#3B6B0C'},
+    {key:'hard',emoji:'😓',label:'しんどい',color:'var(--amber)'},
+    {key:'limit',emoji:'🚨',label:'限界',color:'var(--red)'},
+  ];
+  return items.map(({key,emoji,label,color})=>
+    `<div style="display:flex;align-items:center;gap:8px;padding:3px 0;font-size:13px;">
+      <span>${emoji}</span>
+      <span style="flex:1;">${label}</span>
+      <span style="font-weight:700;color:${color};">${mc[key]}日</span>
+    </div>`
+  ).join('');
+}
 
 // =============================================
 // リセット
@@ -1267,7 +1517,7 @@ function switchTab(tab){
     document.getElementById('tab-'+t)?.classList.toggle('active',t===tab);
   });
   if(tab==='deadline') renderDeadlines();
-  if(tab==='review'){ renderBar('week-bar',barData); renderBar('month-bar',barData); }
+  if(tab==='review') renderWeekContent();
 }
 function switchSubTab(sub){
   ['today','week','month','matome'].forEach(t=>{
@@ -1275,6 +1525,7 @@ function switchSubTab(sub){
     document.getElementById('sc-'+t).classList.toggle('active',t===sub);
   });
   if(sub==='today') renderTodayAchieve();
+  if(sub==='week')  renderWeekContent();
   if(sub==='month') renderMonthContent();
   if(sub==='matome'){ buildCal(); setTimeout(renderOtChart, 100); }
 }
@@ -1309,26 +1560,44 @@ function renderTodayAchieve() {
 function renderMonthContent() {
   const daily = JSON.parse(localStorage.getItem('mamoru_daily') || '[]');
   const now = new Date();
+  const yr = now.getFullYear(), mo = now.getMonth();
   const thisMonth = daily.filter(d => {
+    if (!d.date) return false;
     const date = new Date(d.date);
-    return date.getFullYear() === now.getFullYear() && date.getMonth() === now.getMonth();
+    return date.getFullYear() === yr && date.getMonth() === mo;
   });
-  const container = document.getElementById('month-content');
-  if (!container) return;
-  if (thisMonth.length === 0) {
-    container.innerHTML = '<div class="no-data">今月のデータがありません</div>';
-    return;
+  const monthTasks = tasks.filter(t => {
+    if (!t.done || !t.doneDate) return false;
+    const date = new Date(t.doneDate);
+    return date.getFullYear() === yr && date.getMonth() === mo;
+  });
+
+  const el = (id, val) => { const e=document.getElementById(id); if(e) e.textContent=val; };
+
+  // 勤務時間外
+  const otTotal = thisMonth.reduce((s,d)=>s+(Number(d.ot)||0),0);
+  const otH = Math.floor(otTotal/60), otM = otTotal%60;
+  const otStr = otTotal>0 ? `${otH>0?otH+'時間':''}${otM>0?otM+'分':''}` : '0分';
+  const otAvg = thisMonth.length>0 ? Math.round(otTotal/thisMonth.length) : 0;
+  el('month-ot-total', otStr);
+  el('month-ot-avg', `${Math.floor(otAvg/60)>0?Math.floor(otAvg/60)+'時間':''}${otAvg%60}分`);
+  el('month-task-done', monthTasks.length);
+  el('month-rec-days', thisMonth.length + '日');
+
+  // しんどさ
+  const moodCount = {great:0,ok:0,hard:0,limit:0};
+  thisMonth.forEach(d=>{if(d.mood&&moodCount[d.mood]!==undefined)moodCount[d.mood]++;});
+  const moodEl = document.getElementById('month-mood-content');
+  if (moodEl) {
+    if (thisMonth.length===0) {
+      moodEl.innerHTML='<div style="font-size:12px;color:var(--text-s);">今日タブでしんどさを記録すると表示されます</div>';
+    } else {
+      moodEl.innerHTML = moodMiniHtml(moodCount);
+    }
   }
-  const moodCount = {great:0, ok:0, hard:0, limit:0};
-  thisMonth.forEach(d => { if(d.mood && moodCount[d.mood] !== undefined) moodCount[d.mood]++; });
-  container.innerHTML = `
-    <div class="card">
-      <div class="card-title">しんどさの記録（今月）</div>
-      <div class="achieve-item"><div class="achieve-emoji">😄</div><div class="achieve-name">快調</div><div class="achieve-time" style="color:#1E3A8A;font-weight:700;">${moodCount.great}日</div></div>
-      <div class="achieve-item"><div class="achieve-emoji">🙂</div><div class="achieve-name">まあまあ</div><div class="achieve-time" style="color:#3B6B0C;font-weight:700;">${moodCount.ok}日</div></div>
-      <div class="achieve-item"><div class="achieve-emoji">😓</div><div class="achieve-name">しんどい</div><div class="achieve-time" style="color:var(--amber);font-weight:700;">${moodCount.hard}日</div></div>
-      <div class="achieve-item"><div class="achieve-emoji">🚨</div><div class="achieve-name">限界</div><div class="achieve-time" style="color:var(--red);font-weight:700;">${moodCount.limit}日</div></div>
-    </div>`;
+
+  // カテゴリ別
+  renderBar('month-bar', getCatBarData(monthTasks));
 }
 
 // =============================================
@@ -1387,6 +1656,14 @@ function renderOtChart() {
 }
 
 // =============================================
+// =============================================
+// スプレッドシートを開く
+// =============================================
+function openSpreadsheet() {
+  window.open('https://drive.google.com', '_blank');
+}
+
+// =============================================
 // Excel（CSV）出力
 // =============================================
 function exportExcel() {
@@ -1402,7 +1679,7 @@ function exportExcel() {
   if (typeof XLSX === 'undefined') {
     showSync('ライブラリを読み込み中...');
     const script = document.createElement('script');
-    script.src = 'https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js';
+    script.src = 'https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js';
     script.onload = () => { showSync(''); doExport(allTasks, daily); };
     script.onerror = () => { showSync('⚠ 読み込み失敗。CSVで出力します', true); exportCSVFallback(allTasks, daily); };
     document.head.appendChild(script);
@@ -1414,82 +1691,285 @@ function exportExcel() {
 function doExport(allTasks, daily) {
   const wb = XLSX.utils.book_new();
   const today = todayStr();
+  const daysArr = ['日','月','火','水','木','金','土'];
 
-  // ── シート1：タスク記録 ──
-  const taskHeaders = ['タスク名','カテゴリ','完了日','かかった時間','いつ行ったか','締切日','やること（詳細）'];
-  const taskRows = allTasks
-    .sort((a,b) => (a.doneDate||'') > (b.doneDate||'') ? -1 : 1)
-    .map(t => [
-      t.name || '',
-      t.name || '',
-      t.doneDate || '',
-      t.time ? t.time.split(' · ')[0] : '',
-      t.time && t.time.includes(' · ') ? t.time.split(' · ').slice(1).join(' · ') : '',
-      t.deadline || '',
-      (t.subs || []).join('・'),
-    ]);
-  const taskSheet = XLSX.utils.aoa_to_sheet([taskHeaders, ...taskRows]);
-  // 列幅設定
-  taskSheet['!cols'] = [
-    {wch:20},{wch:14},{wch:12},{wch:16},{wch:22},{wch:12},{wch:30}
-  ];
-  XLSX.utils.book_append_sheet(wb, taskSheet, 'タスク記録');
+  // カラー定数
+  const C = {
+    green:  '1D9E75', greenL: 'E1F5EE', greenB: '9FE1CB',
+    amber:  'BA7517', amberL: 'FAEEDA', amberB: 'FAC775',
+    blue:   '2563EB', blueL:  'DBEAFE',
+    red:    'DC2626', redL:   'FEE2E2',
+    purple: '7C3AED', purpleL:'EDE9FE',
+    gray:   '4B5563', grayL:  'F3F4F6',
+    white:  'FFFFFF', text:   '111827', textS:  '374151',
+  };
 
-  // ── シート2：日次記録 ──
-  const dailyHeaders = ['日付','曜日','しんどさ','昼休み','勤務時間外（分）','メモ'];
-  const days = ['日','月','火','水','木','金','土'];
-  const dailyRows = daily
-    .filter(d => d.date)
-    .sort((a,b) => a.date > b.date ? -1 : 1)
-    .map(d => {
-      const dow = d.date ? days[new Date(d.date).getDay()] : '';
-      const moodLabel = {great:'😄 快調', ok:'🙂 まあまあ', hard:'😓 しんどい', limit:'🚨 限界'}[d.mood] || d.mood || '';
-      const lunchLabel = {ok:'🍱 取れた（20分以上）', half:'🥡 少し（10分程度）', ng:'😞 取れなかった'}[d.lunch] || d.lunch || '';
-      return [d.date, dow, moodLabel, lunchLabel, d.ot || 0, d.memo || ''];
+  function cellStyle(bg, fg, bold=false, center=true, wrap=false, border=true) {
+    const b = border ? {top:{style:'thin',color:{rgb:'D1D5DB'}},bottom:{style:'thin',color:{rgb:'D1D5DB'}},left:{style:'thin',color:{rgb:'D1D5DB'}},right:{style:'thin',color:{rgb:'D1D5DB'}}} : {};
+    return {
+      fill:      { patternType:'solid', fgColor:{rgb:bg} },
+      font:      { name:'Arial', sz:10, color:{rgb:fg}, bold },
+      alignment: { horizontal:center?'center':'left', vertical:'center', wrapText:wrap },
+      border:    b,
+    };
+  }
+  function hdrStyle(bg, bold=true)  { return cellStyle(bg, C.white, bold, true, true); }
+  function dataStyle(bg, fg, bold=false, center=true) { return cellStyle(bg, fg, bold, center); }
+
+  function setCell(ws, addr, v, style) {
+    if (!ws[addr]) ws[addr] = {};
+    ws[addr].v = v; ws[addr].t = typeof v==='number'?'n':'s';
+    ws[addr].s = style;
+  }
+
+  // =============================================
+  // シート1：日次記録
+  // =============================================
+  const ws1 = {};
+  const h1 = ['日付','曜日','タスク名','カテゴリ','かかった時間','いつ行ったか','突発対応','しんどさ','昼休み'];
+  const hColors1 = [C.green,C.green,C.green,C.green,C.green,C.green,C.amber,C.blue,C.blue];
+
+  h1.forEach((h,i) => {
+    const addr = XLSX.utils.encode_cell({r:0,c:i});
+    setCell(ws1, addr, h, hdrStyle(hColors1[i]));
+  });
+
+  // 日次記録＋タスク完了をマージして日付でソート
+  const moodLabel = {great:'😄 快調', ok:'🙂 まあまあ', hard:'😓 しんどい', limit:'🚨 限界'};
+  const lunchLabel = {ok:'🍱 取れた（20分以上）', half:'🥡 少し（10分程度）', ng:'😞 取れなかった'};
+
+  // 日次記録をdate→オブジェクトのマップに
+  const dailyMap = {};
+  daily.filter(d=>d.date).forEach(d => { dailyMap[d.date] = d; });
+
+  // タスク完了データを日付でまとめる
+  const taskByDate = {};
+  allTasks.forEach(t => {
+    const key = t.doneDate || '';
+    if (!key) return;
+    if (!taskByDate[key]) taskByDate[key] = [];
+    taskByDate[key].push(t);
+  });
+
+  // 全日付を収集
+  const allDates = [...new Set([...Object.keys(dailyMap), ...Object.keys(taskByDate)])].sort().reverse();
+
+  let r1 = 1;
+  allDates.forEach(date => {
+    const d = dailyMap[date] || {};
+    const tList = taskByDate[date] || [null];
+    tList.forEach((t, ti) => {
+      const isEven = r1 % 2 === 0;
+      const bg = isEven ? C.grayL : C.white;
+      const timeStr = t ? (t.time ? t.time.split(' · ')[0] : '') : '';
+      const whenStr = t ? (t.time && t.time.includes(' · ') ? t.time.split(' · ').slice(1).join('・') : '') : '';
+      const row = [
+        date,
+        daysArr[new Date(date).getDay()],
+        t ? t.name : '',
+        t ? t.name : '',
+        timeStr,
+        whenStr,
+        '',  // 突発対応（将来用）
+        ti===0 ? (moodLabel[d.mood] || '') : '',
+        ti===0 ? (lunchLabel[d.lunch] || '') : '',
+      ];
+      row.forEach((v,ci) => {
+        const addr = XLSX.utils.encode_cell({r:r1,c:ci});
+        let bg2 = bg, fg = C.text, bold = false;
+        if (ci===6) { bg2 = bg; fg = C.amber; }
+        if (ci===7) { bg2 = C.blueL; fg = C.blue; }
+        if (ci===8) {
+          if (d.lunch==='ok')   { bg2='EAF3DE'; fg='3B6B0C'; }
+          else if (d.lunch==='half') { bg2=C.amberL; fg=C.amber; }
+          else if (d.lunch==='ng')   { bg2=C.redL; fg=C.red; }
+          else bg2=C.blueL;
+        }
+        if (ci===7 && d.mood==='great') { bg2=C.blueL; fg='1E3A8A'; }
+        else if (ci===7 && d.mood==='ok') { bg2='D1FAE5'; fg='3B6B0C'; }
+        else if (ci===7 && d.mood==='hard') { bg2='FEF3C7'; fg='92400E'; }
+        else if (ci===7 && d.mood==='limit') { bg2=C.redL; fg=C.red; }
+        setCell(ws1, addr, v, dataStyle(bg2, fg, bold, ci<=1||ci>=4));
+      });
+      r1++;
     });
-  const dailySheet = XLSX.utils.aoa_to_sheet([dailyHeaders, ...dailyRows]);
-  dailySheet['!cols'] = [
-    {wch:14},{wch:6},{wch:18},{wch:22},{wch:16},{wch:24}
-  ];
-  XLSX.utils.book_append_sheet(wb, dailySheet, '日次記録');
+  });
 
-  // ── シート3：月次まとめ ──
+  ws1['!ref'] = XLSX.utils.encode_range({s:{r:0,c:0},e:{r:r1-1,c:8}});
+  ws1['!cols'] = [{wch:14},{wch:6},{wch:20},{wch:14},{wch:14},{wch:22},{wch:10},{wch:18},{wch:22}];
+  ws1['!rows'] = Array(r1).fill(null).map((_,i)=>({hpt:i===0?22:18}));
+  XLSX.utils.book_append_sheet(wb, ws1, '日次記録');
+
+  // =============================================
+  // シート2：月次まとめ
+  // =============================================
+  const ws2 = {};
+
+  // タイトル行
+  ws2['A1'] = { v:'📊 まもるさん — 月次まとめ', t:'s',
+    s: cellStyle(C.greenL, C.green, true, false, false, false) };
+  ws2['A2'] = { v:`出力日：${today}`, t:'s',
+    s: cellStyle(C.white, C.textS, false, false, false, false) };
+
+  // 月ごとにデータ集計
   const monthMap = {};
-  daily.filter(d => d.date).forEach(d => {
-    const key = d.date.slice(0, 7); // YYYY-MM
-    if (!monthMap[key]) monthMap[key] = { great:0, ok:0, hard:0, limit:0, lok:0, lhalf:0, lng:0, otTotal:0, days:0 };
+  daily.filter(d=>d.date).forEach(d => {
+    const key = d.date.slice(0,7);
+    if (!monthMap[key]) monthMap[key] = {great:0,ok:0,hard:0,limit:0,lok:0,lhalf:0,lng:0,otTotal:0,days:0,taskDone:0,tokk:0};
     const m = monthMap[key];
     m.days++;
-    m.otTotal += Number(d.ot) || 0;
-    if (d.mood === 'great') m.great++;
-    else if (d.mood === 'ok') m.ok++;
-    else if (d.mood === 'hard') m.hard++;
-    else if (d.mood === 'limit') m.limit++;
-    if (d.lunch === 'ok') m.lok++;
-    else if (d.lunch === 'half') m.lhalf++;
-    else if (d.lunch === 'ng') m.lng++;
+    m.otTotal += Number(d.ot)||0;
+    if (d.mood==='great') m.great++;
+    else if (d.mood==='ok') m.ok++;
+    else if (d.mood==='hard') m.hard++;
+    else if (d.mood==='limit') m.limit++;
+    if (d.lunch==='ok') m.lok++;
+    else if (d.lunch==='half') m.lhalf++;
+    else if (d.lunch==='ng') m.lng++;
   });
-  const monthHeaders = [
-    '年月','記録日数',
-    '時間外合計（時間）','1日平均（分）',
-    '😄快調','🙂まあまあ','😓しんどい','🚨限界',
-    '🍱昼休み取れた','🥡少し','😞取れなかった'
-  ];
-  const monthRows = Object.entries(monthMap)
-    .sort((a,b) => a[0] > b[0] ? -1 : 1)
-    .map(([key, m]) => {
-      const otH = Math.round(m.otTotal / 60 * 10) / 10;
-      const otAvg = m.days > 0 ? Math.round(m.otTotal / m.days) : 0;
-      const [yr, mo] = key.split('-');
-      return [`${yr}年${parseInt(mo)}月`, m.days, otH, otAvg, m.great, m.ok, m.hard, m.limit, m.lok, m.lhalf, m.lng];
+  // タスク完了数を月別に
+  allTasks.forEach(t => {
+    const key = (t.doneDate||'').slice(0,7);
+    if (monthMap[key]) monthMap[key].taskDone++;
+  });
+
+  const sortedMonths = Object.keys(monthMap).sort();
+
+  // 週別ヘルパー
+  function getWeeksOfMonth(yr, mo) {
+    const weeks = {};
+    const firstDay = new Date(yr, mo-1, 1);
+    const lastDay  = new Date(yr, mo, 0);
+    let d = new Date(firstDay);
+    while (d <= lastDay) {
+      if (d.getDay() !== 0 && d.getDay() !== 6) {
+        const wk = Math.ceil(d.getDate() / 7);
+        if (!weeks[wk]) weeks[wk] = {start:new Date(d), days:[]};
+        weeks[wk].days.push(new Date(d));
+      }
+      d.setDate(d.getDate()+1);
+    }
+    return weeks;
+  }
+
+  let r2 = 3; // 3行目から（0-indexed: row 2）
+
+  sortedMonths.forEach(key => {
+    const [yr, mo] = key.split('-').map(Number);
+    const label = `${yr}年${mo}月`;
+
+    // 月タイトル行
+    const titleAddr = XLSX.utils.encode_cell({r:r2,c:0});
+    ws2[titleAddr] = { v:`▶ ${label}`, t:'s',
+      s: { fill:{patternType:'solid',fgColor:{rgb:C.green}},
+           font:{name:'Arial',sz:12,color:{rgb:C.white},bold:true},
+           alignment:{horizontal:'left',vertical:'center'} }};
+    // A〜J列を同じ色で埋める
+    for(let c=1;c<10;c++) {
+      const a = XLSX.utils.encode_cell({r:r2,c});
+      ws2[a] = {v:'',t:'s', s:{fill:{patternType:'solid',fgColor:{rgb:C.green}},border:{}}};
+    }
+    r2++;
+
+    // グループヘッダー行1（大分類）
+    const gh = [
+      {v:'期間',bg:C.gray,span:1},
+      {v:'完了\nタスク',bg:C.green,span:1},
+      {v:'突発\n対応',bg:C.amber,span:1},
+      {v:'😄\n快調',bg:C.blue,span:1},
+      {v:'🙂\nまあまあ',bg:C.blue,span:1},
+      {v:'😓\nしんどい',bg:C.red,span:1},
+      {v:'🚨\n限界',bg:'991B1B',span:1},
+      {v:'🍱 昼休み\n取れた',bg:C.green,span:1},
+      {v:'🥡 昼休み\n少し',bg:C.amber,span:1},
+      {v:'😞 昼休み\n取れなかった',bg:C.red,span:1},
+    ];
+    gh.forEach((h,ci) => {
+      const addr = XLSX.utils.encode_cell({r:r2,c:ci});
+      ws2[addr] = {v:h.v, t:'s', s:hdrStyle(h.bg)};
     });
-  const monthSheet = XLSX.utils.aoa_to_sheet([monthHeaders, ...monthRows]);
-  monthSheet['!cols'] = [
-    {wch:12},{wch:10},{wch:16},{wch:14},
-    {wch:8},{wch:10},{wch:10},{wch:8},
-    {wch:14},{wch:8},{wch:12}
-  ];
-  XLSX.utils.book_append_sheet(wb, monthSheet, '月次まとめ');
+    r2++;
+
+    // 週別データ
+    const weeks = getWeeksOfMonth(yr, mo);
+    const weekKeys = Object.keys(weeks).map(Number).sort();
+    const totals = {task:0,tokk:0,great:0,ok:0,hard:0,limit:0,lok:0,lhalf:0,lng:0};
+
+    weekKeys.forEach(wk => {
+      const wDays = weeks[wk].days;
+      const startDate = `${yr}-${String(mo).padStart(2,'0')}-${String(wDays[0].getDate()).padStart(2,'0')}`;
+      const endDate   = `${yr}-${String(mo).padStart(2,'0')}-${String(wDays[wDays.length-1].getDate()).padStart(2,'0')}`;
+      const wLabel = `第${wk}週（${mo}/${wDays[0].getDate()}〜）`;
+
+      // この週のdailyデータを集計
+      const wStats = {great:0,ok:0,hard:0,limit:0,lok:0,lhalf:0,lng:0};
+      wDays.forEach(wd => {
+        const dk = `${wd.getFullYear()}-${String(wd.getMonth()+1).padStart(2,'0')}-${String(wd.getDate()).padStart(2,'0')}`;
+        const rec = dailyMap[dk];
+        if (!rec) return;
+        if (rec.mood==='great') wStats.great++;
+        else if (rec.mood==='ok') wStats.ok++;
+        else if (rec.mood==='hard') wStats.hard++;
+        else if (rec.mood==='limit') wStats.limit++;
+        if (rec.lunch==='ok') wStats.lok++;
+        else if (rec.lunch==='half') wStats.lhalf++;
+        else if (rec.lunch==='ng') wStats.lng++;
+      });
+      // この週のタスク完了数
+      const wTaskDone = allTasks.filter(t => t.doneDate >= startDate && t.doneDate <= endDate).length;
+      totals.task+=wTaskDone; totals.tokk+=0;
+      totals.great+=wStats.great; totals.ok+=wStats.ok; totals.hard+=wStats.hard; totals.limit+=wStats.limit;
+      totals.lok+=wStats.lok; totals.lhalf+=wStats.lhalf; totals.lng+=wStats.lng;
+
+      const rowData = [wLabel, wTaskDone, 0, wStats.great, wStats.ok, wStats.hard, wStats.limit, wStats.lok, wStats.lhalf, wStats.lng];
+      const isEven = weekKeys.indexOf(wk) % 2 === 0;
+      const bg = isEven ? C.grayL : C.white;
+      rowData.forEach((v,ci) => {
+        const addr = XLSX.utils.encode_cell({r:r2,c:ci});
+        let fg = C.text, bgC = bg, bold = false;
+        if (ci===1) { bgC=C.white; fg=C.green; bold=true; }
+        if (ci===2 && v>0) { bgC=C.amberL; fg=C.amber; }
+        if (ci===3) { bgC=C.blueL; fg='1E3A8A'; }
+        if (ci===4) { bgC='D1FAE5'; fg='3B6B0C'; }
+        if (ci===5) { bgC='FEF3C7'; fg='92400E'; }
+        if (ci===6) { bgC=v>0?C.redL:bg; fg=v>0?C.red:C.text; }
+        if (ci===7) { bgC=C.greenL; fg=C.green; }
+        if (ci===8) { bgC=C.amberL; fg=C.amber; }
+        if (ci===9) { bgC=v>0?C.redL:bg; fg=v>0?C.red:C.text; }
+        ws2[addr] = {v, t:typeof v==='number'?'n':'s', s:dataStyle(bgC,fg,bold,ci!==0)};
+      });
+      r2++;
+    });
+
+    // 月合計行
+    const totalRow = [
+      `　${label}　合計`, totals.task, totals.tokk,
+      totals.great, totals.ok, totals.hard, totals.limit,
+      totals.lok, totals.lhalf, totals.lng
+    ];
+    totalRow.forEach((v,ci) => {
+      const addr = XLSX.utils.encode_cell({r:r2,c:ci});
+      const bgs  = [C.greenL,C.greenL,C.amberL,C.blueL,'D1FAE5','FEF3C7',C.redL,C.greenL,C.amberL,C.redL];
+      const fgs  = [C.green, C.green, C.amber, '1E3A8A','3B6B0C','92400E',C.red, C.green, C.amber, C.red];
+      ws2[addr] = {v, t:typeof v==='number'?'n':'s',
+        s:{ fill:{patternType:'solid',fgColor:{rgb:bgs[ci]}},
+            font:{name:'Arial',sz:11,color:{rgb:fgs[ci]},bold:true},
+            alignment:{horizontal:ci===0?'left':'center',vertical:'center'},
+            border:{bottom:{style:'medium',color:{rgb:'9CA3AF'}},
+                    top:{style:'thin',color:{rgb:'D1D5DB'}},
+                    left:{style:'thin',color:{rgb:'D1D5DB'}},
+                    right:{style:'thin',color:{rgb:'D1D5DB'}}}}};
+    });
+    r2 += 2; // 空行1行あけて次月
+  });
+
+  ws2['!ref'] = XLSX.utils.encode_range({s:{r:0,c:0},e:{r:r2,c:9}});
+  ws2['!cols'] = [{wch:22},{wch:8},{wch:8},{wch:8},{wch:10},{wch:10},{wch:8},{wch:12},{wch:10},{wch:14}];
+  // 行高
+  const rowHeights = [];
+  rowHeights[0] = {hpt:28}; rowHeights[1] = {hpt:16};
+  ws2['!rows'] = rowHeights;
+  XLSX.utils.book_append_sheet(wb, ws2, '月次まとめ');
 
   // ダウンロード
   XLSX.writeFile(wb, `まもるさん_${today}.xlsx`);
@@ -1511,9 +1991,57 @@ function exportCSVFallback(allTasks, daily) {
 }
 
 // =============================================
-// 昨日の記録
+// 昨日までの記録
 // =============================================
-let ydayMood = null, ydayLunch = null;
+let ydayMood = null, ydayLunch = null, ydaySelectedDate = null;
+
+function openYdayModal() {
+  // 昨日の日付をデフォルトに設定
+  const yday = new Date(); yday.setDate(yday.getDate() - 1);
+  ydaySelectedDate = `${yday.getFullYear()}-${pad(yday.getMonth()+1)}-${pad(yday.getDate())}`;
+  // UI初期化
+  selectYdayDate('yday');
+  ydayMood = null; ydayLunch = null;
+  ['ok','half','ng'].forEach(x => { document.getElementById('ylb-'+x).className='lunch-btn'; });
+  ['great','ok','hard','limit'].forEach(x => { const b=document.getElementById('ymb-'+x); if(b) b.className='mood-btn'; });
+  updateYdaySelectedLabel();
+  // 昨日ボタンのラベル更新
+  const days=['日','月','火','水','木','金','土'];
+  document.getElementById('yday-date-label').textContent =
+    `${yday.getMonth()+1}月${yday.getDate()}日（${days[yday.getDay()]}）`;
+  openM('modal-yday');
+}
+
+function selectYdayDate(mode) {
+  document.getElementById('ydatebtn-yday').classList.toggle('active', mode==='yday');
+  document.getElementById('ydatebtn-pick').classList.toggle('active', mode==='pick');
+  document.getElementById('yday-date-picker-wrap').classList.toggle('hidden', mode!=='pick');
+  if (mode === 'yday') {
+    const yday = new Date(); yday.setDate(yday.getDate()-1);
+    ydaySelectedDate = `${yday.getFullYear()}-${pad(yday.getMonth()+1)}-${pad(yday.getDate())}`;
+    updateYdaySelectedLabel();
+  } else {
+    // カレンダーの最大値を昨日に設定
+    const pickerEl = document.getElementById('yday-date-input');
+    const yday = new Date(); yday.setDate(yday.getDate()-1);
+    pickerEl.max = `${yday.getFullYear()}-${pad(yday.getMonth()+1)}-${pad(yday.getDate())}`;
+    pickerEl.value = ydaySelectedDate || '';
+    pickerEl.focus();
+  }
+}
+
+function onYdayDateChange() {
+  const val = document.getElementById('yday-date-input').value;
+  if (val) { ydaySelectedDate = val; updateYdaySelectedLabel(); }
+}
+
+function updateYdaySelectedLabel() {
+  const el = document.getElementById('yday-selected-date');
+  if (!el || !ydaySelectedDate) return;
+  const d = new Date(ydaySelectedDate);
+  const days=['日','月','火','水','木','金','土'];
+  el.textContent = `📅 選択中：${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日（${days[d.getDay()]}）`;
+}
 
 function selYLunch(t) {
   ydayLunch = t;
@@ -1529,25 +2057,165 @@ function selYMood(t) {
   });
 }
 async function saveYday() {
-  const yday = new Date(); yday.setDate(yday.getDate() - 1);
-  const ydayStr = `${yday.getFullYear()}-${pad(yday.getMonth()+1)}-${pad(yday.getDate())}`;
-  // ローカル保存
+  if (!ydaySelectedDate) { alert('日付を選択してください'); return; }
   const daily = JSON.parse(localStorage.getItem('mamoru_daily') || '[]');
-  const idx = daily.findIndex(d => d.date === ydayStr);
-  const record = { date: ydayStr, mood: ydayMood||'', lunch: ydayLunch||'', ot: 0 };
+  const idx = daily.findIndex(d => d.date === ydaySelectedDate);
+  const record = { date: ydaySelectedDate, mood: ydayMood||'', lunch: ydayLunch||'', ot: 0 };
   if (idx >= 0) daily[idx] = record; else daily.push(record);
   localStorage.setItem('mamoru_daily', JSON.stringify(daily));
-  // API保存
   try {
-    showSync('昨日の記録を保存中...');
+    showSync('記録を保存中...');
     await apiPost({ action: 'saveDaily', data: record });
-    showSync('✅ 昨日の記録を保存しました');
+    showSync('✅ 記録を保存しました');
   } catch(e) { showSync('✅ ローカルに保存しました'); }
-  // リセット
-  ydayMood = null; ydayLunch = null;
-  ['ok','half','ng'].forEach(x => { document.getElementById('ylb-'+x).className='lunch-btn'; });
-  ['great','ok','hard','limit'].forEach(x => { const b=document.getElementById('ymb-'+x); if(b) b.className='mood-btn'; });
+  renderMonthContent();
   closeM('modal-yday');
+}
+
+// =============================================
+// サンプルデータ投入（手動）
+// =============================================
+async function insertSampleData() {
+  closeM('modal-sample');
+  showSync('サンプルデータを投入中...');
+
+  const sampleTasks = [
+    {id:'S001',name:'分掌',color:'red',subs:['水泳指導計画作成'],deadline:'2026-03-20',pinned:false,done:true,doneDate:'2026-03-05',time:'1時間 · 放課後（勤務内）'},
+    {id:'S002',name:'保護者対応',color:'gray',subs:['田中さんへ電話'],deadline:'',pinned:false,done:true,doneDate:'2026-03-06',time:'20分 · 空きコマ（勤務内）'},
+    {id:'S003',name:'学年',color:'blue',subs:['学年だより作成'],deadline:'2026-03-08',pinned:false,done:true,doneDate:'2026-03-07',time:'1時間30分 · 勤務時間外'},
+    {id:'S004',name:'会議',color:'gray',subs:['職員会議資料準備'],deadline:'',pinned:false,done:true,doneDate:'2026-03-10',time:'45分 · 空きコマ（勤務内）'},
+    {id:'S005',name:'授業',color:'gray',subs:['国語教材研究'],deadline:'',pinned:false,done:true,doneDate:'2026-03-11',time:'1時間 · 勤務時間外'},
+    {id:'S006',name:'生徒指導',color:'gray',subs:['3年A組 面談'],deadline:'',pinned:false,done:true,doneDate:'2026-03-12',time:'30分 · 昼休み（勤務外）'},
+    {id:'S007',name:'分掌',color:'red',subs:['備品発注'],deadline:'2026-03-15',pinned:false,done:true,doneDate:'2026-03-13',time:'20分 · 放課後（勤務内）'},
+    {id:'S008',name:'学級',color:'gray',subs:['学級通信作成'],deadline:'',pinned:false,done:true,doneDate:'2026-03-14',time:'2時間 · 勤務時間外'},
+    {id:'S009',name:'保護者対応',color:'gray',subs:['懇談会準備'],deadline:'2026-03-19',pinned:false,done:true,doneDate:'2026-03-17',time:'1時間 · 放課後（勤務内）'},
+    {id:'S010',name:'授業',color:'gray',subs:['テスト採点'],deadline:'',pinned:false,done:true,doneDate:'2026-03-18',time:'2時間 · 勤務時間外'},
+    {id:'S011',name:'学年',color:'blue',subs:['集金確認'],deadline:'',pinned:false,done:true,doneDate:'2026-03-19',time:'20分 · 空きコマ（勤務内）'},
+    {id:'S012',name:'会議',color:'gray',subs:['学年打ち合わせ'],deadline:'',pinned:false,done:true,doneDate:'2026-03-24',time:'1時間 · 放課後（勤務内）'},
+    {id:'S013',name:'分掌',color:'red',subs:['研修報告書'],deadline:'2026-03-28',pinned:false,done:true,doneDate:'2026-03-26',time:'1時間30分 · 勤務時間外'},
+    {id:'S014',name:'授業',color:'gray',subs:['理科実験準備'],deadline:'',pinned:false,done:true,doneDate:'2026-03-27',time:'45分 · 放課後（勤務内）'},
+    {id:'S015',name:'分掌',color:'red',subs:['プール開き準備'],deadline:'2026-04-10',pinned:false,done:true,doneDate:'2026-04-03',time:'1時間 · 放課後（勤務内）'},
+    {id:'S016',name:'保護者対応',color:'gray',subs:['家庭訪問記録'],deadline:'',pinned:false,done:true,doneDate:'2026-04-04',time:'30分 · 空きコマ（勤務内）'},
+    {id:'S017',name:'学年',color:'blue',subs:['行事計画作成'],deadline:'2026-04-08',pinned:false,done:true,doneDate:'2026-04-07',time:'2時間 · 勤務時間外'},
+    {id:'S018',name:'生徒指導',color:'gray',subs:['行動観察記録'],deadline:'',pinned:false,done:true,doneDate:'2026-04-08',time:'20分 · 昼休み（勤務外）'},
+    {id:'S019',name:'会議',color:'gray',subs:['職員会議'],deadline:'',pinned:false,done:true,doneDate:'2026-04-10',time:'1時間30分 · 放課後（勤務内）'},
+    {id:'S020',name:'授業',color:'gray',subs:['国語教材研究'],deadline:'',pinned:false,done:true,doneDate:'2026-04-11',time:'1時間 · 勤務時間外'},
+    {id:'S021',name:'学級',color:'gray',subs:['席替え'],deadline:'',pinned:false,done:true,doneDate:'2026-04-14',time:'20分 · 空きコマ（勤務内）'},
+    {id:'S022',name:'分掌',color:'red',subs:['水泳指導計画','備品発注'],deadline:'2026-04-18',pinned:false,done:true,doneDate:'2026-04-15',time:'2時間 · 勤務時間外'},
+    {id:'S023',name:'保護者対応',color:'gray',subs:['田中さんへ電話'],deadline:'',pinned:false,done:true,doneDate:'2026-04-16',time:'20分 · 空きコマ（勤務内）'},
+    {id:'S024',name:'学年',color:'blue',subs:['学年だより作成'],deadline:'2026-04-20',pinned:false,done:true,doneDate:'2026-04-17',time:'1時間30分 · 勤務時間外'},
+    {id:'S025',name:'授業',color:'gray',subs:['理科実験準備'],deadline:'',pinned:false,done:true,doneDate:'2026-04-21',time:'1時間 · 放課後（勤務内）'},
+    {id:'S026',name:'生徒指導',color:'gray',subs:['問題行動記録'],deadline:'',pinned:false,done:true,doneDate:'2026-04-22',time:'30分 · 昼休み（勤務外）'},
+    {id:'S027',name:'会議',color:'gray',subs:['学年打ち合わせ'],deadline:'',pinned:false,done:true,doneDate:'2026-04-23',time:'45分 · 放課後（勤務内）'},
+    {id:'S028',name:'学級',color:'gray',subs:['掃除当番表作成'],deadline:'',pinned:false,done:true,doneDate:'2026-04-24',time:'20分 · 空きコマ（勤務内）'},
+    {id:'S029',name:'授業',color:'gray',subs:['テスト採点'],deadline:'',pinned:false,done:true,doneDate:'2026-04-25',time:'2時間 · 勤務時間外'},
+    {id:'S030',name:'分掌',color:'red',subs:['研修報告書'],deadline:'2026-04-28',pinned:false,done:true,doneDate:'2026-04-28',time:'1時間 · 勤務時間外'},
+    // 5月26〜29日（今週）
+    {id:'S031',name:'学年',color:'blue',subs:['運動会準備（会場設営）'],deadline:'',pinned:false,done:true,doneDate:'2026-05-26',time:'2時間 · 放課後（勤務内）'},
+    {id:'S032',name:'授業',color:'gray',subs:['理科・実験準備'],deadline:'',pinned:false,done:true,doneDate:'2026-05-26',time:'45分 · 空きコマ（勤務内）'},
+    {id:'S033',name:'分掌',color:'red',subs:['データ整理（成績入力）'],deadline:'',pinned:false,done:true,doneDate:'2026-05-27',time:'1時間30分 · 勤務時間外'},
+    {id:'S034',name:'学年',color:'blue',subs:['修学旅行準備連絡（保護者メール）'],deadline:'2026-06-10',pinned:false,done:true,doneDate:'2026-05-27',time:'30分 · 空きコマ（勤務内）'},
+    {id:'S035',name:'授業',color:'gray',subs:['国語・漢字テスト採点'],deadline:'',pinned:false,done:true,doneDate:'2026-05-28',time:'1時間 · 昼休み（勤務外）'},
+    {id:'S036',name:'学級',color:'gray',subs:['片付け（教室整理）'],deadline:'',pinned:false,done:true,doneDate:'2026-05-28',time:'20分 · 放課後（勤務内）'},
+    {id:'S037',name:'学年',color:'blue',subs:['運動会準備（プログラム作成）'],deadline:'',pinned:false,done:true,doneDate:'2026-05-28',time:'2時間 · 勤務時間外'},
+    {id:'S038',name:'授業',color:'gray',subs:['算数・教材研究'],deadline:'',pinned:false,done:true,doneDate:'2026-05-28',time:'1時間 · 空きコマ（勤務内）'},
+    {id:'S039',name:'分掌',color:'red',subs:['データ整理（出欠集計）'],deadline:'',pinned:false,done:true,doneDate:'2026-05-29',time:'45分 · 放課後（勤務内）'},
+    {id:'S040',name:'学年',color:'blue',subs:['修学旅行準備連絡（行程確認）'],deadline:'2026-06-10',pinned:false,done:true,doneDate:'2026-05-29',time:'1時間 · 空きコマ（勤務内）'},
+    {id:'S041',name:'学級',color:'gray',subs:['片付け（体育倉庫整理）'],deadline:'',pinned:false,done:true,doneDate:'2026-05-29',time:'30分 · 放課後（勤務内）'},
+    {id:'S042',name:'授業',color:'gray',subs:['体育・運動会練習指導'],deadline:'',pinned:false,done:true,doneDate:'2026-05-29',time:'2時間 · 勤務時間外'},
+  ];
+
+  const sampleDaily = [
+    {date:'2026-03-05',mood:'hard',lunch:'half',ot:30},
+    {date:'2026-03-06',mood:'ok',lunch:'ok',ot:0},
+    {date:'2026-03-07',mood:'hard',lunch:'ng',ot:90},
+    {date:'2026-03-10',mood:'ok',lunch:'half',ot:0},
+    {date:'2026-03-11',mood:'hard',lunch:'ng',ot:60},
+    {date:'2026-03-12',mood:'limit',lunch:'ng',ot:30},
+    {date:'2026-03-13',mood:'ok',lunch:'half',ot:0},
+    {date:'2026-03-14',mood:'hard',lunch:'ng',ot:120},
+    {date:'2026-03-17',mood:'ok',lunch:'ok',ot:0},
+    {date:'2026-03-18',mood:'hard',lunch:'ng',ot:120},
+    {date:'2026-03-19',mood:'ok',lunch:'half',ot:0},
+    {date:'2026-03-24',mood:'great',lunch:'ok',ot:0},
+    {date:'2026-03-25',mood:'ok',lunch:'ok',ot:0},
+    {date:'2026-03-26',mood:'hard',lunch:'ng',ot:90},
+    {date:'2026-03-27',mood:'ok',lunch:'half',ot:30},
+    {date:'2026-03-28',mood:'great',lunch:'ok',ot:0},
+    {date:'2026-04-03',mood:'ok',lunch:'half',ot:60},
+    {date:'2026-04-04',mood:'ok',lunch:'ok',ot:0},
+    {date:'2026-04-07',mood:'hard',lunch:'ng',ot:120},
+    {date:'2026-04-08',mood:'hard',lunch:'ng',ot:90},
+    {date:'2026-04-09',mood:'ok',lunch:'half',ot:0},
+    {date:'2026-04-10',mood:'ok',lunch:'ok',ot:0},
+    {date:'2026-04-11',mood:'hard',lunch:'ng',ot:60},
+    {date:'2026-04-14',mood:'great',lunch:'ok',ot:0},
+    {date:'2026-04-15',mood:'hard',lunch:'ng',ot:120},
+    {date:'2026-04-16',mood:'ok',lunch:'half',ot:0},
+    {date:'2026-04-17',mood:'hard',lunch:'ng',ot:90},
+    {date:'2026-04-18',mood:'ok',lunch:'half',ot:30},
+    {date:'2026-04-21',mood:'ok',lunch:'ok',ot:0},
+    {date:'2026-04-22',mood:'hard',lunch:'ng',ot:60},
+    {date:'2026-04-23',mood:'ok',lunch:'half',ot:0},
+    {date:'2026-04-24',mood:'great',lunch:'ok',ot:0},
+    {date:'2026-04-25',mood:'limit',lunch:'ng',ot:120},
+    {date:'2026-04-28',mood:'hard',lunch:'ng',ot:90},
+    {date:'2026-04-30',mood:'ok',lunch:'half',ot:30},
+    // 5月26〜29日（今週）
+    {date:'2026-05-26',mood:'ok',lunch:'half',ot:0},
+    {date:'2026-05-27',mood:'hard',lunch:'ng',ot:90},
+    {date:'2026-05-28',mood:'ok',lunch:'ok',ot:60},
+    {date:'2026-05-28',mood:'hard',lunch:'ng',ot:120},
+    {date:'2026-05-29',mood:'ok',lunch:'half',ot:0},
+    {date:'2026-05-29',mood:'hard',lunch:'ng',ot:120},
+  ];
+
+  // タスクをマージ（同じIDは上書きしない）
+  const existingTasks = JSON.parse(localStorage.getItem('mamoru_tasks') || '[]');
+  const existingIds = new Set(existingTasks.map(t => String(t.id)));
+  const newTasks = sampleTasks.filter(t => !existingIds.has(String(t.id)));
+  const mergedTasks = [...existingTasks, ...newTasks];
+  localStorage.setItem('mamoru_tasks', JSON.stringify(mergedTasks));
+  tasks = mergedTasks;
+
+  // 日次記録をマージ（同じ日付は上書きしない）
+  const existingDaily = JSON.parse(localStorage.getItem('mamoru_daily') || '[]');
+  const existingDates = new Set(existingDaily.map(d => d.date));
+  const newDaily = sampleDaily.filter(d => !existingDates.has(d.date));
+  const mergedDaily = [...existingDaily, ...newDaily];
+  localStorage.setItem('mamoru_daily', JSON.stringify(mergedDaily));
+
+  renderTasks();
+  showSync(`✅ サンプルデータを投入しました（タスク${newTasks.length}件・日次記録${newDaily.length}件）`);
+}
+
+// =============================================
+// サンプルデータ削除
+// =============================================
+async function deleteSampleData() {
+  closeM('modal-sample-del');
+  // IDが'S'から始まるタスクを削除
+  const before = tasks.length;
+  tasks = tasks.filter(t => !String(t.id).startsWith('S'));
+  saveLocalTasks();
+  renderTasks();
+  // 日次記録はサンプル日付（3〜4月分の固定日）を削除
+  const sampleDates = new Set([
+    '2026-03-05','2026-03-06','2026-03-07','2026-03-10','2026-03-11','2026-03-12',
+    '2026-03-13','2026-03-14','2026-03-17','2026-03-18','2026-03-19','2026-03-24',
+    '2026-03-25','2026-03-26','2026-03-27','2026-03-28',
+    '2026-04-03','2026-04-04','2026-04-07','2026-04-08','2026-04-09','2026-04-10',
+    '2026-04-11','2026-04-14','2026-04-15','2026-04-16','2026-04-17','2026-04-18',
+    '2026-04-21','2026-04-22','2026-04-23','2026-04-24','2026-04-25','2026-04-28','2026-04-30',
+    '2026-05-26','2026-05-27','2026-05-28','2026-05-29',
+  ]);
+  const daily = JSON.parse(localStorage.getItem('mamoru_daily') || '[]');
+  const filtered = daily.filter(d => !sampleDates.has(d.date));
+  localStorage.setItem('mamoru_daily', JSON.stringify(filtered));
+  const deleted = (before - tasks.length) + (daily.length - filtered.length);
+  showSync(`✅ サンプルデータを削除しました（${deleted}件）`);
+  renderMonthContent();
+  renderWeekContent();
 }
 
 // =============================================
@@ -1566,175 +2234,18 @@ async function saveDaily() {
     await apiPost({ action:'saveDaily', data: record });
     showSync('✅ 今日の記録を保存しました');
   } catch(e) { showSync('✅ ローカルに保存しました'); }
+  // 今月タブも即時反映
+  renderMonthContent();
 }
 
-// =============================================
-// CSVインポート
-// =============================================
-let importData = { tasks: [], daily: [] };
 
-function handleImportFile(event) {
-  const file = event.target.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    try {
-      parseImportCSV(e.target.result);
-    } catch(err) {
-      alert('CSVの読み込みに失敗しました。形式を確認してください。\n' + err.message);
-    }
-    // ファイル選択をリセット（同じファイルを再度選べるように）
-    event.target.value = '';
-  };
-  reader.readAsText(file, 'UTF-8');
-}
-
-function parseImportCSV(text) {
-  // BOM除去
-  if (text.charCodeAt(0) === 0xFEFF) text = text.slice(1);
-  const lines = text.split(/\r?\n/).filter(l => l.trim());
-  if (lines.length < 2) { alert('データが見つかりません'); return; }
-
-  // ヘッダー解析
-  const headers = parseCSVLine(lines[0]);
-
-  importData = { tasks: [], daily: [] };
-  const previewRows = [];
-
-  for (let i = 1; i < lines.length; i++) {
-    const row = parseCSVLine(lines[i]);
-    if (!row.length) continue;
-    const obj = {};
-    headers.forEach((h, idx) => { obj[h] = row[idx] || ''; });
-
-    // 種類で振り分け
-    const type = obj['種類'] || '';
-    if (type === 'タスク完了' || obj['名前'] || obj['タスク名']) {
-      // タスクデータ
-      const task = {
-        id:       obj['id'] || obj['タスクID'] || 'imp_' + Date.now() + '_' + i,
-        name:     obj['名前'] || obj['タスク名'] || obj['カテゴリ'] || '',
-        color:    obj['カテゴリ色'] || obj['color'] || 'gray',
-        subs:     (obj['詳細'] || obj['やること'] || '').split('\n').filter(Boolean),
-        deadline: obj['締切'] || obj['締切日'] || '',
-        pinned:   false,
-        done:     obj['完了'] === 'TRUE' || type === 'タスク完了',
-        doneDate: obj['完了日'] || obj['日付'] || '',
-        time:     obj['かかった時間'] || '',
-        when:     obj['いつ行ったか'] || '',
-      };
-      if (task.name) importData.tasks.push(task);
-    } else if (type === '日次記録' || obj['しんどさ'] || obj['昼休み']) {
-      // 日次記録データ
-      const daily = {
-        date:  obj['日付'] || obj['date'] || '',
-        mood:  obj['しんどさ'] || obj['mood'] || '',
-        lunch: obj['昼休み'] || obj['lunch'] || '',
-        ot:    Number(obj['勤務時間外（分）'] || obj['ot'] || 0),
-        memo:  obj['メモ'] || '',
-      };
-      if (daily.date) importData.daily.push(daily);
-    }
-
-    if (previewRows.length < 10) previewRows.push(row);
-  }
-
-  // サマリー
-  const summary = document.getElementById('import-summary');
-  summary.innerHTML = `
-    📋 タスクデータ：<strong>${importData.tasks.length}件</strong>　
-    📅 日次記録：<strong>${importData.daily.length}件</strong>`;
-
-  // プレビューテーブル
-  const table = document.getElementById('preview-table');
-  const maxCols = Math.min(headers.length, 6);
-  table.innerHTML = `
-    <thead><tr>${headers.slice(0,maxCols).map(h=>`<th>${h}</th>`).join('')}</tr></thead>
-    <tbody>${previewRows.map(r=>`<tr>${r.slice(0,maxCols).map(c=>`<td>${c}</td>`).join('')}</tr>`).join('')}</tbody>`;
-
-  // ボタン制御
-  const execBtn = document.getElementById('btn-import-exec');
-  const total = importData.tasks.length + importData.daily.length;
-  execBtn.disabled = total === 0;
-  execBtn.textContent = total > 0 ? `インポート実行（${total}件）` : 'データなし';
-
-  openM('modal-import');
-}
-
-function parseCSVLine(line) {
-  const result = [];
-  let current = '';
-  let inQuotes = false;
-  for (let i = 0; i < line.length; i++) {
-    const ch = line[i];
-    if (ch === '"') {
-      if (inQuotes && line[i+1] === '"') { current += '"'; i++; }
-      else inQuotes = !inQuotes;
-    } else if (ch === ',' && !inQuotes) {
-      result.push(current.trim()); current = '';
-    } else {
-      current += ch;
-    }
-  }
-  result.push(current.trim());
-  return result;
-}
-
-async function execImport() {
-  closeM('modal-import');
-  showSync('インポート中...');
-
-  // タスクをマージ（既存IDは上書き、新規は追加）
-  importData.tasks.forEach(imp => {
-    const idx = tasks.findIndex(t => String(t.id) === String(imp.id));
-    if (idx >= 0) tasks[idx] = imp;
-    else tasks.push(imp);
-  });
-
-  // 日次記録をマージ
-  const daily = JSON.parse(localStorage.getItem('mamoru_daily') || '[]');
-  importData.daily.forEach(imp => {
-    const idx = daily.findIndex(d => d.date === imp.date);
-    if (idx >= 0) daily[idx] = imp;
-    else daily.push(imp);
-  });
-
-  saveLocalTasks();
-  localStorage.setItem('mamoru_daily', JSON.stringify(daily));
-  renderTasks();
-
-  // スプレッドシートにも同期
-  let synced = 0;
-  for (const t of importData.tasks) {
-    try {
-      await apiPost({ action: 'saveTask', data: t });
-      synced++;
-    } catch(e) {}
-  }
-  for (const d of importData.daily) {
-    try {
-      await apiPost({ action: 'saveDaily', data: d });
-      synced++;
-    } catch(e) {}
-  }
-
-  const total = importData.tasks.length + importData.daily.length;
-  showSync(`✅ ${total}件インポート完了（スプレッドシート同期：${synced}件）`);
-  importData = { tasks: [], daily: [] };
-}
 
 // =============================================
 // 起動
 // =============================================
+
 loadTasks();
 setTimeout(renderTodayAchieve, 500);
-// 昨日モーダルのタイトルに日付を入れる
-(function(){
-  const yday = new Date(); yday.setDate(yday.getDate()-1);
-  const days=['日','月','火','水','木','金','土'];
-  const el = document.getElementById('yday-title');
-  if(el) el.textContent = `昨日（${yday.getMonth()+1}月${yday.getDate()}日・${days[yday.getDay()]}）の記録`;
-})();
 </script>
 </body>
 </html>
