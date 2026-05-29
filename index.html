@@ -205,11 +205,12 @@ textarea{resize:none;height:56px;line-height:1.5;}
 .add-sub-btn{display:flex;align-items:center;gap:5px;background:none;border:1px dashed var(--border);border-radius:var(--radius-s);padding:6px 10px;color:var(--text-s);font-size:13px;width:100%;margin-bottom:4px;}
 .section-title{font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;margin-top:12px;}
 .save-btn-lg{background:var(--green);color:#fff;border:none;border-radius:var(--radius);padding:13px;width:100%;font-size:15px;font-weight:700;margin-top:4px;}
-.yday-btn{display:flex;align-items:center;gap:10px;background:var(--gray-l);border:1.5px solid var(--border);border-radius:var(--radius-s);padding:11px 14px;width:100%;font-size:13px;color:var(--text-s);margin-top:8px;}
+.yday-btn{display:flex;align-items:center;gap:10px;background:var(--amber-l);border:1.5px solid var(--amber-b);border-radius:var(--radius-s);padding:11px 14px;width:100%;font-size:13px;color:var(--amber);font-weight:600;margin-top:8px;}
 .consult-wrap{padding:28px 0 0;}
 .consult-divider{border:none;border-top:1px solid var(--border);margin-bottom:18px;}
 .consult-btn{display:flex;align-items:center;justify-content:center;gap:5px;background:transparent;border:none;padding:6px;width:100%;}
 .consult-btn span{font-size:12px;color:var(--text-s);text-decoration:underline;text-underline-offset:3px;}
+.voice-btn{display:flex;align-items:center;justify-content:center;gap:8px;background:var(--blue-l);border:1.5px solid #93C5FD;border-radius:var(--radius-s);padding:11px 14px;width:100%;font-size:13px;font-weight:600;color:var(--blue);margin-bottom:10px;}
 .dl-cal-outer{overflow-x:auto;padding-bottom:8px;margin-bottom:14px;}
 .dl-cal-months{display:flex;gap:12px;width:max-content;}
 .dl-cal-month{background:var(--bg-card);border-radius:var(--radius);padding:10px;min-width:230px;border:1px solid var(--border);}
@@ -384,6 +385,20 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <button class="lunch-btn" id="lb-half" onclick="selLunch('half')">🥡 少し<br><span style="font-size:10px;font-weight:400;">10分程度</span></button>
       <button class="lunch-btn" id="lb-ng" onclick="selLunch('ng')">😞 取れなかった<br><span style="font-size:10px;font-weight:400;">0〜5分</span></button>
     </div>
+    <!-- 昼休み時間外：カテゴリ選択（取れなかった・少しの時のみ表示） -->
+    <div id="lunch-cat-wrap" class="hidden" style="margin-bottom:8px;">
+      <div style="font-size:11px;color:var(--text-s);margin-bottom:5px;">昼休みに何をしていましたか？</div>
+      <div class="cat-grid" id="lunch-cat-grid" style="margin-bottom:0;">
+        <button class="cat-btn" data-n="分掌" onclick="selLunchCat(this)">分掌</button>
+        <button class="cat-btn" data-n="保護者対応" onclick="selLunchCat(this)">保護者対応</button>
+        <button class="cat-btn" data-n="生徒指導" onclick="selLunchCat(this)">生徒指導</button>
+        <button class="cat-btn" data-n="学年" onclick="selLunchCat(this)">学年</button>
+        <button class="cat-btn" data-n="学級" onclick="selLunchCat(this)">学級</button>
+        <button class="cat-btn" data-n="会議" onclick="selLunchCat(this)">会議</button>
+        <button class="cat-btn" data-n="授業準備・宿題等" onclick="selLunchCat(this)">授業準備・宿題等</button>
+        <button class="cat-btn" data-n="その他" onclick="selLunchCat(this)" style="grid-column:span 2;">その他</button>
+      </div>
+    </div>
     <div style="font-size:12px;color:var(--text-s);margin:4px 0 10px;" id="lunch-result"></div>
     <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;">今日のしんどさ（体）💪</div>
     <div class="mood-row" style="margin-bottom:12px;">
@@ -404,6 +419,10 @@ textarea{resize:none;height:56px;line-height:1.5;}
     <button class="save-btn-lg" onclick="saveDaily()">今日の記録を保存する</button>    <button class="yday-btn" onclick="openYdayModal()"><i class="ti ti-clock-minus" style="font-size:18px;"></i>　（忘れていた）昨日までの記録を保存する</button>
     <div class="consult-wrap">
       <hr class="consult-divider">
+      <button class="voice-btn" onclick="openM('modal-voice')">
+        <i class="ti ti-speakerphone" style="font-size:16px;"></i>
+        働き方改革案・行政への要望・困りごと
+      </button>
       <button class="consult-btn" onclick="openM('modal-consult')">
         <i class="ti ti-heart-handshake" style="font-size:13px;color:var(--text-s);"></i>
         <span>困った時、つらい時は相談できます</span>
@@ -586,7 +605,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <button class="cat-btn" data-n="学年" data-c="blue" onclick="selCat(this)">学年</button>
       <button class="cat-btn" data-n="学級" data-c="gray" onclick="selCat(this)">学級</button>
       <button class="cat-btn" data-n="会議" data-c="gray" onclick="selCat(this)">会議</button>
-      <button class="cat-btn" data-n="授業" data-c="gray" onclick="selCat(this)">授業</button>
+      <button class="cat-btn" data-n="授業準備・宿題等" data-c="gray" onclick="selCat(this)">授業準備・宿題等</button>
       <button class="cat-btn" data-n="__other__" data-c="gray" onclick="selCat(this)" style="grid-column:span 2;">その他（自由入力）</button>
     </div>
     <div class="hidden" id="other-wrap"><input type="text" id="other-input" placeholder="カテゴリ名を入力…" style="margin-bottom:8px;"></div>
@@ -669,6 +688,38 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <button class="btn-coral" onclick="saveTokk()">記録する</button>
     </div>
     <button class="btn-cancel" onclick="closeM('modal-add')">キャンセル</button>
+  </div>
+</div>
+
+<!-- modal: 声を届ける -->
+<div class="modal-bg" id="modal-voice" onclick="closeBg('modal-voice',event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title">📣 声を届ける</div>
+    <div style="font-size:13px;color:var(--text-s);margin-bottom:14px;line-height:1.7;">働き方改革案・行政への要望・困りごとなど、日頃感じていることを記録できます。</div>
+
+    <!-- 自由記述 -->
+    <div class="field-label">内容</div>
+    <textarea id="voice-text" placeholder="自由に記述してください…" style="width:100%;font-size:13px;border:1px solid var(--border);border-radius:var(--radius-s);padding:9px 11px;background:var(--gray-l);color:var(--text);outline:none;resize:none;height:120px;line-height:1.6;margin-bottom:10px;"></textarea>
+
+    <button class="btn-primary" onclick="saveVoice()">記録する</button>
+
+    <!-- 県教連送信の提案 -->
+    <div id="voice-send-wrap" class="hidden" style="margin-top:14px;background:var(--blue-l);border:1.5px solid #93C5FD;border-radius:var(--radius-s);padding:12px 14px;">
+      <div style="font-size:13px;color:var(--blue);font-weight:600;margin-bottom:6px;">📨 県教連Webアンケートへの送信</div>
+      <div style="font-size:12px;color:var(--text-s);margin-bottom:4px;line-height:1.7;">現場の声を、行政等に届けています。</div>
+      <div style="font-size:12px;color:var(--text-s);margin-bottom:10px;line-height:1.7;">（要望実現例：春休み日数増加）</div>
+      <div style="font-size:12px;color:var(--blue);margin-bottom:12px;">この内容を県教連Webアンケートの回答として送信することもできます。しますか？</div>
+      <div style="display:flex;gap:8px;">
+        <a href="https://kenkyouren.jp/" target="_blank" rel="noopener"
+          style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:var(--blue);color:#fff;border:none;border-radius:var(--radius-s);padding:10px;font-size:13px;font-weight:600;text-decoration:none;">
+          <i class="ti ti-send" style="font-size:15px;"></i>送信する
+        </a>
+        <button onclick="closeVoiceSend()" style="flex:1;background:var(--gray-l);border:none;border-radius:var(--radius-s);padding:10px;font-size:13px;color:var(--text-s);">しない</button>
+      </div>
+    </div>
+
+    <button class="btn-cancel" onclick="closeM('modal-voice')">閉じる</button>
   </div>
 </div>
 
@@ -802,7 +853,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
     <div class="modal-title">📖 アプリの使い方</div>
 
     <div style="background:var(--green-l);border-left:4px solid var(--green);border-radius:0 var(--radius-s) var(--radius-s) 0;padding:12px 14px;margin-bottom:16px;font-size:13px;color:var(--green-d);line-height:1.8;">
-      🌿 <strong>私のタスク まもるさん</strong>は、日々の業務・体調を記録して、「自分を守る」ためのアプリです。あなたの働き方をあなた自身が把握できるようにします。また、万が一の時に、記録を5秒でまとめて提出することもできます。もちろん、日々のタスクをもれなく行い、締切を守るためにも役立つ教職員専用アプリです。
+      🌿 <strong>私のタスク まもるさん</strong>は、日々の業務・体調を記録して、「自分を守る」ためのアプリです。あなたの働き方をあなた自身が把握できるようにします。また、万が一の時に、記録を5秒でまとめて提出することもできます。もちろん、日々のタスクをもれなく行い、「締切を守る」ためにも役立つ教職員専用アプリです。
     </div>
 
     <div class="howto-item">
@@ -1010,10 +1061,24 @@ textarea{resize:none;height:56px;line-height:1.5;}
     <div id="yday-selected-date" style="font-size:12px;color:var(--green-d);font-weight:600;background:var(--green-l);padding:6px 12px;border-radius:var(--radius-s);margin-bottom:14px;"></div>
 
     <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:7px;">🍱 昼休み</div>
-    <div class="lunch-row" style="margin-bottom:12px;">
+    <div class="lunch-row" style="margin-bottom:8px;">
       <button class="lunch-btn" id="ylb-ok" onclick="selYLunch('ok')">🍱 取れた<br><span style="font-size:10px;font-weight:400;">20分以上</span></button>
       <button class="lunch-btn" id="ylb-half" onclick="selYLunch('half')">🥡 少し<br><span style="font-size:10px;font-weight:400;">10分程度</span></button>
       <button class="lunch-btn" id="ylb-ng" onclick="selYLunch('ng')">😞 取れなかった<br><span style="font-size:10px;font-weight:400;">0〜5分</span></button>
+    </div>
+    <!-- 昼休み時間外：カテゴリ選択 -->
+    <div id="ylunch-cat-wrap" class="hidden" style="margin-bottom:12px;">
+      <div style="font-size:11px;color:var(--text-s);margin-bottom:5px;">昼休みに何をしていましたか？</div>
+      <div class="cat-grid" id="ylunch-cat-grid" style="margin-bottom:0;">
+        <button class="cat-btn" data-n="分掌" onclick="selYLunchCat(this)">分掌</button>
+        <button class="cat-btn" data-n="保護者対応" onclick="selYLunchCat(this)">保護者対応</button>
+        <button class="cat-btn" data-n="生徒指導" onclick="selYLunchCat(this)">生徒指導</button>
+        <button class="cat-btn" data-n="学年" onclick="selYLunchCat(this)">学年</button>
+        <button class="cat-btn" data-n="学級" onclick="selYLunchCat(this)">学級</button>
+        <button class="cat-btn" data-n="会議" onclick="selYLunchCat(this)">会議</button>
+        <button class="cat-btn" data-n="授業準備・宿題等" onclick="selYLunchCat(this)">授業準備・宿題等</button>
+        <button class="cat-btn" data-n="その他" onclick="selYLunchCat(this)" style="grid-column:span 2;">その他</button>
+      </div>
     </div>
     <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;">しんどさ（体）💪</div>
     <div class="mood-row" style="margin-bottom:12px;">
@@ -1077,7 +1142,7 @@ function showSync(msg, isError=false) {
 // =============================================
 // データ
 // =============================================
-const CAT_INITIAL = {'分掌':'分','保護者対応':'保','生徒指導':'生','学年':'学','学級':'学','会議':'会','授業':'授'};
+const CAT_INITIAL = {'分掌':'分','保護者対応':'保','生徒指導':'生','学年':'学','学級':'学','会議':'会','授業準備・宿題等':'授'};
 let tasks = [];
 let nextId = 1;
 let activeIdx = -1, selTaskId = null;
@@ -1656,7 +1721,7 @@ function renderDeadlines(){
   }
 
   rg('⚠ 期限超過', over, 'over');
-  rg('🔥 もうすぐ（3日以内）', near, 'near');
+  rg('🔥 もうすぐ', near, 'near');
   rg('', norm, 'normal');  // ← ラベルなし
 }
 
@@ -1726,10 +1791,44 @@ async function dlDeleteTask(id) {
 // =============================================
 // ふりかえり
 // =============================================
+let currentLunchCat = '', ydayLunchCat = '';
+
 function selLunch(t){
   currentLunch = t;
   ['ok','half','ng'].forEach(x=>{document.getElementById('lb-'+x).className='lunch-btn'+(x===t?' '+t:'');});
+  // 取れなかった・少しの場合にカテゴリ選択を表示
+  const wrap = document.getElementById('lunch-cat-wrap');
+  if (wrap) wrap.classList.toggle('hidden', t === 'ok');
+  if (t === 'ok') {
+    currentLunchCat = '';
+    document.querySelectorAll('#lunch-cat-grid .cat-btn').forEach(b => b.className='cat-btn');
+  }
   document.getElementById('lunch-result').textContent = '記録しました：'+({ok:'🍱 取れた（20分以上）',half:'🥡 少し（10分程度）',ng:'😞 取れなかった'})[t];
+}
+
+function selLunchCat(el) {
+  document.querySelectorAll('#lunch-cat-grid .cat-btn').forEach(b => b.className='cat-btn');
+  el.classList.add('sel-g');
+  currentLunchCat = el.dataset.n;
+}
+
+function selYLunch(t) {
+  ydayLunch = t;
+  ['ok','half','ng'].forEach(x => {
+    document.getElementById('ylb-'+x).className = 'lunch-btn' + (x===t?' '+t:'');
+  });
+  const wrap = document.getElementById('ylunch-cat-wrap');
+  if (wrap) wrap.classList.toggle('hidden', t === 'ok');
+  if (t === 'ok') {
+    ydayLunchCat = '';
+    document.querySelectorAll('#ylunch-cat-grid .cat-btn').forEach(b => b.className='cat-btn');
+  }
+}
+
+function selYLunchCat(el) {
+  document.querySelectorAll('#ylunch-cat-grid .cat-btn').forEach(b => b.className='cat-btn');
+  el.classList.add('sel-g');
+  ydayLunchCat = el.dataset.n;
 }
 function selMood(type, val){
   currentMood[type] = val;
@@ -1750,13 +1849,17 @@ async function saveDaily(){
     if (hasData && !confirm('今日の記録が既にあります。上書きしますか？')) return;
   }
 
+  // 昼休みの状況に応じて時間外勤務を自動加算
+  const lunchOt = currentLunch === 'ng' ? 45 : currentLunch === 'half' ? 20 : 0;
+
   const record = {
     date: td,
     moodBody: currentMood.body || '',
     moodMind: currentMood.mind || '',
     mood: currentMood.body || currentMood.mind || '',
     lunch: currentLunch || '',
-    ot: 0,
+    lunchCat: currentLunchCat || '',
+    ot: lunchOt,
     memo: document.getElementById('today-memo')?.value.trim() || '',
   };
   if (idx >= 0) daily[idx] = record; else daily.push(record);
@@ -1764,7 +1867,7 @@ async function saveDaily(){
   try {
     showSync('記録を保存中...');
     await apiPost({ action:'saveDaily', data: record });
-    showSync('✅ 今日の記録を保存しました');
+    showSync(`✅ 今日の記録を保存しました${lunchOt > 0 ? `（昼休み${lunchOt}分を時間外勤務に加算）` : ''}`);
   } catch(e) { showSync('⚠ オフライン保存', true); }
   renderMonthContent();
 }
@@ -2209,6 +2312,34 @@ function renderOtChart() {
 
 // =============================================
 // =============================================
+// 声を届ける
+// =============================================
+async function saveVoice() {
+  const text = document.getElementById('voice-text').value.trim();
+  if (!text) { alert('内容を入力してください'); return; }
+
+  const record = { date: todayStr(), content: text };
+
+  const voices = JSON.parse(localStorage.getItem('mamoru_voices') || '[]');
+  voices.push(record);
+  localStorage.setItem('mamoru_voices', JSON.stringify(voices));
+
+  try {
+    showSync('記録中...');
+    await apiPost({ action: 'saveVoice', data: record });
+    showSync('✅ 記録しました');
+  } catch(e) { showSync('✅ ローカルに記録しました'); }
+
+  document.getElementById('voice-send-wrap').classList.remove('hidden');
+}
+
+function closeVoiceSend() {
+  document.getElementById('voice-send-wrap').classList.add('hidden');
+  document.getElementById('voice-text').value = '';
+  closeM('modal-voice');
+}
+
+// =============================================
 // スプレッドシートを開く
 // =============================================
 function openSpreadsheet() {
@@ -2241,6 +2372,7 @@ function exportExcel() {
 }
 
 function doExport(allTasks, daily) {
+  const voices = JSON.parse(localStorage.getItem('mamoru_voices') || '[]');
   const wb = XLSX.utils.book_new();
   const today = todayStr();
   const daysArr = ['日','月','火','水','木','金','土'];
@@ -2564,6 +2696,28 @@ function doExport(allTasks, daily) {
   ws2['!rows'] = rowHeights;
   XLSX.utils.book_append_sheet(wb, ws2, '月次まとめ');
 
+  // ── シート3：声を届ける ──
+  if (voices.length > 0) {
+    const ws3 = {};
+    const h3 = ['日付','項目','内容'];
+    const hc3 = [C.blue, C.blue, C.blue];
+    h3.forEach((h,i) => {
+      const addr = XLSX.utils.encode_cell({r:0,c:i});
+      setCell(ws3, addr, h, hdrStyle(hc3[i]));
+    });
+    voices.sort((a,b)=>a.date>b.date?-1:1).forEach((v,ri) => {
+      const bg = ri%2===0 ? C.blueL : C.white;
+      [v.date||'', v.category||'', v.content||''].forEach((val,ci) => {
+        const addr = XLSX.utils.encode_cell({r:ri+1,c:ci});
+        setCell(ws3, addr, val, dataStyle(bg, C.text, false, ci===0));
+      });
+    });
+    ws3['!ref'] = XLSX.utils.encode_range({s:{r:0,c:0},e:{r:voices.length,c:2}});
+    ws3['!cols'] = [{wch:14},{wch:16},{wch:50}];
+    ws3['!rows'] = Array(voices.length+1).fill(null).map((_,i)=>({hpt:i===0?22:36}));
+    XLSX.utils.book_append_sheet(wb, ws3, '声を届ける');
+  }
+
   // ダウンロード
   XLSX.writeFile(wb, `まもるさん_${today}.xlsx`);
   showSync('✅ Excelファイルを出力しました');
@@ -2592,9 +2746,12 @@ function openYdayModal() {
   const yday = new Date(); yday.setDate(yday.getDate() - 1);
   ydaySelectedDate = `${yday.getFullYear()}-${pad(yday.getMonth()+1)}-${pad(yday.getDate())}`;
   selectYdayDate('yday');
-  ydayMood = null; ydayMindMood = null; ydayLunch = null;
+  ydayMood = null; ydayMindMood = null; ydayLunch = null; ydayLunchCat = '';
   const ydayMemoEl = document.getElementById('yday-memo');
   if (ydayMemoEl) ydayMemoEl.value = '';
+  const ywrap = document.getElementById('ylunch-cat-wrap');
+  if (ywrap) ywrap.classList.add('hidden');
+  document.querySelectorAll('#ylunch-cat-grid .cat-btn').forEach(b => b.className='cat-btn');
   ['ok','half','ng'].forEach(x => { document.getElementById('ylb-'+x).className='lunch-btn'; });
   ['body','mind'].forEach(type =>
     ['great','ok','hard','limit'].forEach(x => {
@@ -2665,13 +2822,17 @@ async function saveYday() {
     if (hasData && !confirm(`${ydaySelectedDate} の記録が既にあります。上書きしますか？`)) return;
   }
 
+  // 昼休みの状況に応じて時間外勤務を自動加算
+  const lunchOtY = ydayLunch === 'ng' ? 45 : ydayLunch === 'half' ? 20 : 0;
+
   const record = {
     date: ydaySelectedDate,
     moodBody: ydayMood || '',
     moodMind: ydayMindMood || '',
     mood: ydayMood || ydayMindMood || '',
     lunch: ydayLunch || '',
-    ot: 0,
+    lunchCat: ydayLunchCat || '',
+    ot: lunchOtY,
     memo: document.getElementById('yday-memo')?.value.trim() || '',
   };
   if (idx >= 0) daily[idx] = record; else daily.push(record);
@@ -3030,12 +3191,40 @@ async function saveDaily() {
 
 
 // =============================================
+// 昼休み未記録の自動補完
+// =============================================
+async function autoFillLunchMemo() {
+  const daily = JSON.parse(localStorage.getItem('mamoru_daily') || '[]');
+  const today = todayStr();
+  let updated = false;
+
+  daily.forEach(d => {
+    // 昨日以前の記録で「昼休み=取れなかった」かつ「メモが空」の場合
+    if (d.date && d.date < today && d.lunch === 'ng' && !d.memo) {
+      d.memo = '昼休みに児童の提出物チェックをした';
+      updated = true;
+    }
+  });
+
+  if (updated) {
+    localStorage.setItem('mamoru_daily', JSON.stringify(daily));
+    // スプレッドシートにも同期
+    const targets = daily.filter(d => d.date < today && d.lunch === 'ng' && d.memo === '昼休みに児童の提出物チェックをした');
+    for (const d of targets) {
+      try { await apiPost({ action: 'saveDaily', data: d }); } catch(e) {}
+    }
+    showSync('✅ 昼休み記録を自動補完しました');
+  }
+}
+
+// =============================================
 // 起動
 // =============================================
 
 loadTasks();
 setTimeout(renderTodayAchieve, 500);
 setTimeout(updateHideFarUI, 100);
+setTimeout(autoFillLunchMemo, 500);
 </script>
 </body>
 </html>
