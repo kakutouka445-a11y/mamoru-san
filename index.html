@@ -375,7 +375,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
   <!-- 今日 -->
   <div class="subtab-content active" id="sc-today">
     <div class="ot-card" id="ot-card" style="display:none;">
-      <div class="ot-header"><i class="ti ti-clock-exclamation"></i><span>勤務時間外の記録</span></div>
+      <div class="ot-header"><i class="ti ti-clock-exclamation"></i><span>時間外勤務の記録</span></div>
       <div id="ot-rows"></div>
     </div>
     <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:7px;">🍱 今日の昼休み</div>
@@ -413,8 +413,8 @@ textarea{resize:none;height:56px;line-height:1.5;}
   <!-- 今週 -->
   <div class="subtab-content" id="sc-week">
     <!-- 大：勤務時間外 -->
-    <div class="avg-box" style="margin-top:10px;"><div class="avg-label">勤務時間外（週計）</div><div class="avg-val" id="week-ot-total">—</div></div>
-    <div class="avg-box"><div class="avg-label">1日平均 勤務時間外</div><div class="avg-val" id="week-ot-avg">—</div></div>
+    <div class="avg-box" style="margin-top:10px;"><div class="avg-label">時間外勤務（週計）</div><div class="avg-val" id="week-ot-total">—</div></div>
+    <div class="avg-box"><div class="avg-label">1日平均 時間外勤務</div><div class="avg-val" id="week-ot-avg">—</div></div>
     <!-- 小：完了タスク・突発対応 -->
     <div class="mini-stat-row">
       <div class="mini-stat-box"><div class="mini-stat-num" id="week-task-done">—</div><div class="mini-stat-label">完了タスク</div></div>
@@ -437,8 +437,8 @@ textarea{resize:none;height:56px;line-height:1.5;}
   <!-- 今月 -->
   <div class="subtab-content" id="sc-month">
     <!-- 大：勤務時間外 -->
-    <div class="avg-box" style="margin-top:10px;" id="month-ot-total-box"><div class="avg-label">勤務時間外（月計）</div><div class="avg-val" id="month-ot-total">—</div></div>
-    <div class="avg-box" id="month-ot-avg-box"><div class="avg-label">1日平均 勤務時間外</div><div class="avg-val" id="month-ot-avg">—</div></div>
+    <div class="avg-box" style="margin-top:10px;" id="month-ot-total-box"><div class="avg-label">時間外勤務（月計）</div><div class="avg-val" id="month-ot-total">—</div></div>
+    <div class="avg-box" id="month-ot-avg-box"><div class="avg-label">1日平均 時間外勤務</div><div class="avg-val" id="month-ot-avg">—</div></div>
     <!-- 小：完了タスク・突発対応 -->
     <div class="mini-stat-row">
       <div class="mini-stat-box"><div class="mini-stat-num" id="month-task-done">—</div><div class="mini-stat-label">完了タスク</div></div>
@@ -461,9 +461,9 @@ textarea{resize:none;height:56px;line-height:1.5;}
   <!-- まとめ -->
   <div class="subtab-content" id="sc-matome">
     <!-- 時間外勤務グラフ -->
-    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:8px;">📊 時間外勤務の推移（過去5ヶ月）</div>
+    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:8px;">📊 時間外勤務の推移（過去5か月）</div>
     <div class="card" style="padding:14px;">
-      <canvas id="ot-chart" width="320" height="160"></canvas>
+      <canvas id="ot-chart" style="width:100%;height:160px;display:block;"></canvas>
     </div>
     <!-- しんどさカレンダー（体・心） -->
     <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;">体しんどさ💪</div>
@@ -742,7 +742,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
     <button class="settings-item-btn" onclick="toggleHideFar()">
       <i class="ti ti-calendar-off settings-item-icon" style="color:var(--blue);"></i>
       <div class="settings-item-text">
-        <div class="settings-item-title" id="hide-far-title">1ヶ月以上先の締切タスクを非表示</div>
+        <div class="settings-item-title" id="hide-far-title">1か月以上先の締切タスクを非表示</div>
         <div class="settings-item-sub" id="hide-far-sub">現在：表示中</div>
       </div>
       <div id="hide-far-toggle" style="width:36px;height:20px;border-radius:10px;background:var(--gray-m);position:relative;flex-shrink:0;transition:background .2s;">
@@ -802,7 +802,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
     <div class="modal-title">📖 アプリの使い方</div>
 
     <div style="background:var(--green-l);border-left:4px solid var(--green);border-radius:0 var(--radius-s) var(--radius-s) 0;padding:12px 14px;margin-bottom:16px;font-size:13px;color:var(--green-d);line-height:1.8;">
-      🌿 <strong>私のタスク まもるさん</strong>は、日々の業務・体調を記録して、「自分を守る」ためのアプリです。あなたの働き方をあなた自身が把握できるようにします。また、万が一の時に、記録を5秒でまとめて提出することもできます。もちろん、日々のタスクをもれなく行い、締切を「守る」ためにも役立つ教職員専用アプリです。
+      🌿 <strong>私のタスク まもるさん</strong>は、日々の業務・体調を記録して、「自分を守る」ためのアプリです。あなたの働き方をあなた自身が把握できるようにします。また、万が一の時に、記録を5秒でまとめて提出することもできます。もちろん、日々のタスクをもれなく行い、締切を守るためにも役立つ教職員専用アプリです。
     </div>
 
     <div class="howto-item">
@@ -840,7 +840,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
         <div class="howto-desc">
           <b>今日</b>：今日完了したタスクの一覧と、しんどさ（体・心）・昼休みを記録します。「今日の記録を保存する」を忘れずに。<br>
           <b>今週・今月</b>：勤務時間外（合計・1日平均）・突発対応・体しんどさ💪・心しんどさ❤️（横棒グラフ）・カテゴリ別時間を集計して表示します。<br>
-          <b>まとめ</b>：過去5ヶ月の時間外推移グラフと、体・心それぞれのしんどさカレンダー。<br>
+          <b>まとめ</b>：過去5か月の時間外推移グラフと、体・心それぞれのしんどさカレンダー。<br>
           <b>（忘れていた）昨日までの記録</b>：日付を選んで過去の記録を後から入力できます。
         </div>
       </div>
@@ -1121,7 +1121,7 @@ function saveLocalTasks() {
 }
 
 // =============================================
-// 表示フィルタ：1ヶ月以上先の締切タスクを非表示
+// 表示フィルタ：1か月以上先の締切タスクを非表示
 // =============================================
 let hideFarTasks = localStorage.getItem('mamoru_hideFar') === 'true';
 
@@ -1168,7 +1168,7 @@ function sortedTasks(){
   // 締切あり・1週間より先
   let dlFar = undone.filter(t => !t.deadline || new Date(t.deadline) > in7days);
 
-  // 1ヶ月以上先を非表示にする設定がONの場合
+  // 1か月以上先を非表示にする設定がONの場合
   if (hideFarTasks) {
     dlFar = dlFar.filter(t => !t.deadline || new Date(t.deadline) <= in1month);
   }
@@ -1612,7 +1612,7 @@ function renderDeadlines(){
 
   let wdl = tasks.filter(t=>t.deadline&&!t.done).sort((a,b)=>new Date(a.deadline)-new Date(b.deadline));
 
-  // 1ヶ月以上先を非表示設定がONの場合はフィルタ
+  // 1か月以上先を非表示設定がONの場合はフィルタ
   if (hideFarTasks) {
     wdl = wdl.filter(t => new Date(t.deadline) <= in1month);
   }
@@ -1861,7 +1861,9 @@ function renderWeekContent() {
   const otTotal = weekDaily.reduce((s,d)=>s+(Number(d.ot)||0),0);
   const otH = Math.floor(otTotal/60), otM = otTotal%60;
   const otStr = otTotal>0 ? `${otH>0?otH+'時間':''}${otM>0?otM+'分':''}` : '0分';
-  const otAvg = weekDates.length>0 ? Math.round(otTotal/weekDates.length) : 0;
+  // 記録がある日数（今日までの実績）で平均を計算
+  const recDaysWeek = weekDaily.length || 1;
+  const otAvg = Math.round(otTotal / recDaysWeek);
 
   const el = (id, val) => { const e=document.getElementById(id); if(e) e.textContent=val; };
   el('week-ot-total', otStr);
@@ -1924,7 +1926,7 @@ function renderDeadlineCalendar() {
     dlMap[t.deadline].push(t);
   });
 
-  // 表示する月：今月 + 締切のある月を最大3ヶ月先まで
+  // 表示する月：今月 + 締切のある月を最大3か月先まで
   const months = new Set();
   months.add(`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`);
   Object.keys(dlMap).forEach(dl => {
@@ -1933,7 +1935,7 @@ function renderDeadlineCalendar() {
       months.add(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`);
     }
   });
-  // 今月から最大6ヶ月
+  // 今月から最大6か月
   for (let m = 1; m <= 5; m++) {
     const d = new Date(now.getFullYear(), now.getMonth() + m, 1);
     months.add(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`);
@@ -2148,11 +2150,14 @@ function renderMonthContent() {
 }
 
 // =============================================
-// 時間外勤務グラフ（過去5ヶ月）
+// 時間外勤務グラフ（過去5か月）
 // =============================================
 function renderOtChart() {
   const canvas = document.getElementById('ot-chart');
   if (!canvas) return;
+  // Canvasの実際の描画サイズを親要素に合わせる
+  canvas.width  = canvas.offsetWidth  || 320;
+  canvas.height = canvas.offsetHeight || 160;
   const ctx = canvas.getContext('2d');
   const daily = JSON.parse(localStorage.getItem('mamoru_daily') || '[]');
   const now = new Date();
