@@ -129,7 +129,7 @@ input,textarea{font-family:inherit;}
 .achieve-footer{margin-top:8px;padding-top:8px;border-top:1px solid var(--border);font-size:12px;color:#0F6E56;font-weight:600;}
 
 /* 時間外カード */
-.ot-card{background:var(--amber-l);border:1.5px solid var(--amber-b);border-radius:var(--radius);padding:12px 14px;margin-bottom:10px;}
+.ot-card{background:var(--amber-l);border-left:4px solid var(--amber);border-radius:0 var(--radius-s) var(--radius-s) 0;padding:10px 14px;margin-bottom:10px;}
 .ot-header{display:flex;align-items:center;gap:6px;margin-bottom:8px;}
 .ot-header i{color:var(--amber);font-size:16px;}
 .ot-header span{font-size:11px;font-weight:600;color:var(--amber);}
@@ -210,8 +210,23 @@ textarea{resize:none;height:56px;line-height:1.5;}
 .consult-divider{border:none;border-top:1px solid var(--border);margin-bottom:18px;}
 .consult-btn{display:flex;align-items:center;justify-content:center;gap:5px;background:transparent;border:none;padding:6px;width:100%;}
 .consult-btn span{font-size:12px;color:var(--text-s);text-decoration:underline;text-underline-offset:3px;}
-.dl-section-title{font-size:11px;font-weight:600;color:var(--text-s);padding:8px 14px 4px;letter-spacing:.04em;}
-.dl-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-s);padding:10px 14px;margin:0 14px 6px;display:flex;align-items:center;gap:10px;}
+.dl-cal-outer{overflow-x:auto;padding-bottom:8px;margin-bottom:14px;}
+.dl-cal-months{display:flex;gap:12px;width:max-content;}
+.dl-cal-month{background:var(--bg-card);border-radius:var(--radius);padding:10px;min-width:230px;border:1px solid var(--border);}
+.dl-cal-month-title{font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:8px;text-align:center;}
+.dl-cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
+.dl-cal-dow{font-size:10px;color:var(--text-s);text-align:center;padding:2px 0;}
+.dl-cal-day{display:flex;flex-direction:column;align-items:center;justify-content:flex-start;border-radius:6px;font-size:11px;color:var(--text-s);cursor:default;padding:3px 1px;min-height:36px;}
+.dl-cal-day.today{outline:2px solid var(--green);outline-offset:1px;font-weight:700;color:var(--green-d);}
+.dl-cal-day.dl-over{background:var(--red-l);color:var(--red);font-weight:700;}
+.dl-cal-day.dl-near{background:#FFF7ED;color:#C2410C;font-weight:700;}
+.dl-cal-day.dl-normal{background:var(--blue-l);color:var(--blue);font-weight:700;}
+.dl-cal-day-num{font-size:11px;line-height:1.2;}
+.dl-cal-task-name{font-size:8px;line-height:1.2;text-align:center;word-break:break-all;overflow:hidden;max-width:100%;margin-top:1px;}
+.dl-cal-legend{display:flex;gap:12px;margin-bottom:8px;flex-wrap:wrap;}
+.dl-cal-legend-item{display:flex;align-items:center;gap:4px;font-size:11px;color:var(--text-s);}
+.dl-cal-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
+.dl-card{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-s);padding:6px 10px;margin:0 14px 4px;display:flex;align-items:center;gap:10px;}
 .dl-card.over{border-left:3px solid var(--red);}
 .dl-card.near{border-left:3px solid #EA580C;}
 .dl-card.normal{border-left:3px solid var(--blue);}
@@ -324,10 +339,20 @@ textarea{resize:none;height:56px;line-height:1.5;}
   <div class="header">
     <div class="header-row">
       <div class="header-title">📅 <strong>締切一覧</strong></div>
-      <div class="date-badge" id="deadline-badge"></div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button class="settings-btn" onclick="openM('modal-settings')" title="設定"><i class="ti ti-settings"></i></button>
+        <div class="date-badge" id="deadline-badge"></div>
+      </div>
     </div>
   </div>
-  <div style="overflow-y:auto;flex:1;" id="deadline-list"></div>
+  <div style="overflow-y:auto;flex:1;">
+    <div id="deadline-list"></div>
+    <!-- 月次カレンダー -->
+    <div style="padding:10px 14px 0;">
+      <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;">📆 月別カレンダー</div>
+      <div class="dl-cal-outer" id="dl-cal-outer"></div>
+    </div>
+  </div>
 </div>
 
 <!-- ふりかえり -->
@@ -335,7 +360,10 @@ textarea{resize:none;height:56px;line-height:1.5;}
   <div class="header">
     <div class="header-row">
       <div class="header-title">🌙 <strong>ふりかえり</strong></div>
-      <div class="date-badge" id="review-badge"></div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button class="settings-btn" onclick="openM('modal-settings')" title="設定"><i class="ti ti-settings"></i></button>
+        <div class="date-badge" id="review-badge"></div>
+      </div>
     </div>
   </div>
   <div class="subtab-row">
@@ -362,12 +390,19 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <button class="lunch-btn" id="lb-ng" onclick="selLunch('ng')">😞 取れなかった<br><span style="font-size:10px;font-weight:400;">0〜5分</span></button>
     </div>
     <div style="font-size:12px;color:var(--text-s);margin:4px 0 10px;" id="lunch-result"></div>
-    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:7px;">今日のしんどさ</div>
+    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;">今日のしんどさ（体）</div>
+    <div class="mood-row" style="margin-bottom:12px;">
+      <button class="mood-btn" id="mb-body-great" onclick="selMood('body','great')">😄<br>快調</button>
+      <button class="mood-btn" id="mb-body-ok" onclick="selMood('body','ok')">🙂<br>まあまあ</button>
+      <button class="mood-btn" id="mb-body-hard" onclick="selMood('body','hard')">😓<br>しんどい</button>
+      <button class="mood-btn" id="mb-body-limit" onclick="selMood('body','limit')">🚨<br>限界</button>
+    </div>
+    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;">今日のしんどさ（心）</div>
     <div class="mood-row">
-      <button class="mood-btn" id="mb-great" onclick="selMood('great')">😄<br>快調</button>
-      <button class="mood-btn" id="mb-ok" onclick="selMood('ok')">🙂<br>まあまあ</button>
-      <button class="mood-btn" id="mb-hard" onclick="selMood('hard')">😓<br>しんどい</button>
-      <button class="mood-btn" id="mb-limit" onclick="selMood('limit')">🚨<br>限界</button>
+      <button class="mood-btn" id="mb-mind-great" onclick="selMood('mind','great')">😄<br>快調</button>
+      <button class="mood-btn" id="mb-mind-ok" onclick="selMood('mind','ok')">🙂<br>まあまあ</button>
+      <button class="mood-btn" id="mb-mind-hard" onclick="selMood('mind','hard')">😓<br>しんどい</button>
+      <button class="mood-btn" id="mb-mind-limit" onclick="selMood('mind','limit')">🚨<br>限界</button>
     </div>
     <button class="save-btn-lg" onclick="saveDaily()">今日の記録を保存する</button>
     <button class="yday-btn" onclick="openYdayModal()"><i class="ti ti-clock-minus" style="font-size:18px;"></i>　（忘れていた）昨日までの記録を保存する</button>
@@ -389,11 +424,16 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <div class="mini-stat-box"><div class="mini-stat-num" id="week-task-done">—</div><div class="mini-stat-label">完了タスク</div></div>
       <div class="mini-stat-box"><div class="mini-stat-num" id="week-tokk">—</div><div class="mini-stat-label">突発対応</div></div>
     </div>
-    <!-- 小：しんどさ -->
-    <div class="card">
-      <div class="card-title">しんどさ（今週）</div>
-      <div id="week-mood-content"><div style="font-size:12px;color:var(--text-s);">記録がありません</div></div>
-    </div>
+      <div style="display:flex;gap:8px;margin-bottom:10px;">
+        <div class="card" style="flex:1;padding:10px;">
+          <div class="card-title">体しんどさ</div>
+          <div id="week-mood-body"></div>
+        </div>
+        <div class="card" style="flex:1;padding:10px;">
+          <div class="card-title">心しんどさ</div>
+          <div id="week-mood-mind"></div>
+        </div>
+      </div>
     <!-- カテゴリ別時間 -->
     <div class="card-title">カテゴリ別時間</div>
     <div class="bar-chart" id="week-bar"></div>
@@ -406,13 +446,18 @@ textarea{resize:none;height:56px;line-height:1.5;}
     <!-- 小：完了タスク・突発対応 -->
     <div class="mini-stat-row">
       <div class="mini-stat-box"><div class="mini-stat-num" id="month-task-done">—</div><div class="mini-stat-label">完了タスク</div></div>
-      <div class="mini-stat-box"><div class="mini-stat-num" id="month-rec-days">—</div><div class="mini-stat-label">記録日数</div></div>
+      <div class="mini-stat-box"><div class="mini-stat-num" id="month-tokk">—</div><div class="mini-stat-label">突発対応</div></div>
     </div>
-    <!-- 小：しんどさ -->
-    <div class="card">
-      <div class="card-title">しんどさ（今月）</div>
-      <div id="month-mood-content"><div style="font-size:12px;color:var(--text-s);">記録がありません</div></div>
-    </div>
+      <div style="display:flex;gap:8px;margin-bottom:10px;">
+        <div class="card" style="flex:1;padding:10px;">
+          <div class="card-title">体しんどさ</div>
+          <div id="month-mood-body"></div>
+        </div>
+        <div class="card" style="flex:1;padding:10px;">
+          <div class="card-title">心しんどさ</div>
+          <div id="month-mood-mind"></div>
+        </div>
+      </div>
     <!-- カテゴリ別時間 -->
     <div class="card-title">カテゴリ別時間</div>
     <div class="bar-chart" id="month-bar"></div>
@@ -424,16 +469,11 @@ textarea{resize:none;height:56px;line-height:1.5;}
     <div class="card" style="padding:14px;">
       <canvas id="ot-chart" width="320" height="160"></canvas>
     </div>
-    <!-- しんどさカレンダー -->
-    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;">しんどさ カレンダー</div>
-    <div style="font-size:11px;color:var(--text-s);margin-bottom:6px;">← 左右にスクロール</div>
-    <div class="cal-legend">
-      <div class="cal-legend-item"><div class="cal-swatch" style="background:var(--blue-l);"></div>😄快調</div>
-      <div class="cal-legend-item"><div class="cal-swatch" style="background:#D1FAE5;"></div>🙂まあまあ</div>
-      <div class="cal-legend-item"><div class="cal-swatch" style="background:#FEF3C7;"></div>😓しんどい</div>
-      <div class="cal-legend-item"><div class="cal-swatch" style="background:var(--red-l);"></div>🚨限界</div>
-    </div>
-    <div class="cal-outer" id="cal-outer"></div>
+    <!-- しんどさカレンダー（体・心） -->
+    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;">体しんどさ</div>
+    <div class="cal-outer" id="cal-outer-body"></div>
+    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;margin-top:4px;">心しんどさ</div>
+    <div class="cal-outer" id="cal-outer-mind"></div>
 
   </div>
 </div>
@@ -719,12 +759,15 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <div class="howto-icon">🏠</div>
       <div>
         <div class="howto-title">ホーム画面</div>
-        <div class="howto-desc">タスクの一覧が表示されます。<br>
-          <b>▶ボタン</b>：タスクを開始・完了します。完了時にかかった時間・いつ行ったかを記録できます。<br>
-          <b>📌ボタン</b>：ピン固定してリスト先頭に表示します。<br>
+        <div class="howto-desc">
+          タスクの一覧が表示されます。<br>
+          <b>▶ボタン</b>：タスクを開始・完了します。完了時にかかった時間・いつ実行したかを記録できます。<br>
+          <b>📌ボタン</b>：ピン固定してリスト先頭に表示します。何個でも固定できます。<br>
           <b>タップ</b>：タスク名をタップするとその場で編集できます。<br>
           <b>ドラッグ</b>：左端の「≡」を長押しして並べ替えができます。<br>
-          完了したタスクは薄く表示され、翌日に自動で非表示になります。</div>
+          <b>並び順</b>：ピン固定→締切7日以内（近い順）→その他（手動順）→完了済み。<br>
+          完了したタスクは薄く表示され、翌日に自動で非表示になります。
+        </div>
       </div>
     </div>
 
@@ -732,8 +775,11 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <div class="howto-icon">📅</div>
       <div>
         <div class="howto-title">締切</div>
-        <div class="howto-desc">締切日のあるタスクを一覧表示します。<br>
-          🔴 期限超過・🟠 3日以内・🔵 今後の締切、の3段階で色分けされます。</div>
+        <div class="howto-desc">
+          締切日のあるタスクを一覧表示します。タップで編集・消去もできます。<br>
+          🔴 期限超過・🟠 3日以内・🔵 今後、の3段階で色分けされます。<br>
+          
+        </div>
       </div>
     </div>
 
@@ -742,10 +788,11 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <div>
         <div class="howto-title">ふりかえり</div>
         <div class="howto-desc">
-          <b>今日</b>：今日完了したタスクの一覧と、しんどさ・昼休みを記録します。「今日の記録を保存する」を忘れずに。<br>
-          <b>今週・今月</b>：勤務時間外・しんどさ・カテゴリ別時間を集計して表示します。<br>
-          <b>まとめ</b>：過去5ヶ月の時間外推移グラフとしんどさカレンダー。<br>
-          <b>（忘れていた）昨日までの記録</b>：日付を選んで過去の記録を後から入力できます。</div>
+          <b>今日</b>：今日完了したタスクの一覧と、しんどさ（体・心）・昼休みを記録します。「今日の記録を保存する」を忘れずに。<br>
+          <b>今週・今月</b>：勤務時間外（合計・1日平均）・突発対応・体しんどさ・心しんどさ（横棒グラフ）・カテゴリ別時間を集計して表示します。<br>
+          <b>まとめ</b>：過去5ヶ月の時間外推移グラフと、体・心それぞれのしんどさカレンダー。<br>
+          <b>（忘れていた）昨日までの記録</b>：日付を選んで過去の記録を後から入力できます。
+        </div>
       </div>
     </div>
 
@@ -754,47 +801,42 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <div>
         <div class="howto-title">タスクを追加</div>
         <div class="howto-desc">
-          <b>通常タスク</b>：カテゴリ・締切日・やること（複数可）を設定します。<br>
-          <b>⚡突発対応</b>：予定外の対応を素早く記録します。時間・いつ・メモを入力します。</div>
-      </div>
-    </div>
-
-    <div class="howto-item">
-      <div class="howto-icon">📊</div>
-      <div>
-        <div class="howto-title">スプレッドシートで確認（自動同期中）</div>
-        <div class="howto-desc">
-          アプリで入力したデータは、Googleスプレッドシートに<b>リアルタイムで自動保存</b>されます。<br>
-          ✅ データが消えにくい（クラウド保存）<br>
-          ✅ PCからも確認・編集できる<br>
-          ✅ 将来の「みえるさん」連携の土台になる<br>
-          「設定→スプレッドシートで確認」でGoogleドライブが開きます。</div>
-      </div>
-    </div>
-
-    <div class="howto-item">
-      <div class="howto-icon">📄</div>
-      <div>
-        <div class="howto-title">Excelに出力 との違い</div>
-        <div class="howto-desc">
-          スプレッドシートとExcel出力は<b>目的が違います</b>。<br><br>
-          <b>スプレッドシート（自動同期）</b><br>
-          　→ 日々のデータ蓄積・バックアップ用<br>
-          　→ 常に最新データが反映される<br>
-          　→ 書式なし・シンプルな一覧<br><br>
-          <b>Excelに出力（.xlsx）</b><br>
-          　→ 月末・学期末のまとめ・報告書用<br>
-          　→ ボタンを押した時点のデータを出力<br>
-          　→ 色分け・月次まとめシート付きの完成版<br>
-          　→ 管理職への報告・労働組合への相談資料に活用できます</div>
+          <b>通常タスク</b>：カテゴリ・締切日・やること（1件）を入力します。<br>
+          <b>⚡突発対応</b>：予定外の対応を素早く記録します。
+        </div>
       </div>
     </div>
 
     <div class="howto-item">
       <div class="howto-icon">⚙️</div>
       <div>
-        <div class="howto-title">設定メニュー</div>
-        <div class="howto-desc">タブバーの⚙️から開きます。データの出力・サンプルの投入・削除・リセットなどができます。</div>
+        <div class="howto-title">設定（右上⚙️ボタン）</div>
+        <div class="howto-desc">
+          どの画面の右上からでも開けます。<br>
+          <b>スプレッドシートで確認</b>：Googleドライブを開きます。データは自動同期中です。<br>
+          <b>Excelに出力</b>：日次記録・月次まとめを色付きの.xlsxで保存します。月末・報告書用に。<br>
+          <b>Excelからタスクを一括入力</b>：ひな形をダウンロード→入力→インポートでタスクを一括追加できます。<br>
+          <b>サンプルデータを投入/削除</b>：前月・前々月分のサンプルデータを追加・削除します。<br>
+          <b>全てのデータをリセット</b>：すべてのデータを削除します（取り消し不可）。
+        </div>
+      </div>
+    </div>
+
+    <div class="howto-item">
+      <div class="howto-icon">📊</div>
+      <div>
+        <div class="howto-title">スプレッドシートとExcel出力の違い</div>
+        <div class="howto-desc">
+          <b>スプレッドシート（自動同期）</b><br>
+          　→ 日々のデータ蓄積・バックアップ用<br>
+          　→ 常に最新データが自動反映<br>
+          　→ PCからも確認・編集できる<br>
+          　→ 将来の「みえるさん」連携の土台<br><b>Excelに出力（.xlsx）</b><br>
+          　→ 月末・学期末のまとめ・報告書用<br>
+          　→ ボタンを押した時点のデータを出力<br>
+          　→ 色分け・月次まとめシート付きの完成版<br>
+          　→ 管理職への報告・教職員団体等への相談資料に活用できます
+        </div>
       </div>
     </div>
 
@@ -850,7 +892,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <div class="card-title">アプリ情報</div>
       <div style="font-size:13px;color:var(--text-s);line-height:1.8;">
         <div>アプリ名：私のタスク　まもるさん</div>
-        <div>対象：山口県教職員</div>
+        <div>対象：教職員</div>
         <div style="font-size:11px;margin-top:8px;color:var(--text-s);">将来的には「みんなのタスク みえるさん」と連携予定</div>
       </div>
     </div>
@@ -923,12 +965,19 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <button class="lunch-btn" id="ylb-half" onclick="selYLunch('half')">🥡 少し<br><span style="font-size:10px;font-weight:400;">10分程度</span></button>
       <button class="lunch-btn" id="ylb-ng" onclick="selYLunch('ng')">😞 取れなかった<br><span style="font-size:10px;font-weight:400;">0〜5分</span></button>
     </div>
-    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:7px;">しんどさ</div>
+    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;">しんどさ（体）</div>
+    <div class="mood-row" style="margin-bottom:12px;">
+      <button class="mood-btn" id="ymb-body-great" onclick="selYMood('body','great')">😄<br>快調</button>
+      <button class="mood-btn" id="ymb-body-ok" onclick="selYMood('body','ok')">🙂<br>まあまあ</button>
+      <button class="mood-btn" id="ymb-body-hard" onclick="selYMood('body','hard')">😓<br>しんどい</button>
+      <button class="mood-btn" id="ymb-body-limit" onclick="selYMood('body','limit')">🚨<br>限界</button>
+    </div>
+    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;">しんどさ（心）</div>
     <div class="mood-row" style="margin-bottom:16px;">
-      <button class="mood-btn" id="ymb-great" onclick="selYMood('great')">😄<br>快調</button>
-      <button class="mood-btn" id="ymb-ok" onclick="selYMood('ok')">🙂<br>まあまあ</button>
-      <button class="mood-btn" id="ymb-hard" onclick="selYMood('hard')">😓<br>しんどい</button>
-      <button class="mood-btn" id="ymb-limit" onclick="selYMood('limit')">🚨<br>限界</button>
+      <button class="mood-btn" id="ymb-mind-great" onclick="selYMood('mind','great')">😄<br>快調</button>
+      <button class="mood-btn" id="ymb-mind-ok" onclick="selYMood('mind','ok')">🙂<br>まあまあ</button>
+      <button class="mood-btn" id="ymb-mind-hard" onclick="selYMood('mind','hard')">😓<br>しんどい</button>
+      <button class="mood-btn" id="ymb-mind-limit" onclick="selYMood('mind','limit')">🚨<br>限界</button>
     </div>
     <button class="btn-primary" onclick="saveYday()">記録を保存する</button>
     <button class="btn-cancel" onclick="closeM('modal-yday')">キャンセル</button>
@@ -940,7 +989,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
   <div class="modal-center" onclick="event.stopPropagation()">
     <div class="modal-icon">📦</div>
     <div class="modal-center-title">サンプルデータを投入</div>
-    <div class="modal-center-body">前月・前々月分のタスクと日次記録のサンプルデータを追加します。<br><br><strong style="color:var(--amber);">既存のデータには上書きしません。</strong></div>
+    <div class="modal-center-body">前月・前々月分のタスクと日次記録のサンプルデータを追加します。<br><strong style="color:var(--amber);">既存のデータには上書きしません。</strong></div>
     <div class="btn-row">
       <button class="btn-gray" onclick="closeM('modal-sample')">キャンセル</button>
       <button class="btn-primary" style="flex:1;margin-top:0;" onclick="insertSampleData()">投入する</button>
@@ -982,7 +1031,7 @@ let nextId = 1;
 let activeIdx = -1, selTaskId = null;
 const step = {s:{h:0,m:0}, e:{h:0,m:0}, t:{h:0,m:0}};
 let selCatName = null, selCatColor = 'gray';
-let currentMood = null, currentLunch = null;
+let currentMood = {body: null, mind: null}, currentLunch = null;
 
 // ── 日付 ──
 function todayStr(){const d=new Date();return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;}
@@ -1422,24 +1471,110 @@ function renderDeadlines(){
   const td = new Date(); td.setHours(0,0,0,0);
   const wdl = tasks.filter(t=>t.deadline&&!t.done).sort((a,b)=>new Date(a.deadline)-new Date(b.deadline));
   if(!wdl.length){ c.innerHTML='<div class="no-data">締切のあるタスクはありません</div>'; return; }
-  const over=wdl.filter(t=>new Date(t.deadline)<td);
-  const near=wdl.filter(t=>{const d=Math.round((new Date(t.deadline)-td)/864e5);return d>=0&&d<=3;});
-  const norm=wdl.filter(t=>Math.round((new Date(t.deadline)-td)/864e5)>3);
-  function rg(label,items,cls){
+
+  const over = wdl.filter(t=>new Date(t.deadline)<td);
+  const near = wdl.filter(t=>{const d=Math.round((new Date(t.deadline)-td)/864e5);return d>=0&&d<=3;});
+  const norm = wdl.filter(t=>Math.round((new Date(t.deadline)-td)/864e5)>3);
+
+  function rg(label, items, cls) {
     if(!items.length) return;
-    const ti=document.createElement('div');ti.className='dl-section-title';ti.textContent=label;c.appendChild(ti);
-    items.forEach(t=>{
-      const diff=Math.round((new Date(t.deadline)-td)/864e5);
-      const dd=new Date(t.deadline);
-      const card=document.createElement('div');card.className=`dl-card ${cls}`;
-      const col=cls==='over'?'var(--red)':cls==='near'?'#EA580C':'var(--blue)';
-      card.innerHTML=`<div style="flex:1;min-width:0;"><div class="dl-name">${t.name}</div>${(t.subs||[]).length?`<div class="dl-sub-text">${t.subs.join('・')}</div>`:''}</div><div><div class="dl-date" style="font-size:12px;font-weight:600;color:${col};text-align:right;">${dd.getMonth()+1}月${dd.getDate()}日</div><div style="font-size:11px;color:${col};text-align:right;">${diff<0?Math.abs(diff)+'日超過':diff===0?'今日':diff===1?'明日':'あと'+diff+'日'}</div></div>`;
+    // 「今後の締切」はラベルなし
+    if(label) {
+      const ti=document.createElement('div');ti.className='dl-section-title';ti.textContent=label;c.appendChild(ti);
+    }
+    items.forEach(t => {
+      const diff = Math.round((new Date(t.deadline)-td)/864e5);
+      const dd   = new Date(t.deadline);
+      const col  = cls==='over'?'var(--red)':cls==='near'?'#EA580C':'var(--blue)';
+      const card = document.createElement('div');
+      card.className = `dl-card ${cls}`;
+      card.dataset.id = t.id;
+
+      // 通常表示
+      card.innerHTML = `
+        <div style="flex:1;min-width:0;cursor:pointer;display:flex;align-items:center;gap:4px;" onclick="tapDlCard('${t.id}')">
+          <span class="cat-initial cat-${t.color==='red'?'red':t.color==='blue'?'blue':'gray'}" style="flex-shrink:0;">${(CAT_INITIAL[t.name]||t.name.charAt(0))}</span>
+          <span style="font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
+            ${(t.subs&&t.subs.length) ? t.subs.join('・') : t.name}
+          </span>
+        </div>
+        <div style="text-align:right;flex-shrink:0;cursor:pointer;" onclick="tapDlCard('${t.id}')">
+          <div style="font-size:12px;font-weight:600;color:${col};">${dd.getMonth()+1}月${dd.getDate()}日</div>
+          <div style="font-size:11px;color:${col};">${diff<0?Math.abs(diff)+'日超過':diff===0?'今日':diff===1?'明日':'あと'+diff+'日'}</div>
+        </div>
+        <button onclick="openStart('${t.id}')" style="background:var(--green-l);color:var(--green-d);border:none;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:6px;">
+          <i class="ti ti-player-play" style="font-size:13px;"></i>
+        </button>`;
       c.appendChild(card);
     });
   }
-  rg('⚠ 期限超過',over,'over');
-  rg('🔥 もうすぐ（3日以内）',near,'near');
-  rg('📅 今後の締切',norm,'normal');
+
+  rg('⚠ 期限超過', over, 'over');
+  rg('🔥 もうすぐ（3日以内）', near, 'near');
+  rg('', norm, 'normal');  // ← ラベルなし
+}
+
+// 締切一覧のカードをタップ → インライン編集
+function tapDlCard(id) {
+  const t = tasks.find(t => String(t.id) === String(id));
+  if (!t) return;
+  const card = document.querySelector(`.dl-card[data-id="${id}"]`);
+  if (!card) return;
+
+  // すでに編集中なら閉じる
+  if (card.classList.contains('dl-editing')) {
+    renderDeadlines(); return;
+  }
+  card.classList.add('dl-editing');
+
+  const subsText = (t.subs||[]).join('・');
+  card.innerHTML = `
+    <div style="flex:1;min-width:0;">
+      <input class="dl-edit-name" type="text" value="${t.name}" placeholder="タスク名" style="width:100%;font-size:14px;font-weight:600;border:none;border-bottom:1.5px solid var(--green);background:transparent;outline:none;padding:2px 0;margin-bottom:5px;">
+      <input class="dl-edit-sub" type="text" value="${subsText}" placeholder="やること" style="width:100%;font-size:12px;border:none;border-bottom:1px solid var(--border);background:transparent;outline:none;padding:2px 0;margin-bottom:6px;color:var(--text-s);">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
+        <span style="font-size:11px;color:var(--text-s);flex-shrink:0;">締切</span>
+        <input class="dl-edit-dl" type="date" value="${t.deadline||''}" style="flex:1;font-size:12px;border:1px solid var(--border);border-radius:var(--radius-s);padding:4px 8px;background:var(--gray-l);color:var(--text);outline:none;">
+        <button onclick="(function(){document.querySelector('.dl-card[data-id=\\'${id}\\'] .dl-edit-dl').value=''})()" style="background:var(--gray-l);border:1px solid var(--border);border-radius:4px;color:var(--text-s);padding:2px 8px;font-size:13px;">×</button>
+      </div>
+      <div style="display:flex;gap:10px;">
+        <button onclick="saveDlEdit('${id}')" style="flex:1;background:var(--green);color:#fff;border:none;border-radius:var(--radius-s);padding:10px;font-size:14px;font-weight:700;">保存</button>
+        <button onclick="renderDeadlines()" style="flex:1;background:var(--gray-l);color:var(--text-s);border:none;border-radius:var(--radius-s);padding:10px;font-size:14px;">キャンセル</button>
+        <button onclick="dlDeleteTask('${id}')" style="background:var(--red-l);color:var(--red);border:1px solid #FCA5A5;border-radius:var(--radius-s);padding:10px 14px;font-size:12px;">🗑 消去</button>
+      </div>
+    </div>`;
+
+  card.querySelector('.dl-edit-name').focus();
+}
+
+async function saveDlEdit(id) {
+  const card = document.querySelector(`.dl-card[data-id="${id}"]`);
+  if (!card) return;
+  const t = tasks.find(t => String(t.id) === String(id));
+  if (!t) return;
+  const nameEl = card.querySelector('.dl-edit-name');
+  const subEl  = card.querySelector('.dl-edit-sub');
+  const dlEl   = card.querySelector('.dl-edit-dl');
+  t.name     = nameEl.value.trim() || t.name;
+  t.subs     = subEl.value ? subEl.value.split('・').map(s=>s.trim()).filter(Boolean) : [];
+  t.deadline = dlEl ? dlEl.value : t.deadline;
+  saveLocalTasks(); renderDeadlines();
+  try {
+    showSync('保存中...');
+    await apiPost({ action:'updateTask', data:{id:t.id, name:t.name, subs:t.subs, deadline:t.deadline} });
+    showSync('✅ 保存しました');
+  } catch(e) { showSync('⚠ オフライン保存', true); }
+}
+
+async function dlDeleteTask(id) {
+  if (!confirm('このタスクを消去しますか？')) return;
+  tasks = tasks.filter(t => String(t.id) !== String(id));
+  saveLocalTasks(); renderDeadlines(); renderTasks();
+  try {
+    showSync('削除中...');
+    await apiPost({ action:'deleteTask', data:{id} });
+    showSync('✅ タスクを消去しました');
+  } catch(e) { showSync('⚠ ローカルのみ削除', true); }
 }
 
 // =============================================
@@ -1450,47 +1585,55 @@ function selLunch(t){
   ['ok','half','ng'].forEach(x=>{document.getElementById('lb-'+x).className='lunch-btn'+(x===t?' '+t:'');});
   document.getElementById('lunch-result').textContent = '記録しました：'+({ok:'🍱 取れた（20分以上）',half:'🥡 少し（10分程度）',ng:'😞 取れなかった'})[t];
 }
-function selMood(t){
-  currentMood = t;
+function selMood(type, val){
+  currentMood[type] = val;
   ['great','ok','hard','limit'].forEach(x=>{
-    const b=document.getElementById('mb-'+x);
-    if(b) b.className='mood-btn'+(x===t?' '+(x==='ok'?'ok2':x):'');
+    const b=document.getElementById(`mb-${type}-${x}`);
+    if(b) b.className='mood-btn'+(x===val?' '+(x==='ok'?'ok2':x):'');
   });
 }
 async function saveDaily(){
+  const daily = JSON.parse(localStorage.getItem('mamoru_daily') || '[]');
+  const td = todayStr();
+  const idx = daily.findIndex(d => d.date === td);
+  const record = {
+    date: td,
+    moodBody: currentMood.body || '',
+    moodMind: currentMood.mind || '',
+    mood: currentMood.body || currentMood.mind || '', // 後方互換
+    lunch: currentLunch || '',
+    ot: 0
+  };
+  if (idx >= 0) daily[idx] = record; else daily.push(record);
+  localStorage.setItem('mamoru_daily', JSON.stringify(daily));
   try {
     showSync('記録を保存中...');
-    await apiPost({ action:'saveDaily', data:{
-      date: todayStr(),
-      mood: currentMood || '',
-      lunch: currentLunch || '',
-    }});
+    await apiPost({ action:'saveDaily', data: record });
     showSync('✅ 今日の記録を保存しました');
   } catch(e) { showSync('⚠ オフライン保存', true); }
+  renderMonthContent();
 }
 
 // =============================================
 // しんどさカレンダー
 // =============================================
-function buildCal(){
-  const outer = document.getElementById('cal-outer'); if(!outer) return;
-  const moodTypes = ['great','ok','ok','hard','hard','limit'];
-  const moodData = {};
+function buildCal(type='body'){
+  const outerId = type === 'body' ? 'cal-outer-body' : 'cal-outer-mind';
+  const outer = document.getElementById(outerId); if(!outer) return;
   const today = new Date();
-  for(let m=0;m<5;m++){
-    const base = new Date(today.getFullYear(),today.getMonth()-m,1);
-    const dim  = new Date(base.getFullYear(),base.getMonth()+1,0).getDate();
-    for(let d=1;d<=dim;d++){
-      const date = new Date(base.getFullYear(),base.getMonth(),d);
-      if(date>today) break;
-      if(date.getDay()===0||date.getDay()===6) continue;
-      if(Math.random()<0.7){
-        const k = `${base.getFullYear()}-${pad(base.getMonth()+1)}-${pad(d)}`;
-        moodData[k] = moodTypes[Math.floor(Math.random()*moodTypes.length)];
-      }
-    }
-  }
   const tStr = todayStr();
+
+  // localStorageの実データを使う
+  const dailyArr = JSON.parse(localStorage.getItem('mamoru_daily') || '[]');
+  const moodData = {};
+  dailyArr.forEach(d => {
+    if (!d.date) return;
+    let m = '';
+    if (type === 'body') m = d.moodBody || (d.moodMind ? '' : d.mood) || '';
+    else                 m = d.moodMind || '';
+    if (m) moodData[d.date] = m;
+  });
+
   const cont = document.createElement('div'); cont.className='cal-months';
   for(let m=4;m>=0;m--){
     const base = new Date(today.getFullYear(),today.getMonth()-m,1);
@@ -1571,36 +1714,127 @@ function renderWeekContent() {
   el('week-task-done', weekTasks.length);
   el('week-tokk', '—');
 
-  // しんどさ
-  const moodCount = {great:0,ok:0,hard:0,limit:0};
-  weekDaily.forEach(d=>{if(d.mood&&moodCount[d.mood]!==undefined)moodCount[d.mood]++;});
-  const moodEl = document.getElementById('week-mood-content');
-  if (moodEl) {
-    if (weekDaily.length===0) {
-      moodEl.innerHTML='<div style="font-size:12px;color:var(--text-s);">記録がありません</div>';
-    } else {
-      moodEl.innerHTML = moodMiniHtml(moodCount);
-    }
-  }
+  // しんどさ（体・心）
+  const bodyCount = {great:0,ok:0,hard:0,limit:0};
+  const mindCount = {great:0,ok:0,hard:0,limit:0};
+  weekDaily.forEach(d => {
+    const bm = d.moodBody || (d.moodMind ? '' : d.mood) || '';
+    const mm = d.moodMind || '';
+    if (bm && bodyCount[bm] !== undefined) bodyCount[bm]++;
+    if (mm && mindCount[mm] !== undefined) mindCount[mm]++;
+  });
+  const bodyEl = document.getElementById('week-mood-body');
+  const mindEl = document.getElementById('week-mood-mind');
+  if (bodyEl) bodyEl.innerHTML = moodBarHtml(bodyCount);
+  if (mindEl) mindEl.innerHTML = moodBarHtml(mindCount);
 
   // カテゴリ別
   renderBar('week-bar', getCatBarData(weekTasks));
 }
 
-function moodMiniHtml(mc) {
+function moodBarHtml(mc) {
+  const total = Object.values(mc).reduce((a,b)=>a+b, 0);
+  if (total === 0) return '<div style="font-size:11px;color:var(--text-s);">記録なし</div>';
   const items = [
-    {key:'great',emoji:'😄',label:'快調',color:'#1E3A8A'},
-    {key:'ok',emoji:'🙂',label:'まあまあ',color:'#3B6B0C'},
-    {key:'hard',emoji:'😓',label:'しんどい',color:'var(--amber)'},
-    {key:'limit',emoji:'🚨',label:'限界',color:'var(--red)'},
+    {key:'great', emoji:'😄', color:'#DBEAFE', textColor:'#1E3A8A'},
+    {key:'ok',    emoji:'🙂', color:'#D1FAE5', textColor:'#3B6B0C'},
+    {key:'hard',  emoji:'😓', color:'#FEF3C7', textColor:'#92400E'},
+    {key:'limit', emoji:'🚨', color:' #FEE2E2', textColor:'#991B1B'},
   ];
-  return items.map(({key,emoji,label,color})=>
-    `<div style="display:flex;align-items:center;gap:8px;padding:3px 0;font-size:13px;">
-      <span>${emoji}</span>
-      <span style="flex:1;">${label}</span>
-      <span style="font-weight:700;color:${color};">${mc[key]}日</span>
-    </div>`
-  ).join('');
+  return items.map(({key, emoji, color, textColor}) => {
+    const v = mc[key] || 0;
+    const pct = total > 0 ? Math.round(v / total * 100) : 0;
+    return `<div style="margin-bottom:5px;">
+      <div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:2px;">
+        <span>${emoji}</span>
+        <span style="color:${textColor};font-weight:600;">${v}日</span>
+      </div>
+      <div style="background:var(--gray-l);border-radius:3px;height:8px;overflow:hidden;">
+        <div style="width:${pct}%;height:100%;background:${color};border:1px solid ${textColor}22;border-radius:3px;min-width:${v>0?4:0}px;"></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function renderDeadlineCalendar() {
+  const outer = document.getElementById('dl-cal-outer');
+  if (!outer) return;
+  const now = new Date(); now.setHours(0,0,0,0);
+  const tStr = todayStr();
+
+  // 締切のあるタスク（未完了）をdate→タスクのマップに
+  const dlMap = {};
+  tasks.filter(t => t.deadline && !t.done).forEach(t => {
+    if (!dlMap[t.deadline]) dlMap[t.deadline] = [];
+    dlMap[t.deadline].push(t);
+  });
+
+  // 表示する月：今月 + 締切のある月を最大3ヶ月先まで
+  const months = new Set();
+  months.add(`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`);
+  Object.keys(dlMap).forEach(dl => {
+    const d = new Date(dl);
+    if (d >= new Date(now.getFullYear(), now.getMonth(), 1)) {
+      months.add(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`);
+    }
+  });
+  // 今月から最大6ヶ月
+  for (let m = 1; m <= 5; m++) {
+    const d = new Date(now.getFullYear(), now.getMonth() + m, 1);
+    months.add(`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}`);
+  }
+  const sortedMonths = [...months].sort().slice(0, 6);
+
+  const cont = document.createElement('div');
+  cont.className = 'dl-cal-months';
+
+  sortedMonths.forEach(key => {
+    const [yr, mo] = key.split('-').map(Number);
+    const firstDay = new Date(yr, mo-1, 1);
+    const dim = new Date(yr, mo, 0).getDate();
+    const fd = firstDay.getDay();
+
+    const md = document.createElement('div');
+    md.className = 'dl-cal-month';
+    let html = `<div class="dl-cal-month-title">${yr}年${mo}月</div><div class="dl-cal-grid">`;
+    ['日','月','火','水','木','金','土'].forEach(d => html += `<div class="dl-cal-dow">${d}</div>`);
+    for (let i = 0; i < fd; i++) html += `<div></div>`;
+
+    for (let d = 1; d <= dim; d++) {
+      const dateStr = `${yr}-${String(mo).padStart(2,'0')}-${String(d).padStart(2,'0')}`;
+      const isToday = dateStr === tStr;
+      const dlTasks = dlMap[dateStr] || [];
+      const diff = Math.round((new Date(dateStr) - now) / 864e5);
+
+      let cls = 'dl-cal-day';
+      if (isToday) cls += ' today';
+      let dotHTML = '';
+
+      if (dlTasks.length > 0) {
+        if (diff < 0)      { cls += ' dl-over'; }
+        else if (diff <= 3){ cls += ' dl-near'; }
+        else               { cls += ' dl-normal'; }
+        // 詳細内容の先頭5文字（なければカテゴリ名）
+        const detail = dlTasks[0].subs && dlTasks[0].subs.length > 0
+          ? dlTasks[0].subs[0].slice(0,5)
+          : dlTasks[0].name.slice(0,5);
+        const moreCount = dlTasks.length > 1 ? `+${dlTasks.length-1}` : '';
+        const title = dlTasks.map(t => t.name + (t.subs&&t.subs.length?' / '+t.subs.join('・'):'')).join('・');
+        html += `<div class="${cls}" title="${title}">
+          <span class="dl-cal-day-num">${d}</span>
+          <span class="dl-cal-task-name">${detail}${moreCount}</span>
+        </div>`;
+      } else {
+        html += `<div class="${cls}"><span class="dl-cal-day-num">${d}</span></div>`;
+      }
+    }
+    html += '</div>';
+    md.innerHTML = html;
+    cont.appendChild(md);
+  });
+
+  outer.innerHTML = '';
+  outer.appendChild(cont);
 }
 
 // =============================================
@@ -1672,7 +1906,7 @@ function switchTab(tab){
     document.getElementById('screen-'+t).classList.toggle('active',t===tab);
     document.getElementById('tab-'+t)?.classList.toggle('active',t===tab);
   });
-  if(tab==='deadline') renderDeadlines();
+  if(tab==='deadline') { renderDeadlines(); renderDeadlineCalendar(); }
   if(tab==='review') renderWeekContent();
 }
 function switchSubTab(sub){
@@ -1683,7 +1917,7 @@ function switchSubTab(sub){
   if(sub==='today') renderTodayAchieve();
   if(sub==='week')  renderWeekContent();
   if(sub==='month') renderMonthContent();
-  if(sub==='matome'){ buildCal(); setTimeout(renderOtChart, 100); }
+  if(sub==='matome'){ buildCal('body'); buildCal('mind'); setTimeout(renderOtChart, 100); }
 }
 
 // =============================================
@@ -1738,19 +1972,21 @@ function renderMonthContent() {
   el('month-ot-total', otStr);
   el('month-ot-avg', `${Math.floor(otAvg/60)>0?Math.floor(otAvg/60)+'時間':''}${otAvg%60}分`);
   el('month-task-done', monthTasks.length);
-  el('month-rec-days', thisMonth.length + '日');
+  el('month-tokk', '—');
 
-  // しんどさ
-  const moodCount = {great:0,ok:0,hard:0,limit:0};
-  thisMonth.forEach(d=>{if(d.mood&&moodCount[d.mood]!==undefined)moodCount[d.mood]++;});
-  const moodEl = document.getElementById('month-mood-content');
-  if (moodEl) {
-    if (thisMonth.length===0) {
-      moodEl.innerHTML='<div style="font-size:12px;color:var(--text-s);">今日タブでしんどさを記録すると表示されます</div>';
-    } else {
-      moodEl.innerHTML = moodMiniHtml(moodCount);
-    }
-  }
+  // しんどさ（体・心）
+  const bodyCount = {great:0,ok:0,hard:0,limit:0};
+  const mindCount = {great:0,ok:0,hard:0,limit:0};
+  thisMonth.forEach(d => {
+    const bm = d.moodBody || (d.moodMind ? '' : d.mood) || '';
+    const mm = d.moodMind || '';
+    if (bm && bodyCount[bm] !== undefined) bodyCount[bm]++;
+    if (mm && mindCount[mm] !== undefined) mindCount[mm]++;
+  });
+  const bodyEl = document.getElementById('month-mood-body');
+  const mindEl = document.getElementById('month-mood-mind');
+  if (bodyEl) bodyEl.innerHTML = moodBarHtml(bodyCount);
+  if (mindEl) mindEl.innerHTML = moodBarHtml(mindCount);
 
   // カテゴリ別
   renderBar('month-bar', getCatBarData(monthTasks));
@@ -1882,8 +2118,8 @@ function doExport(allTasks, daily) {
   // シート1：日次記録
   // =============================================
   const ws1 = {};
-  const h1 = ['日付','曜日','タスク名','カテゴリ','かかった時間','いつ行ったか','突発対応','しんどさ','昼休み'];
-  const hColors1 = [C.green,C.green,C.green,C.green,C.green,C.green,C.amber,C.blue,C.blue];
+  const h1 = ['日付','曜日','タスク名','カテゴリ','かかった時間','いつ行ったか','突発対応','しんどさ（体）','しんどさ（心）','昼休み'];
+  const hColors1 = [C.green,C.green,C.green,C.green,C.green,C.green,C.amber,C.blue,C.blue,C.blue];
 
   h1.forEach((h,i) => {
     const addr = XLSX.utils.encode_cell({r:0,c:i});
@@ -1919,6 +2155,8 @@ function doExport(allTasks, daily) {
       const bg = isEven ? C.grayL : C.white;
       const timeStr = t ? (t.time ? t.time.split(' · ')[0] : '') : '';
       const whenStr = t ? (t.time && t.time.includes(' · ') ? t.time.split(' · ').slice(1).join('・') : '') : '';
+      const bodyMood = d.moodBody || d.mood || '';
+      const mindMood = d.moodMind || '';
       const row = [
         date,
         daysArr[new Date(date).getDay()],
@@ -1926,25 +2164,38 @@ function doExport(allTasks, daily) {
         t ? t.name : '',
         timeStr,
         whenStr,
-        '',  // 突発対応（将来用）
-        ti===0 ? (moodLabel[d.mood] || '') : '',
+        '',  // 突発対応
+        ti===0 ? (moodLabel[bodyMood] || '') : '',
+        ti===0 ? (moodLabel[mindMood] || '') : '',
         ti===0 ? (lunchLabel[d.lunch] || '') : '',
       ];
       row.forEach((v,ci) => {
         const addr = XLSX.utils.encode_cell({r:r1,c:ci});
         let bg2 = bg, fg = C.text, bold = false;
         if (ci===6) { bg2 = bg; fg = C.amber; }
-        if (ci===7) { bg2 = C.blueL; fg = C.blue; }
+        // 体のしんどさ（ci=7）
+        if (ci===7) {
+          if (bodyMood==='great') { bg2=C.blueL; fg='1E3A8A'; }
+          else if (bodyMood==='ok') { bg2='D1FAE5'; fg='3B6B0C'; }
+          else if (bodyMood==='hard') { bg2='FEF3C7'; fg='92400E'; }
+          else if (bodyMood==='limit') { bg2=C.redL; fg=C.red; }
+          else bg2=C.blueL;
+        }
+        // 心のしんどさ（ci=8）
         if (ci===8) {
+          if (mindMood==='great') { bg2=C.blueL; fg='1E3A8A'; }
+          else if (mindMood==='ok') { bg2='D1FAE5'; fg='3B6B0C'; }
+          else if (mindMood==='hard') { bg2='FEF3C7'; fg='92400E'; }
+          else if (mindMood==='limit') { bg2=C.redL; fg=C.red; }
+          else bg2=C.blueL;
+        }
+        // 昼休み（ci=9）
+        if (ci===9) {
           if (d.lunch==='ok')   { bg2='EAF3DE'; fg='3B6B0C'; }
           else if (d.lunch==='half') { bg2=C.amberL; fg=C.amber; }
           else if (d.lunch==='ng')   { bg2=C.redL; fg=C.red; }
           else bg2=C.blueL;
         }
-        if (ci===7 && d.mood==='great') { bg2=C.blueL; fg='1E3A8A'; }
-        else if (ci===7 && d.mood==='ok') { bg2='D1FAE5'; fg='3B6B0C'; }
-        else if (ci===7 && d.mood==='hard') { bg2='FEF3C7'; fg='92400E'; }
-        else if (ci===7 && d.mood==='limit') { bg2=C.redL; fg=C.red; }
         setCell(ws1, addr, v, dataStyle(bg2, fg, bold, ci<=1||ci>=4));
       });
       r1++;
@@ -1952,7 +2203,7 @@ function doExport(allTasks, daily) {
   });
 
   ws1['!ref'] = XLSX.utils.encode_range({s:{r:0,c:0},e:{r:r1-1,c:8}});
-  ws1['!cols'] = [{wch:14},{wch:6},{wch:20},{wch:14},{wch:14},{wch:22},{wch:10},{wch:18},{wch:22}];
+  ws1['!cols'] = [{wch:14},{wch:6},{wch:20},{wch:14},{wch:14},{wch:22},{wch:10},{wch:18},{wch:18},{wch:22}];
   ws1['!rows'] = Array(r1).fill(null).map((_,i)=>({hpt:i===0?22:18}));
   XLSX.utils.book_append_sheet(wb, ws1, '日次記録');
 
@@ -2149,19 +2400,20 @@ function exportCSVFallback(allTasks, daily) {
 // =============================================
 // 昨日までの記録
 // =============================================
-let ydayMood = null, ydayLunch = null, ydaySelectedDate = null;
+let ydayMood = null, ydayMindMood = null, ydayLunch = null, ydaySelectedDate = null;
 
 function openYdayModal() {
-  // 昨日の日付をデフォルトに設定
   const yday = new Date(); yday.setDate(yday.getDate() - 1);
   ydaySelectedDate = `${yday.getFullYear()}-${pad(yday.getMonth()+1)}-${pad(yday.getDate())}`;
-  // UI初期化
   selectYdayDate('yday');
-  ydayMood = null; ydayLunch = null;
+  ydayMood = null; ydayMindMood = null; ydayLunch = null;
   ['ok','half','ng'].forEach(x => { document.getElementById('ylb-'+x).className='lunch-btn'; });
-  ['great','ok','hard','limit'].forEach(x => { const b=document.getElementById('ymb-'+x); if(b) b.className='mood-btn'; });
+  ['body','mind'].forEach(type =>
+    ['great','ok','hard','limit'].forEach(x => {
+      const b = document.getElementById(`ymb-${type}-${x}`); if(b) b.className='mood-btn';
+    })
+  );
   updateYdaySelectedLabel();
-  // 昨日ボタンのラベル更新
   const days=['日','月','火','水','木','金','土'];
   document.getElementById('yday-date-label').textContent =
     `${yday.getMonth()+1}月${yday.getDate()}日（${days[yday.getDay()]}）`;
@@ -2205,18 +2457,26 @@ function selYLunch(t) {
     document.getElementById('ylb-'+x).className = 'lunch-btn' + (x===t?' '+t:'');
   });
 }
-function selYMood(t) {
-  ydayMood = t;
+function selYMood(type, val) {
+  if (type === 'body') ydayMood = val;
+  else ydayMindMood = val;
   ['great','ok','hard','limit'].forEach(x => {
-    const b = document.getElementById('ymb-'+x);
-    if(b) b.className = 'mood-btn' + (x===t?' '+(x==='ok'?'ok2':x):'');
+    const b = document.getElementById(`ymb-${type}-${x}`);
+    if(b) b.className = 'mood-btn' + (x===val?' '+(x==='ok'?'ok2':x):'');
   });
 }
 async function saveYday() {
   if (!ydaySelectedDate) { alert('日付を選択してください'); return; }
   const daily = JSON.parse(localStorage.getItem('mamoru_daily') || '[]');
   const idx = daily.findIndex(d => d.date === ydaySelectedDate);
-  const record = { date: ydaySelectedDate, mood: ydayMood||'', lunch: ydayLunch||'', ot: 0 };
+  const record = {
+    date: ydaySelectedDate,
+    moodBody: ydayMood || '',
+    moodMind: ydayMindMood || '',
+    mood: ydayMood || ydayMindMood || '',
+    lunch: ydayLunch || '',
+    ot: 0
+  };
   if (idx >= 0) daily[idx] = record; else daily.push(record);
   localStorage.setItem('mamoru_daily', JSON.stringify(daily));
   try {
@@ -2225,6 +2485,15 @@ async function saveYday() {
     showSync('✅ 記録を保存しました');
   } catch(e) { showSync('✅ ローカルに保存しました'); }
   renderMonthContent();
+  // リセット
+  ydayMood = null; ydayMindMood = null; ydayLunch = null;
+  ['body','mind'].forEach(type =>
+    ['great','ok','hard','limit'].forEach(x => {
+      const b = document.getElementById(`ymb-${type}-${x}`);
+      if(b) b.className = 'mood-btn';
+    })
+  );
+  ['ok','half','ng'].forEach(x => { document.getElementById('ylb-'+x).className='lunch-btn'; });
   closeM('modal-yday');
 }
 
@@ -2364,22 +2633,20 @@ function downloadImportTemplate() {
 
 function _doDownloadTemplate() {
   const wb = XLSX.utils.book_new();
-  const headers = ['タスク名（カテゴリ）','やること（詳細）','締切日（YYYY/MM/DD）','カテゴリ色'];
+  const headers = ['タスク名（カテゴリ）','やること（詳細）','締切日（YYYY/MM/DD）'];
   const examples = [
-    ['分掌','水泳指導計画・備品発注','2026/06/15','red'],
-    ['保護者対応','田中さんへ電話','','gray'],
-    ['学年','学年だより作成・集金確認','2026/06/10','blue'],
-    ['会議','職員会議資料準備','','gray'],
-    ['授業','理科実験準備','','gray'],
+    ['分掌','水泳指導計画・備品発注','2026/06/15'],
+    ['保護者対応','田中さんへ電話',''],
+    ['学年','学年だより作成・集金確認','2026/06/10'],
+    ['会議','職員会議資料準備',''],
+    ['授業','理科実験準備',''],
   ];
-  const note = [['※ カテゴリ色：red（分掌）/ blue（学年）/ gray（その他）'],
-                ['※ 締切日は空欄でもOK'],
-                ['※ やることは「・」区切りで複数入力できます']];
+  const note = [['※ 締切日は空欄でもOK'],
+                ['※ カテゴリ色はアプリが自動設定します（分掌→赤・学年→青・その他→グレー）']];
   const ws = XLSX.utils.aoa_to_sheet([headers, ...examples, [], ...note]);
-  ws['!cols'] = [{wch:20},{wch:30},{wch:20},{wch:12}];
-  // ヘッダー色
+  ws['!cols'] = [{wch:20},{wch:30},{wch:20}];
   const hStyle = { fill:{patternType:'solid',fgColor:{rgb:'1D9E75'}}, font:{bold:true,color:{rgb:'FFFFFF'},name:'Arial',sz:11}, alignment:{horizontal:'center'} };
-  ['A1','B1','C1','D1'].forEach(addr => { if(ws[addr]) ws[addr].s = hStyle; });
+  ['A1','B1','C1'].forEach(addr => { if(ws[addr]) ws[addr].s = hStyle; });
   XLSX.utils.book_append_sheet(wb, ws, 'タスク入力');
   XLSX.writeFile(wb, 'まもるさん_タスク入力ひな形.xlsx');
   showSync('✅ ひな形をダウンロードしました');
@@ -2417,16 +2684,18 @@ function _parseImportFile(file) {
         const name = String(r[0]||'').trim();
         const subsRaw = String(r[1]||'').trim();
         const dlRaw = String(r[2]||'').trim();
-        const color = String(r[3]||'gray').trim().toLowerCase();
         if (!name) return;
+        // カテゴリ名から色を自動判定
+        const color = name==='分掌' ? 'red'
+                    : name==='学年' ? 'blue'
+                    : 'gray';
         const subs = subsRaw ? subsRaw.split('・').map(s=>s.trim()).filter(Boolean) : [];
-        // 日付変換
         let deadline = '';
         if (dlRaw) {
           const d = new Date(dlRaw.replace(/\//g, '-'));
           if (!isNaN(d)) deadline = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
         }
-        importedTasks.push({ id:'imp_'+Date.now()+'_'+i, name, color:['red','blue','gray'].includes(color)?color:'gray', subs, deadline, pinned:false, done:false, doneDate:null, time:'' });
+        importedTasks.push({ id:'imp_'+Date.now()+'_'+i, name, color, subs, deadline, pinned:false, done:false, doneDate:null, time:'' });
       });
 
       // プレビュー表示
