@@ -81,9 +81,12 @@ input,textarea{font-family:inherit;}
 .edit-area{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;}
 .edit-name{font-size:13px;border:none;border-bottom:1.5px solid var(--green);background:transparent;outline:none;width:100%;padding:1px 0;font-weight:600;color:var(--text);}
 .edit-sub{font-size:11px;border:none;border-bottom:1px solid var(--border);background:transparent;outline:none;width:100%;padding:1px 0;color:var(--text-s);}
-.edit-actions{display:flex;gap:8px;margin-top:8px;}
-.edit-save{font-size:13px;background:var(--green);color:#fff;border:none;border-radius:6px;padding:8px 16px;font-weight:600;}
-.edit-cancel{font-size:13px;background:var(--gray-l);color:var(--text-s);border:none;border-radius:6px;padding:8px 14px;}
+.edit-actions{display:flex;gap:12px;margin-top:10px;}
+.edit-save{font-size:14px;background:var(--green);color:#fff;border:none;border-radius:var(--radius-s);padding:12px 24px;font-weight:700;flex:1;}
+.edit-cancel{font-size:14px;background:var(--gray-l);color:var(--text-s);border:none;border-radius:var(--radius-s);padding:12px 20px;flex:1;}
+.edit-delete{font-size:12px;background:var(--red-l);color:var(--red);border:1px solid #FCA5A5;border-radius:var(--radius-s);padding:12px 14px;}
+.edit-dl-clear{background:var(--gray-l);border:1px solid var(--border);border-radius:4px;color:var(--text-s);font-size:14px;padding:2px 8px;flex-shrink:0;}
+.btn-delete-task{display:flex;align-items:center;justify-content:center;gap:6px;background:transparent;border:none;color:var(--red);font-size:12px;padding:8px;width:100%;opacity:0.7;}
 
 /* タブバー */
 .tab-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--bg-card);border-top:1px solid var(--border);display:flex;align-items:stretch;height:64px;z-index:50;}
@@ -163,7 +166,7 @@ input,textarea{font-family:inherit;}
 
 /* チップ */
 .chips{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;}
-.chip{padding:5px 12px;border-radius:20px;border:1px solid var(--border);background:var(--gray-l);font-size:12px;color:var(--text);}
+.chip{padding:10px 16px;border-radius:20px;border:1px solid var(--border);background:var(--gray-l);font-size:14px;color:var(--text);}
 .chip.sel{background:var(--green-l);border-color:var(--green);color:var(--green-d);font-weight:600;}
 .chip.coral{border-color:var(--coral-b);}
 .chip.coral.sel{background:var(--coral-l);border-color:var(--coral);color:#4A1B0C;}
@@ -300,7 +303,10 @@ textarea{resize:none;height:56px;line-height:1.5;}
   <div class="header">
     <div class="header-row">
       <div class="header-title">🌿 <span>私のタスク</span>　<strong>まもるさん</strong></div>
-      <div class="date-badge" id="today-badge"></div>
+      <div style="display:flex;align-items:center;gap:8px;">
+        <button class="settings-btn" onclick="openM('modal-settings')" title="設定"><i class="ti ti-settings"></i></button>
+        <div class="date-badge" id="today-badge"></div>
+      </div>
     </div>
   </div>
   <div class="active-bar hidden" id="active-bar">
@@ -439,7 +445,6 @@ textarea{resize:none;height:56px;line-height:1.5;}
   <button class="tab active" id="tab-home" onclick="switchTab('home')"><i class="ti ti-home"></i><span>ホーム</span></button>
   <button class="tab" id="tab-deadline" onclick="switchTab('deadline')"><i class="ti ti-calendar-due"></i><span>締切</span></button>
   <button class="tab" id="tab-review" onclick="switchTab('review')"><i class="ti ti-moon"></i><span>ふりかえり</span></button>
-  <button class="tab" id="tab-settings" onclick="openM('modal-settings')"><i class="ti ti-settings"></i><span>設定</span></button>
   <button class="tab-add" onclick="openAddTask()"><i class="ti ti-plus"></i><span>タスクを追加</span></button>
 </div>
 
@@ -472,7 +477,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
       </div>
       <div class="total-box"><div class="total-label">合計</div><div class="total-val" id="s-total">—</div></div>
     </div>
-    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;">いつ行いましたか？</div>
+    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;">いつ実行しましたか？</div>
     <div class="hint">複数選択できます</div>
     <div class="chips" id="s-when">
       <div class="chip" onclick="togChip(this)">空きコマ（勤務内）</div>
@@ -482,6 +487,9 @@ textarea{resize:none;height:56px;line-height:1.5;}
     </div>
     <button class="btn-primary" onclick="saveTaskDone()">完了として保存</button>
     <button class="btn-cancel" onclick="closeM('modal-start')">あとで</button>
+    <button class="btn-delete-task" onclick="confirmDeleteTask()">
+      <i class="ti ti-trash" style="font-size:14px;"></i> このタスクを消去する
+    </button>
   </div>
 </div>
 
@@ -511,7 +519,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
       </div>
       <div class="total-box"><div class="total-label">合計</div><div class="total-val" id="e-total">—</div></div>
     </div>
-    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;margin-top:12px;">いつ行いましたか？</div>
+    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;margin-top:12px;">いつ実行しましたか？</div>
     <div class="hint">複数選択できます</div>
     <div class="chips" id="e-when">
       <div class="chip" onclick="togChip(this)">空きコマ（勤務内）</div>
@@ -548,9 +556,8 @@ textarea{resize:none;height:56px;line-height:1.5;}
     <div id="task-section">
       <div class="field-label">締切日 <span style="font-weight:400;color:var(--text-s);">（任意）</span></div>
       <input type="date" id="dl-input">
-      <div class="field-label">やること <span style="font-weight:400;color:var(--text-s);">（いくつでも）</span></div>
-      <div class="subtask-list" id="sub-list"></div>
-      <button class="add-sub-btn" onclick="addSub()"><i class="ti ti-plus" style="font-size:14px;"></i>やることを追加</button>
+      <div class="field-label">やること</div>
+      <input type="text" id="sub-single" placeholder="例：水泳指導計画・備品発注" style="margin-bottom:8px;">
       <button class="btn-primary" onclick="addTask()">追加する</button>
     </div>
     <div id="tokk-section" class="hidden">
@@ -627,6 +634,14 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <div class="settings-item-text">
         <div class="settings-item-title">Excelに出力</div>
         <div class="settings-item-sub">日次記録・月次まとめを .xlsx で保存</div>
+      </div>
+      <i class="ti ti-chevron-right settings-item-arrow"></i>
+    </button>
+    <button class="settings-item-btn" onclick="closeM('modal-settings');openM('modal-excel-import')">
+      <i class="ti ti-table-import settings-item-icon" style="color:#217346;"></i>
+      <div class="settings-item-text">
+        <div class="settings-item-title">Excelからタスクを一括入力</div>
+        <div class="settings-item-sub">ひな形DL → 入力 → インポート</div>
       </div>
       <i class="ti ti-chevron-right settings-item-arrow"></i>
     </button>
@@ -784,6 +799,38 @@ textarea{resize:none;height:56px;line-height:1.5;}
     </div>
 
     <button class="btn-cancel" onclick="closeM('modal-howto')">閉じる</button>
+  </div>
+</div>
+
+<!-- modal: Excelからタスク一括入力 -->
+<div class="modal-bg" id="modal-excel-import" onclick="closeBg('modal-excel-import',event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title">📥 Excelからタスクを一括入力</div>
+    <div style="font-size:13px;color:var(--text-s);line-height:1.7;margin-bottom:16px;">
+      ① ひな形をダウンロードしてExcelで開く<br>
+      ② タスク名・カテゴリ・締切日などを入力して保存<br>
+      ③ ファイルを選択してインポート
+    </div>
+    <!-- Step1: ひな形DL -->
+    <button class="btn-primary" style="background:#217346;margin-bottom:10px;" onclick="downloadImportTemplate()">
+      <i class="ti ti-download" style="font-size:16px;margin-right:6px;"></i>① ひな形をダウンロード（.xlsx）
+    </button>
+    <!-- Step2: ファイル選択 -->
+    <button class="btn-primary" onclick="document.getElementById('task-import-file').click()">
+      <i class="ti ti-upload" style="font-size:16px;margin-right:6px;"></i>② ファイルを選択してインポート
+    </button>
+    <input type="file" id="task-import-file" accept=".xlsx,.csv" style="display:none;" onchange="handleTaskImport(event)">
+    <!-- プレビュー -->
+    <div id="import-preview-area" class="hidden" style="margin-top:14px;">
+      <div style="font-size:12px;font-weight:600;color:var(--text-s);margin-bottom:6px;">プレビュー（先頭10件）</div>
+      <div style="max-height:200px;overflow-y:auto;border:1px solid var(--border);border-radius:var(--radius-s);margin-bottom:10px;">
+        <table id="import-preview-table" style="width:100%;border-collapse:collapse;font-size:11px;"></table>
+      </div>
+      <div id="import-summary-text" style="font-size:13px;color:var(--green-d);background:var(--green-l);padding:8px 12px;border-radius:var(--radius-s);margin-bottom:10px;"></div>
+      <button class="btn-primary" id="btn-do-import" onclick="executeTaskImport()">インポート実行</button>
+    </div>
+    <button class="btn-cancel" onclick="closeM('modal-excel-import')">閉じる</button>
   </div>
 </div>
 
@@ -978,16 +1025,22 @@ function saveLocalTasks() {
 function sortedTasks(){
   const td = todayStr();
   const vis = tasks.filter(t => !(t.done && t.doneDate && t.doneDate !== td));
-  const pinned = vis.filter(t => t.pinned && !t.done);
-  const active = vis.filter(t => !t.pinned && !t.done);
-  const done = vis.filter(t => t.done);
-  active.sort((a,b)=>{
-    if(a.deadline&&b.deadline) return new Date(a.deadline)-new Date(b.deadline);
-    if(a.deadline) return -1;
-    if(b.deadline) return 1;
-    return 0;
-  });
-  return [...pinned, ...active, ...done];
+  const pinned  = vis.filter(t => t.pinned && !t.done);
+  const undone  = vis.filter(t => !t.pinned && !t.done);
+  const done    = vis.filter(t => t.done);
+
+  const today0 = new Date(); today0.setHours(0,0,0,0);
+  const in7days = new Date(today0); in7days.setDate(today0.getDate() + 7);
+
+  // 締切あり・1週間以内（overdue含む）
+  const dlNear  = undone.filter(t => t.deadline && new Date(t.deadline) <= in7days);
+  // 締切あり・1週間より先 または 締切なし → 手動順（orderプロパティまたは配列順）
+  const dlFar   = undone.filter(t => !t.deadline || new Date(t.deadline) > in7days);
+
+  dlNear.sort((a,b) => new Date(a.deadline) - new Date(b.deadline));
+  // dlFarは配列の順番そのまま（ドラッグで変更可能）
+
+  return [...pinned, ...dlNear, ...dlFar, ...done];
 }
 
 function dlBadge(dl){
@@ -1044,23 +1097,24 @@ function tapTask(id) {
   const el = document.querySelector(`.task-item[data-id="${id}"]`);
   if (!el) return;
 
-  // すでに編集中なら閉じる
-  if (el.classList.contains('editing')) {
-    cancelEdit(id);
-    return;
-  }
+  if (el.classList.contains('editing')) { cancelEdit(id); return; }
 
   el.classList.add('editing');
   const subsText = (t.subs || []).join('・');
-  const catCls = 'cat-' + (t.color==='red'?'red':t.color==='blue'?'blue':'gray');
 
   el.querySelector('.task-body').outerHTML = `
     <div class="edit-area">
       <input class="edit-name" type="text" value="${t.name}" placeholder="カテゴリ名">
       <input class="edit-sub" type="text" value="${subsText}" placeholder="やること（・区切り）">
+      <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
+        <span style="font-size:11px;color:var(--text-s);flex-shrink:0;">締切</span>
+        <input class="edit-deadline" type="date" value="${t.deadline||''}" style="flex:1;font-size:12px;border:1px solid var(--border);border-radius:var(--radius-s);padding:4px 8px;background:var(--gray-l);color:var(--text);outline:none;">
+        <button class="edit-dl-clear" onclick="clearDeadline('${id}')" title="締切を消去">×</button>
+      </div>
       <div class="edit-actions">
         <button class="edit-save" onclick="saveEdit('${id}')">保存</button>
         <button class="edit-cancel" onclick="cancelEdit('${id}')">キャンセル</button>
+        <button class="edit-delete" onclick="deleteTaskById('${id}')">🗑 消去</button>
       </div>
     </div>`;
 
@@ -1071,30 +1125,48 @@ function tapTask(id) {
   });
 }
 
+function clearDeadline(id) {
+  const el = document.querySelector(`.task-item[data-id="${id}"]`);
+  if (!el) return;
+  const dlEl = el.querySelector('.edit-deadline');
+  if (dlEl) dlEl.value = '';
+}
+
 async function saveEdit(id) {
   const el = document.querySelector(`.task-item[data-id="${id}"]`);
   if (!el) return;
   const nameEl = el.querySelector('.edit-name');
   const subEl  = el.querySelector('.edit-sub');
+  const dlEl   = el.querySelector('.edit-deadline');
   if (!nameEl) return;
 
   const t = tasks.find(t => String(t.id) === String(id));
   if (!t) return;
 
-  t.name = nameEl.value.trim() || t.name;
-  t.subs = subEl.value.split('・').map(s=>s.trim()).filter(Boolean);
+  t.name     = nameEl.value.trim() || t.name;
+  t.subs     = subEl.value.split('・').map(s=>s.trim()).filter(Boolean);
+  t.deadline = dlEl ? dlEl.value : t.deadline;
 
   renderTasks();
   saveLocalTasks();
   try {
     showSync('保存中...');
-    await apiPost({ action: 'updateTask', data: { id: t.id, name: t.name, subs: t.subs } });
+    await apiPost({ action: 'updateTask', data: { id: t.id, name: t.name, subs: t.subs, deadline: t.deadline } });
     showSync('✅ 保存しました');
   } catch(e) { showSync('⚠ オフライン保存', true); }
 }
 
-function cancelEdit(id) {
-  renderTasks();
+function cancelEdit(id) { renderTasks(); }
+
+async function deleteTaskById(id) {
+  if (!confirm('このタスクを消去しますか？')) return;
+  tasks = tasks.filter(t => String(t.id) !== String(id));
+  renderTasks(); saveLocalTasks();
+  try {
+    showSync('削除中...');
+    await apiPost({ action: 'deleteTask', data: { id } });
+    showSync('✅ タスクを消去しました');
+  } catch(e) { showSync('⚠ ローカルのみ削除', true); }
 }
 
 // =============================================
@@ -1225,6 +1297,14 @@ function openStart(id) {
   document.querySelectorAll('#s-when .chip').forEach(c => c.classList.remove('sel'));
   openM('modal-start');
 }
+
+function confirmDeleteTask() {
+  if (!selTaskId) return;
+  if (!confirm('このタスクを消去しますか？')) return;
+  closeM('modal-start');
+  deleteTaskById(selTaskId);
+  selTaskId = null;
+}
 function startTask(){
   const t = tasks.find(t => String(t.id) === String(selTaskId));
   if(!t) return;
@@ -1298,7 +1378,8 @@ async function addTask(){
   if(selCatName==='__other__'){ name = document.getElementById('other-input').value.trim(); }
   else if(selCatName){ name = selCatName; color = selCatColor; }
   if(!name){ alert('カテゴリを選んでください'); return; }
-  const subs = [...document.querySelectorAll('#sub-list input')].map(i=>i.value.trim()).filter(Boolean);
+  const subVal = document.getElementById('sub-single').value.trim();
+  const subs = subVal ? [subVal] : [];
   const dl = document.getElementById('dl-input').value;
   const newTask = { id: 'local_' + Date.now(), name, color, subs, deadline:dl, pinned:false, done:false, doneDate:null, time:'' };
   tasks.push(newTask); renderTasks(); saveLocalTasks(); closeM('modal-add');
@@ -1324,13 +1405,13 @@ async function saveTokk(){
 function openAddTask(){
   openM('modal-add'); switchType('task');
   document.getElementById('dl-input').value = '';
-  document.getElementById('sub-list').innerHTML = '';
+  document.getElementById('sub-single').value = '';
   document.getElementById('other-wrap').classList.add('hidden');
   document.getElementById('other-input').value = '';
   document.querySelectorAll('#cat-grid .cat-btn').forEach(b=>b.className='cat-btn');
   document.querySelectorAll('#tokk-when .chip').forEach(c=>c.classList.remove('sel'));
   document.getElementById('tokk-memo').value = '';
-  resetStep('t'); selCatName = null; selCatColor = 'gray'; addSub();
+  resetStep('t'); selCatName = null; selCatColor = 'gray';
 }
 
 // =============================================
@@ -2262,6 +2343,129 @@ async function insertSampleData() {
 
   renderTasks();
   showSync(`✅ サンプルデータを投入しました（タスク${newTasks.length}件・日次記録${newDaily.length}件）`);
+}
+
+// =============================================
+// Excelからタスク一括入力
+// =============================================
+let importedTasks = [];
+
+function downloadImportTemplate() {
+  // SheetJSが読み込まれているか確認してひな形生成
+  if (typeof XLSX === 'undefined') {
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js';
+    script.onload = () => _doDownloadTemplate();
+    document.head.appendChild(script);
+  } else {
+    _doDownloadTemplate();
+  }
+}
+
+function _doDownloadTemplate() {
+  const wb = XLSX.utils.book_new();
+  const headers = ['タスク名（カテゴリ）','やること（詳細）','締切日（YYYY/MM/DD）','カテゴリ色'];
+  const examples = [
+    ['分掌','水泳指導計画・備品発注','2026/06/15','red'],
+    ['保護者対応','田中さんへ電話','','gray'],
+    ['学年','学年だより作成・集金確認','2026/06/10','blue'],
+    ['会議','職員会議資料準備','','gray'],
+    ['授業','理科実験準備','','gray'],
+  ];
+  const note = [['※ カテゴリ色：red（分掌）/ blue（学年）/ gray（その他）'],
+                ['※ 締切日は空欄でもOK'],
+                ['※ やることは「・」区切りで複数入力できます']];
+  const ws = XLSX.utils.aoa_to_sheet([headers, ...examples, [], ...note]);
+  ws['!cols'] = [{wch:20},{wch:30},{wch:20},{wch:12}];
+  // ヘッダー色
+  const hStyle = { fill:{patternType:'solid',fgColor:{rgb:'1D9E75'}}, font:{bold:true,color:{rgb:'FFFFFF'},name:'Arial',sz:11}, alignment:{horizontal:'center'} };
+  ['A1','B1','C1','D1'].forEach(addr => { if(ws[addr]) ws[addr].s = hStyle; });
+  XLSX.utils.book_append_sheet(wb, ws, 'タスク入力');
+  XLSX.writeFile(wb, 'まもるさん_タスク入力ひな形.xlsx');
+  showSync('✅ ひな形をダウンロードしました');
+}
+
+function handleTaskImport(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  event.target.value = '';
+
+  if (typeof XLSX === 'undefined') {
+    showSync('ライブラリ読み込み中...');
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/xlsx-js-style@1.2.0/dist/xlsx.bundle.js';
+    script.onload = () => _parseImportFile(file);
+    document.head.appendChild(script);
+  } else {
+    _parseImportFile(file);
+  }
+}
+
+function _parseImportFile(file) {
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const wb = XLSX.read(e.target.result, { type: 'array' });
+      const ws = wb.Sheets[wb.SheetNames[0]];
+      const rows = XLSX.utils.sheet_to_json(ws, { header:1, defval:'' });
+      if (rows.length < 2) { alert('データが見つかりません'); return; }
+
+      importedTasks = [];
+      const dataRows = rows.slice(1).filter(r => r[0] && String(r[0]).trim() && !String(r[0]).startsWith('※'));
+
+      dataRows.forEach((r, i) => {
+        const name = String(r[0]||'').trim();
+        const subsRaw = String(r[1]||'').trim();
+        const dlRaw = String(r[2]||'').trim();
+        const color = String(r[3]||'gray').trim().toLowerCase();
+        if (!name) return;
+        const subs = subsRaw ? subsRaw.split('・').map(s=>s.trim()).filter(Boolean) : [];
+        // 日付変換
+        let deadline = '';
+        if (dlRaw) {
+          const d = new Date(dlRaw.replace(/\//g, '-'));
+          if (!isNaN(d)) deadline = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+        }
+        importedTasks.push({ id:'imp_'+Date.now()+'_'+i, name, color:['red','blue','gray'].includes(color)?color:'gray', subs, deadline, pinned:false, done:false, doneDate:null, time:'' });
+      });
+
+      // プレビュー表示
+      const table = document.getElementById('import-preview-table');
+      const preview = importedTasks.slice(0,10);
+      table.innerHTML = `
+        <thead><tr style="background:var(--green-l);">
+          <th style="padding:5px 8px;text-align:left;font-size:11px;color:var(--green-d);">タスク名</th>
+          <th style="padding:5px 8px;text-align:left;font-size:11px;color:var(--green-d);">やること</th>
+          <th style="padding:5px 8px;text-align:left;font-size:11px;color:var(--green-d);">締切</th>
+        </tr></thead>
+        <tbody>${preview.map(t=>`<tr>
+          <td style="padding:4px 8px;border-bottom:1px solid var(--border);font-size:11px;">${t.name}</td>
+          <td style="padding:4px 8px;border-bottom:1px solid var(--border);font-size:11px;">${t.subs.join('・')||'—'}</td>
+          <td style="padding:4px 8px;border-bottom:1px solid var(--border);font-size:11px;">${t.deadline||'—'}</td>
+        </tr>`).join('')}</tbody>`;
+
+      document.getElementById('import-summary-text').textContent = `${importedTasks.length}件のタスクが見つかりました`;
+      document.getElementById('import-preview-area').classList.remove('hidden');
+    } catch(err) {
+      alert('ファイルの読み込みに失敗しました。ひな形の形式を確認してください。\n' + err.message);
+    }
+  };
+  reader.readAsArrayBuffer(file);
+}
+
+async function executeTaskImport() {
+  if (!importedTasks.length) return;
+  tasks = [...tasks, ...importedTasks];
+  saveLocalTasks(); renderTasks();
+  // API同期
+  let synced = 0;
+  for (const t of importedTasks) {
+    try { await apiPost({ action:'saveTask', data:t }); synced++; } catch(e) {}
+  }
+  showSync(`✅ ${importedTasks.length}件のタスクをインポートしました`);
+  importedTasks = [];
+  document.getElementById('import-preview-area').classList.add('hidden');
+  closeM('modal-excel-import');
 }
 
 // =============================================
