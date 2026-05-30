@@ -117,7 +117,7 @@ input,textarea{font-family:inherit;}
 
 /* ふりかえりサブタブ */
 .subtab-row{display:flex;gap:6px;padding:10px 14px 0;flex-shrink:0;}
-.subtab{flex:1;padding:7px 4px;border-radius:var(--radius-s);border:1.5px solid var(--border);background:var(--gray-l);font-size:11px;font-weight:600;color:var(--text-s);text-align:center;}
+.subtab{flex:1;padding:13px 4px;border-radius:var(--radius-s);border:1.5px solid var(--border);background:var(--gray-l);font-size:16px;font-weight:600;color:var(--text-s);text-align:center;}
 .subtab.active{background:var(--green-l);border-color:var(--green-b);color:var(--green-d);}
 .subtab.matome{border-color:var(--coral-b);color:#7A3B0C;}
 .subtab.matome.active{background:var(--coral-l);border-color:var(--coral);color:#4A1B0C;}
@@ -1076,16 +1076,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
 
     <div style="font-size:12px;font-weight:700;color:var(--text);margin-bottom:6px;">■ 管理者が知り得る情報・知り得ない情報</div>
 
-    <div style="background:var(--green-l);border-radius:var(--radius-s);padding:10px 12px;margin-bottom:8px;">
-      <div style="font-size:11px;font-weight:700;color:var(--green-d);margin-bottom:5px;">【現在：ログイン機能なし】</div>
-      <div style="font-size:12px;color:var(--green-d);line-height:1.7;">
-        <b>知り得る情報</b>：Googleスプレッドシートに保存された全データ（タスク・しんどさ・体調メモ・時間外勤務・声を届けるの内容）<br>
-        <b>知り得ない情報</b>：利用者の氏名・所属校などの個人情報（誰のデータかは識別できません）
-      </div>
-    </div>
-
     <div style="background:var(--blue-l);border-radius:var(--radius-s);padding:10px 12px;margin-bottom:14px;">
-      <div style="font-size:11px;font-weight:700;color:var(--blue);margin-bottom:5px;">【将来：Firebase・ログイン機能実装後】</div>
       <div style="font-size:12px;color:#1e3a8a;line-height:1.7;">
         Row Owner設定により、各利用者のデータは本人のみが閲覧・編集できます。管理者権限は設定せず、開発者は個人のタスク・記録データにアクセスできません。<br>
         <b>知り得る情報</b>：登録者数などの集計情報、「声を届ける」の送信内容<br>
