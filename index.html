@@ -3638,35 +3638,20 @@ async function autoFillLunchMemo() {
 // =============================================
 // スマホ「戻る」ボタン対応
 // =============================================
-function pushModalState() {
-  history.pushState({ modal: true }, '');
-}
-
-window.addEventListener('popstate', (e) => {
-  // 開いているモーダルを探して閉じる
+window.addEventListener('popstate', () => {
   const openModal = document.querySelector('.modal-bg.open');
   if (openModal) {
     openModal.classList.remove('open');
-    // 次の戻るに備えてstateを積み直す必要はない
-  } else {
-    // モーダルが開いていない場合はアプリを閉じないよう履歴を積み直す
-    history.pushState({ modal: false }, '');
   }
+  history.pushState({ modal: true }, '');
 });
 
-// モーダルを開く時に履歴を積む
-const _origOpenM = openM;
-function openM(id) {
-  _origOpenM(id);
-  history.pushState({ modal: true, id }, '');
-}
+// 初期状態を履歴に積む
+history.pushState({ modal: true }, '');
 
 loadTasks();
 setTimeout(renderTodayAchieve, 500);
 setTimeout(updateHideFarUI, 100);
-
-// 初期状態を履歴に積む
-history.pushState({ modal: false }, '');
 setTimeout(autoFillLunchMemo, 500);
 </script>
 </body>
