@@ -121,7 +121,7 @@ input,textarea{font-family:inherit;}
 .subtab.active{background:var(--green-l);border-color:var(--green-b);color:var(--green-d);}
 .subtab.matome{border-color:var(--coral-b);color:#7A3B0C;}
 .subtab.matome.active{background:var(--coral-l);border-color:var(--coral);color:#4A1B0C;}
-.subtab-content{display:none;flex:1;overflow-y:auto;padding:10px 14px 0;}
+.subtab-content{display:none;flex:1;overflow-y:auto;padding:10px 14px 80px;}
 .subtab-content.active{display:block;}
 
 /* カード */
@@ -426,9 +426,9 @@ textarea{resize:none;height:56px;line-height:1.5;}
 
     <!-- 週コーナー：週次間 -->
     <div id="ms-week" class="matome-section" style="display:none;">
-      <div style="font-size:12px;color:var(--text-s);margin-bottom:4px;">1週あたり平均時間外勤務（1日平均・縦軸：0〜4時間）</div>
+      <div style="font-size:12px;color:var(--text-s);margin-bottom:4px;">過去5週間の1日平均時間外勤務（縦軸：0〜4時間）</div>
       <canvas id="chart-week-ot" style="width:100%;height:160px;display:block;margin-bottom:12px;"></canvas>
-      <div class="avg-box"><div class="avg-label">時間外勤務</div><div class="avg-val" id="ms-week-ot-total">—</div></div>
+      <div class="avg-box"><div class="avg-label">時間外勤務（今週合計）</div><div class="avg-val" id="ms-week-ot-total">—</div></div>
       <div class="avg-box"><div class="avg-label">1日平均 時間外勤務</div><div class="avg-val" id="ms-week-ot-avg">—</div></div>
       <div class="mini-stat-row">
         <div class="mini-stat-box"><div class="mini-stat-num" id="ms-week-task-done">—</div><div class="mini-stat-label">完了タスク</div></div>
@@ -443,9 +443,9 @@ textarea{resize:none;height:56px;line-height:1.5;}
 
     <!-- 月コーナー：月次 -->
     <div id="ms-month" class="matome-section" style="display:none;">
-      <div style="font-size:12px;color:var(--text-s);margin-bottom:4px;">1か月あたり平均時間外勤務（1日平均・縦軸：0〜4時間）</div>
+      <div style="font-size:12px;color:var(--text-s);margin-bottom:4px;">過去5か月の1日平均時間外勤務（縦軸：0〜4時間）</div>
       <canvas id="chart-month-ot" style="width:100%;height:160px;display:block;margin-bottom:12px;"></canvas>
-      <div class="avg-box"><div class="avg-label">時間外勤務</div><div class="avg-val" id="ms-month-ot-total">—</div></div>
+      <div class="avg-box"><div class="avg-label">時間外勤務（今月合計）</div><div class="avg-val" id="ms-month-ot-total">—</div></div>
       <div class="avg-box"><div class="avg-label">1日平均 時間外勤務</div><div class="avg-val" id="ms-month-ot-avg">—</div></div>
       <div class="mini-stat-row">
         <div class="mini-stat-box"><div class="mini-stat-num" id="ms-month-task-done">—</div><div class="mini-stat-label">完了タスク</div></div>
@@ -552,7 +552,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
       </div>
       <!-- 退勤時刻 -->
       <div style="flex:1;background:var(--gray-l);border-radius:var(--radius-s);padding:8px 10px;">
-        <div style="font-size:11px;color:var(--text-s);margin-bottom:5px;text-align:center;">退勤時刻</div>
+        <div style="font-size:11px;color:var(--text-s);margin-bottom:5px;text-align:center;">退勤時刻（実際）</div>
         <div style="font-size:22px;font-weight:700;color:var(--amber);text-align:center;margin-bottom:6px;" id="disp-end">16:45</div>
         <div style="display:flex;gap:4px;justify-content:center;">
           <button onclick="adjTime('end',-60)" style="flex:1;background:#DBEAFE;border:1px solid #93C5FD;border-radius:4px;font-size:11px;padding:4px 0;color:#1E3A8A;font-weight:600;">－1h</button>
@@ -636,8 +636,9 @@ textarea{resize:none;height:56px;line-height:1.5;}
     </div>
     <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;">📝 体調メモ <span style="font-weight:400;font-size:11px;">（任意・自由記述）</span></div>
     <textarea id="today-memo" placeholder="気になること、体の状態など…" style="width:100%;font-size:13px;border:1px solid var(--border);border-radius:var(--radius-s);padding:9px 11px;background:var(--gray-l);color:var(--text);outline:none;resize:none;height:64px;line-height:1.6;margin-bottom:10px;"></textarea>
-    <button class="save-btn-lg" onclick="saveDaily()">今日の記録を保存する</button>    <button class="yday-btn" onclick="openYdayModal()"><i class="ti ti-clock-minus" style="font-size:18px;"></i>　昨日までの記録を保存する</button>
+    <button class="save-btn-lg" onclick="saveDaily()">今日の記録を保存する</button>
     </div><!-- /holiday-work-wrap -->
+    <button class="yday-btn" onclick="openYdayModal()"><i class="ti ti-clock-minus" style="font-size:18px;"></i>　過去の記録を修正する</button>
     <div class="consult-wrap">
       <hr class="consult-divider">
       <button class="voice-btn" onclick="openM('modal-voice')">
@@ -1005,7 +1006,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
     <div class="field-label">勤務開始時刻</div>
     <input type="time" id="default-start-input" style="width:100%;font-size:16px;border:1px solid var(--border);border-radius:var(--radius-s);padding:8px 12px;background:var(--gray-l);color:var(--text);outline:none;margin-bottom:14px;">
 
-    <div class="field-label">退勤時刻（定時）</div>
+    <div class="field-label">退勤の基本時刻（定時）</div>
     <input type="time" id="default-end-input" style="width:100%;font-size:16px;border:1px solid var(--border);border-radius:var(--radius-s);padding:8px 12px;background:var(--gray-l);color:var(--text);outline:none;margin-bottom:14px;">
 
     <div class="field-label">持ち帰り業務のデフォルト</div>
@@ -1190,7 +1191,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
           <!-- ① 時間外在校等時間 -->
           <div style="font-size:11px;font-weight:700;color:var(--text-s);margin-bottom:5px;">① 時間外在校等時間</div>
           <div style="display:flex;align-items:center;gap:4px;margin-bottom:4px;flex-wrap:wrap;">
-            <div style="background:#DBEAFE;border:1px solid #93C5FD;border-radius:6px;padding:4px 8px;font-size:11px;font-weight:600;color:#1E3A8A;white-space:nowrap;">退勤時刻</div>
+            <div style="background:#DBEAFE;border:1px solid #93C5FD;border-radius:6px;padding:4px 8px;font-size:11px;font-weight:600;color:#1E3A8A;white-space:nowrap;">退勤時刻（実際）</div>
             <div style="font-size:13px;color:var(--text-s);">－</div>
             <div style="background:#DBEAFE;border:1px solid #93C5FD;border-radius:6px;padding:4px 8px;font-size:11px;font-weight:600;color:#1E3A8A;white-space:nowrap;">勤務開始時刻</div>
             <div style="font-size:13px;color:var(--text-s);">－</div>
@@ -1298,108 +1299,6 @@ textarea{resize:none;height:56px;line-height:1.5;}
   </div>
 </div>
 
-<!-- modal: 昨日までのクイック記録 -->
-<div class="modal-bg" id="modal-quick-yday" onclick="closeBg('modal-quick-yday',event)">
-  <div class="modal" onclick="event.stopPropagation()">
-    <div class="modal-handle"></div>
-    <div class="modal-title">⚡ 昨日までのクイック記録</div>
-
-    <!-- 日付選択 -->
-    <div class="field-label">📅 いつの記録ですか？</div>
-    <div style="display:flex;gap:8px;margin-bottom:14px;">
-      <button class="yday-date-btn active" id="qydatebtn-yday" onclick="selQYdayDate('yday')">
-        昨日<br><span id="qyday-date-label" style="font-size:11px;font-weight:400;"></span>
-      </button>
-      <button class="yday-date-btn" id="qydatebtn-pick" onclick="selQYdayDate('pick')">
-        日付を選ぶ<br><span style="font-size:11px;font-weight:400;">カレンダー</span>
-      </button>
-    </div>
-    <div id="qyday-date-picker-wrap" class="hidden" style="margin-bottom:12px;">
-      <input type="date" id="qyday-date-input" onchange="onQYdayDateChange()">
-    </div>
-    <div id="qyday-selected-date" style="font-size:12px;color:var(--green-d);font-weight:600;background:var(--green-l);padding:6px 12px;border-radius:var(--radius-s);margin-bottom:14px;"></div>
-
-    <!-- 時間入力 -->
-    <div style="font-size:13px;color:var(--text-s);margin-bottom:12px;text-align:center;">その日の時間外勤務時間は？</div>
-    <div class="stepper-box" style="margin-bottom:16px;">
-      <div class="stepper-row">
-        <div class="stepper-label">時間</div>
-        <div class="stepper-ctrl">
-          <button class="stepper-btn" style="width:44px;height:44px;font-size:22px;" onclick="chTime('qy','h',-1)">－</button>
-          <div class="stepper-val" id="qy-h" style="font-size:26px;min-width:44px;">0</div>
-          <button class="stepper-btn" style="width:44px;height:44px;font-size:22px;" onclick="chTime('qy','h',1)">＋</button>
-          <div class="stepper-unit">時間</div>
-        </div>
-      </div>
-      <div class="stepper-row">
-        <div class="stepper-label">分</div>
-        <div class="stepper-ctrl">
-          <button class="stepper-btn" style="width:44px;height:44px;font-size:22px;" onclick="chTime('qy','m',-1)">－</button>
-          <div class="stepper-val" id="qy-m" style="font-size:26px;min-width:44px;">0</div>
-          <button class="stepper-btn" style="width:44px;height:44px;font-size:22px;" onclick="chTime('qy','m',1)">＋</button>
-          <div class="stepper-unit">分（10分単位）</div>
-        </div>
-      </div>
-      <div class="total-box"><div class="total-label">合計</div><div class="total-val" id="qy-total" style="font-size:22px;">—</div></div>
-    </div>
-
-    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;margin-top:4px;">📝 メモ <span style="font-weight:400;font-size:11px;">（任意・音声入力可）</span></div>
-    <textarea id="qyday-memo" placeholder="例：怪我の件で20時まで保護者対応。急な研修が入って放課後がなくなった…など" style="width:100%;font-size:13px;border:1px solid var(--border);border-radius:var(--radius-s);padding:9px 11px;background:var(--gray-l);color:var(--text);outline:none;resize:none;height:72px;line-height:1.6;margin-bottom:12px;"></textarea>
-
-    <button class="btn-primary" style="font-size:16px;padding:14px;" onclick="saveQuickYday()">記録する</button>
-    <button class="btn-cancel" onclick="closeM('modal-quick-yday')">キャンセル</button>
-  </div>
-</div>
-
-<!-- modal: クイック記録 -->
-<div class="modal-bg" id="modal-quick" onclick="closeBg('modal-quick',event)">
-  <div class="modal" onclick="event.stopPropagation()">
-    <div class="modal-handle"></div>
-    <div class="modal-title">⚡ クイック記録</div>
-    <div style="font-size:13px;color:var(--text-s);margin-bottom:16px;text-align:center;">今日の時間外勤務時間は？</div>
-
-    <div class="stepper-box" style="margin-bottom:16px;">
-      <div class="stepper-row">
-        <div class="stepper-label">時間</div>
-        <div class="stepper-ctrl">
-          <button class="stepper-btn" style="width:44px;height:44px;font-size:22px;" onclick="chTime('q','h',-1)">－</button>
-          <div class="stepper-val" id="q-h" style="font-size:26px;min-width:44px;">0</div>
-          <button class="stepper-btn" style="width:44px;height:44px;font-size:22px;" onclick="chTime('q','h',1)">＋</button>
-          <div class="stepper-unit">時間</div>
-        </div>
-      </div>
-      <div class="stepper-row">
-        <div class="stepper-label">分</div>
-        <div class="stepper-ctrl">
-          <button class="stepper-btn" style="width:44px;height:44px;font-size:22px;" onclick="chTime('q','m',-1)">－</button>
-          <div class="stepper-val" id="q-m" style="font-size:26px;min-width:44px;">0</div>
-          <button class="stepper-btn" style="width:44px;height:44px;font-size:22px;" onclick="chTime('q','m',1)">＋</button>
-          <div class="stepper-unit">分（10分単位）</div>
-        </div>
-      </div>
-      <div class="total-box" style="padding:12px 14px;">
-        <div class="total-label">合計</div>
-        <div class="total-val" id="q-total" style="font-size:22px;">—</div>
-      </div>
-    </div>
-
-    <!-- 記録済み表示 -->
-    <div id="quick-saved" class="hidden" style="background:var(--green-l);border:1.5px solid var(--green-b);border-radius:var(--radius-s);padding:10px 14px;margin-bottom:12px;display:flex;justify-content:space-between;align-items:center;">
-      <span style="font-size:12px;color:var(--green-d);">✅ 今日の記録済み</span>
-      <span style="font-size:16px;font-weight:700;color:var(--green-d);" id="quick-saved-val">—</span>
-    </div>
-
-    <!-- 自由記述 -->
-    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;margin-top:4px;">📝 今日のメモ <span style="font-weight:400;font-size:11px;">（任意・音声入力可）</span></div>
-    <textarea id="quick-memo" placeholder="例：怪我の件で20時まで保護者対応。綱紀保持研修が急に入って放課後がなくなった…など、何でも" style="width:100%;font-size:13px;border:1px solid var(--border);border-radius:var(--radius-s);padding:9px 11px;background:var(--gray-l);color:var(--text);outline:none;resize:none;height:80px;line-height:1.6;margin-bottom:12px;"></textarea>
-
-    <button class="btn-primary" style="font-size:16px;padding:14px;" onclick="saveQuick()">今日の記録をする</button>
-    <button class="yday-btn" style="margin-top:8px;" onclick="openQuickYday()">
-      <i class="ti ti-clock-minus" style="font-size:18px;"></i>　昨日までのクイック記録
-    </button>
-    <button class="btn-cancel" onclick="closeM('modal-quick')">キャンセル</button>
-  </div>
-</div>
 
 <!-- modal: リセット Step1 -->
 <div class="modal-bg center" id="modal-reset1" onclick="closeBg('modal-reset1',event)">
@@ -1444,7 +1343,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
-      <div class="modal-title" style="margin-bottom:0;">（忘れていた）記録を保存する</div>
+      <div class="modal-title" style="margin-bottom:0;">過去の記録を修正する</div>
       <button onclick="openWorkDefaultModal()" style="display:flex;align-items:center;gap:4px;background:var(--gray-l);border:1px solid var(--border);border-radius:var(--radius-s);padding:5px 10px;font-size:11px;color:var(--text-s);white-space:nowrap;">
         <i class="ti ti-settings" style="font-size:12px;"></i>デフォルトを設定
       </button>
@@ -1486,27 +1385,74 @@ textarea{resize:none;height:56px;line-height:1.5;}
         <button class="cat-btn" data-n="その他" onclick="togYLunchCat(this)" style="grid-column:span 2;">その他</button>
       </div>
     </div>
-    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;">⏱ 時間外勤務時間 <span style="font-weight:400;font-size:11px;">（任意）</span></div>
-    <div class="stepper-box" style="margin-bottom:14px;">
+    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;">⏱ 時間外在校等時間</div>
+    <div style="display:flex;gap:8px;margin-bottom:6px;">
+      <div style="flex:1;background:var(--gray-l);border-radius:var(--radius-s);padding:8px 10px;">
+        <div style="font-size:11px;color:var(--text-s);margin-bottom:5px;text-align:center;">勤務開始</div>
+        <div style="font-size:20px;font-weight:700;color:var(--text);text-align:center;margin-bottom:6px;" id="yday-disp-start">08:00</div>
+        <div style="display:flex;gap:4px;justify-content:center;">
+          <button onclick="adjYdayTime('start',-60)" style="flex:1;background:#DBEAFE;border:1px solid #93C5FD;border-radius:4px;font-size:11px;padding:4px 0;color:#1E3A8A;font-weight:600;">－1h</button>
+          <button onclick="adjYdayTime('start',60)" style="flex:1;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:4px;font-size:11px;padding:4px 0;color:#991B1B;font-weight:600;">＋1h</button>
+          <button onclick="adjYdayTime('start',-15)" style="flex:1;background:#DBEAFE;border:1px solid #93C5FD;border-radius:4px;font-size:11px;padding:4px 0;color:#1E3A8A;font-weight:600;">－15分</button>
+          <button onclick="adjYdayTime('start',15)" style="flex:1;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:4px;font-size:11px;padding:4px 0;color:#991B1B;font-weight:600;">＋15分</button>
+        </div>
+      </div>
+      <div style="flex:1;background:var(--gray-l);border-radius:var(--radius-s);padding:8px 10px;">
+        <div style="font-size:11px;color:var(--text-s);margin-bottom:5px;text-align:center;">退勤時刻（実際）</div>
+        <div style="font-size:20px;font-weight:700;color:var(--amber);text-align:center;margin-bottom:6px;" id="yday-disp-end">16:45</div>
+        <div style="display:flex;gap:4px;justify-content:center;">
+          <button onclick="adjYdayTime('end',-60)" style="flex:1;background:#DBEAFE;border:1px solid #93C5FD;border-radius:4px;font-size:11px;padding:4px 0;color:#1E3A8A;font-weight:600;">－1h</button>
+          <button onclick="adjYdayTime('end',60)" style="flex:1;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:4px;font-size:11px;padding:4px 0;color:#991B1B;font-weight:600;">＋1h</button>
+          <button onclick="adjYdayTime('end',-15)" style="flex:1;background:#DBEAFE;border:1px solid #93C5FD;border-radius:4px;font-size:11px;padding:4px 0;color:#1E3A8A;font-weight:600;">－15分</button>
+          <button onclick="adjYdayTime('end',15)" style="flex:1;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:4px;font-size:11px;padding:4px 0;color:#991B1B;font-weight:600;">＋15分</button>
+        </div>
+      </div>
+    </div>
+    <div id="yday-school-ot-result" style="font-size:12px;color:var(--text-s);margin-bottom:4px;text-align:center;"></div>
+    <div style="font-size:11px;color:var(--text-s);margin-bottom:10px;display:flex;align-items:center;gap:6px;">
+      微調整：
+      <button onclick="adjYdaySchoolOt(-10)" style="border:1px solid var(--border);border-radius:4px;background:var(--gray-l);padding:2px 8px;font-size:12px;">－10分</button>
+      <span id="yday-school-ot-manual" style="font-weight:600;color:var(--green-d);">—</span>
+      <button onclick="adjYdaySchoolOt(10)" style="border:1px solid var(--border);border-radius:4px;background:var(--gray-l);padding:2px 8px;font-size:12px;">＋10分</button>
+    </div>
+
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+      <div style="font-size:13px;font-weight:700;color:var(--text);">🏠 持ち帰り業務</div>
+    </div>
+    <div class="stepper-box" style="margin-bottom:8px;">
       <div class="stepper-row">
         <div class="stepper-label">時間</div>
         <div class="stepper-ctrl">
-          <button class="stepper-btn" onclick="chTime('y','h',-1)">－</button>
-          <div class="stepper-val" id="y-h">0</div>
-          <button class="stepper-btn" onclick="chTime('y','h',1)">＋</button>
+          <button class="stepper-btn" onclick="adjYdayTakehome(-60)">－</button>
+          <div class="stepper-val" id="yday-th-h">0</div>
+          <button class="stepper-btn" onclick="adjYdayTakehome(60)">＋</button>
           <div class="stepper-unit">時間</div>
         </div>
       </div>
       <div class="stepper-row">
         <div class="stepper-label">分</div>
         <div class="stepper-ctrl">
-          <button class="stepper-btn" onclick="chTime('y','m',-1)">－</button>
-          <div class="stepper-val" id="y-m">0</div>
-          <button class="stepper-btn" onclick="chTime('y','m',1)">＋</button>
+          <button class="stepper-btn" onclick="adjYdayTakehome(-10)">－</button>
+          <div class="stepper-val" id="yday-th-m">0</div>
+          <button class="stepper-btn" onclick="adjYdayTakehome(10)">＋</button>
           <div class="stepper-unit">分（10分単位）</div>
         </div>
       </div>
-      <div class="total-box"><div class="total-label">合計</div><div class="total-val" id="y-total">—</div></div>
+      <div class="total-box"><div class="total-label">合計</div><div class="total-val" id="yday-th-total">—</div></div>
+    </div>
+
+    <!-- 今日の合計 -->
+    <div id="yday-ot-summary" style="background:var(--green-l);border-left:4px solid var(--green);border-radius:0 var(--radius-s) var(--radius-s) 0;padding:10px 14px;margin-bottom:12px;">
+      <div style="font-size:11px;color:var(--green-d);margin-bottom:2px;">📊 合計</div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--green-d);">
+        <span>時間外在校等時間</span><span id="yday-summary-school" style="font-weight:700;">—</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--blue);">
+        <span>持ち帰り業務</span><span id="yday-summary-takehome" style="font-weight:700;">—</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;font-weight:700;color:var(--text);border-top:1px solid var(--border);margin-top:6px;padding-top:6px;">
+        <span>合　計</span><span id="yday-summary-total">—</span>
+      </div>
     </div>
     <div class="mood-row" style="margin-bottom:12px;">
       <button class="mood-btn" id="ymb-body-great" onclick="selYMood('body','great')">😄<br>快調</button>
@@ -1621,134 +1567,7 @@ function saveLocalTasks() {
   localStorage.setItem('mamoru_tasks', JSON.stringify(tasks));
 }
 
-// =============================================
-// 昨日までのクイック記録
-// =============================================
-let qydaySelectedDate = null;
 
-function openQuickYday() {
-  closeM('modal-quick');
-  const yday = new Date(); yday.setDate(yday.getDate()-1);
-  qydaySelectedDate = `${yday.getFullYear()}-${pad(yday.getMonth()+1)}-${pad(yday.getDate())}`;
-  const days=['日','月','火','水','木','金','土'];
-  const el = document.getElementById('qyday-date-label');
-  if(el) el.textContent = `${yday.getMonth()+1}月${yday.getDate()}日（${days[yday.getDay()]}）`;
-  selQYdayDate('yday');
-  resetStep('qy');
-  const m = document.getElementById('qyday-memo');
-  if (m) m.value = '';
-  updateQYdayLabel();
-  openM('modal-quick-yday');
-}
-
-function selQYdayDate(mode) {
-  document.getElementById('qydatebtn-yday').classList.toggle('active', mode==='yday');
-  document.getElementById('qydatebtn-pick').classList.toggle('active', mode==='pick');
-  document.getElementById('qyday-date-picker-wrap').classList.toggle('hidden', mode!=='pick');
-  if (mode === 'yday') {
-    const yday = new Date(); yday.setDate(yday.getDate()-1);
-    qydaySelectedDate = `${yday.getFullYear()}-${pad(yday.getMonth()+1)}-${pad(yday.getDate())}`;
-    updateQYdayLabel();
-  } else {
-    const pickerEl = document.getElementById('qyday-date-input');
-    const yday = new Date(); yday.setDate(yday.getDate()-1);
-    pickerEl.max = `${yday.getFullYear()}-${pad(yday.getMonth()+1)}-${pad(yday.getDate())}`;
-    pickerEl.value = qydaySelectedDate || '';
-    pickerEl.focus();
-  }
-}
-
-function onQYdayDateChange() {
-  const val = document.getElementById('qyday-date-input').value;
-  if (val) { qydaySelectedDate = val; updateQYdayLabel(); }
-}
-
-function updateQYdayLabel() {
-  const el = document.getElementById('qyday-selected-date');
-  if (!el || !qydaySelectedDate) return;
-  const d = new Date(qydaySelectedDate);
-  const days=['日','月','火','水','木','金','土'];
-  el.textContent = `📅 選択中：${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日（${days[d.getDay()]}）`;
-}
-
-async function saveQuickYday() {
-  if (!qydaySelectedDate) { alert('日付を選択してください'); return; }
-  const totalMin = step.qy.h * 60 + step.qy.m;
-  if (totalMin === 0) { alert('時間を入力してください'); return; }
-
-  const daily = JSON.parse(localStorage.getItem('mamoru_daily') || '[]');
-  const idx = daily.findIndex(d => d.date === qydaySelectedDate);
-  if (idx >= 0 && daily[idx].ot > 0) {
-    if (!confirm(`${qydaySelectedDate} の記録が既にあります。上書きしますか？`)) return;
-  }
-  const record = idx >= 0
-    ? { ...daily[idx], ot: totalMin, memo: document.getElementById('qyday-memo')?.value.trim() || daily[idx].memo || '' }
-    : { date: qydaySelectedDate, moodBody:'', moodMind:'', mood:'', lunch:'', ot: totalMin, memo: document.getElementById('qyday-memo')?.value.trim() || '' };
-  if (idx >= 0) daily[idx] = record; else daily.push(record);
-  localStorage.setItem('mamoru_daily', JSON.stringify(daily));
-
-  try {
-    showSync('記録中...');
-    await apiPost({ action: 'saveDaily', data: record });
-    showSync('✅ 記録しました'); showCelebration();
-  } catch(e) { showSync('✅ ローカルに記録しました'); showCelebration(); }
-
-  renderMatomeWeek();
-  renderMatomeMonth();
-  resetStep('qy');
-  closeM('modal-quick-yday');
-}
-
-// =============================================
-// クイック記録
-// =============================================
-function renderQuickSaved() {
-  const daily = JSON.parse(localStorage.getItem('mamoru_daily') || '[]');
-  const td = todayStr();
-  const rec = daily.find(d => d.date === td);
-  const saved = document.getElementById('quick-saved');
-  const savedVal = document.getElementById('quick-saved-val');
-  if (saved && rec && rec.ot > 0) {
-    const h = Math.floor(rec.ot / 60), m = rec.ot % 60;
-    savedVal.textContent = `${h > 0 ? h+'時間' : ''}${m > 0 ? m+'分' : '0分'}`;
-    saved.classList.remove('hidden');
-  } else if (saved) {
-    saved.classList.add('hidden');
-  }
-}
-
-async function saveQuick() {
-  const h = step.q.h, m = step.q.m;
-  const totalMin = h * 60 + m;
-  if (totalMin === 0) { alert('時間を入力してください'); return; }
-
-  const daily = JSON.parse(localStorage.getItem('mamoru_daily') || '[]');
-  const td = todayStr();
-  const idx = daily.findIndex(d => d.date === td);
-
-  if (idx >= 0 && daily[idx].ot > 0) {
-    if (!confirm('今日の記録が既にあります。上書きしますか？')) return;
-  }
-
-  const record = idx >= 0
-    ? { ...daily[idx], ot: totalMin, memo: document.getElementById('quick-memo')?.value.trim() || daily[idx].memo || '' }
-    : { date: td, moodBody:'', moodMind:'', mood:'', lunch:'', ot: totalMin, memo: document.getElementById('quick-memo')?.value.trim() || '' };
-
-  if (idx >= 0) daily[idx] = record; else daily.push(record);
-  localStorage.setItem('mamoru_daily', JSON.stringify(daily));
-
-  try {
-    showSync('記録中...');
-    await apiPost({ action: 'saveDaily', data: record });
-    showSync('✅ 記録しました'); showCelebration();
-  } catch(e) { showSync('✅ ローカルに記録しました'); showCelebration(); }
-
-  renderQuickSaved();
-  renderMatomeMonth();
-  renderMatomeWeek();
-  resetStep('q');
-  closeM('modal-quick');
-}
 
 // =============================================
 // 表示フィルタ：1か月以上先の締切タスクを非表示
@@ -2338,7 +2157,7 @@ function fmtMinShort(m) {
   return `${mn}分`;
 }
 
-function drawBarChart(canvasId, labels, data, color='#1D9E75') {
+function drawBarChart(canvasId, labels, data, color='#1D9E75', maxOverride=null) {
   const canvas = document.getElementById(canvasId);
   if (!canvas) return;
   canvas.width  = canvas.offsetWidth || 320;
@@ -2348,18 +2167,20 @@ function drawBarChart(canvasId, labels, data, color='#1D9E75') {
   const W = canvas.width, H = canvas.height;
   const padC = {top:20, bottom:36, left:42, right:8};
   const bw = (W - padC.left - padC.right) / data.length;
-  const MAX_MIN = 4 * 60; // 上限5時間固定
+  const MAX_MIN = maxOverride || (4 * 60);
 
   ctx.fillStyle = '#F3F4F6';
   ctx.fillRect(0,0,W,H);
 
-  // グリッド（1h=60, 2h=120, 3h=180, 4h=240, 5h=300）
-  [60,120,180,240].forEach(v=>{
+  // グリッド（MAX_MINを4分割）
+  const gridSteps = [0.25, 0.5, 0.75, 1.0].map(r => Math.round(MAX_MIN * r));
+  gridSteps.forEach(v=>{
     const y = padC.top + (H-padC.top-padC.bottom)*(1-v/MAX_MIN);
     ctx.strokeStyle='#E5E7EB'; ctx.lineWidth=1;
     ctx.beginPath(); ctx.moveTo(padC.left,y); ctx.lineTo(W-padC.right,y); ctx.stroke();
     ctx.fillStyle='#9CA3AF'; ctx.font='10px Arial'; ctx.textAlign='right';
-    ctx.fillText(`${v/60}h`, padC.left-3, y+4);
+    const h=Math.floor(v/60), m=v%60;
+    ctx.fillText(m>0?`${h}h${m}m`:`${h}h`, padC.left-3, y+4);
   });
 
   // バー
@@ -2459,16 +2280,22 @@ function renderMatomeWeek() {
     }
     weeks5.push({ label, ot, bodyArr, mindArr, recDays });
   }
-  // グラフは1日平均（週の合計÷記録日数）
+  // グラフは週合計（分）を時間換算して表示
+  // グラフは1日平均（記録日数で割る）
   const weekAvgs = weeks5.map(w => w.recDays > 0 ? Math.round(w.ot / w.recDays) : 0);
-  drawBarChart('chart-week-ot', weeks5.map(w=>w.label), weekAvgs, '#2563EB');
+  drawBarChart('chart-week-ot', weeks5.map(w=>w.label), weekAvgs, '#2563EB', 4*60);
 
-  // 今週の集計
+  // 今週の集計（weeks5[4]がw=0のループ→今週）
   const thisWeek = weeks5[4];
   const el = (id, v) => { const e=document.getElementById(id); if(e) e.textContent=v; };
+
+  // 合計は週全体のot合計
   el('ms-week-ot-total', fmtMinShort(thisWeek.ot));
-  const weekDays = Math.min(dow===0?7:dow, 7);
-  el('ms-week-ot-avg', fmtMinShort(Math.round(thisWeek.ot/Math.max(weekDays,1))));
+  // 1日平均：記録した日数で割る
+  const weekAvgMin = thisWeek.recDays > 0 ? Math.round(thisWeek.ot / thisWeek.recDays) : 0;
+  el('ms-week-ot-avg', fmtMinShort(weekAvgMin));
+  // デバッグ確認用（本番では削除）
+  console.log('今週合計:', thisWeek.ot, '分 / 記録日数:', thisWeek.recDays, '日 / 1日平均:', weekAvgMin, '分');
 
   // 完了タスク・突発対応・しんどさで共通利用する変数を先に定義
   const weekStartStr = `${monday.getFullYear()}-${pad(monday.getMonth()+1)}-${pad(monday.getDate())}`;
@@ -2510,9 +2337,9 @@ function renderMatomeMonth() {
     const ot = recs.reduce((s,r)=>s+(r.ot||0), 0);
     months5.push({ label, ot, recs });
   }
-  // グラフは1日平均
+  // グラフは1日平均（記録日数で割る）
   const monthAvgs = months5.map(m => m.recs.length > 0 ? Math.round(m.recs.reduce((s,r)=>s+(r.ot||0),0) / m.recs.length) : 0);
-  drawBarChart('chart-month-ot', months5.map(m=>m.label), monthAvgs, '#7C3AED');
+  drawBarChart('chart-month-ot', months5.map(m=>m.label), monthAvgs, '#7C3AED', 4*60);
 
   // 今月の集計
   const thisMonth = months5[4].recs;
@@ -3512,11 +3339,97 @@ function exportCSVFallback(allTasks, daily) {
 }
 
 // =============================================
+// 昨日モーダル用 時間外在校等時間・持ち帰り業務
+// =============================================
+let ydayStartMin = 8 * 60;
+let ydayEndMin   = 16 * 60 + 45;
+let ydaySchoolOtMin = 0;
+let ydayTakehomeMin = 0;
+
+function initYdayOtUI() {
+  const startDefault = localStorage.getItem('mamoru_work_start') || '08:00';
+  const endDefault   = localStorage.getItem('mamoru_work_end')   || '16:45';
+  const thDefault    = Number(localStorage.getItem('mamoru_takehome_default') || 0);
+  const [sh, sm] = startDefault.split(':').map(Number);
+  const [eh, em] = endDefault.split(':').map(Number);
+  ydayStartMin = sh * 60 + sm;
+  ydayEndMin   = eh * 60 + em;
+  ydayTakehomeMin = thDefault;
+  ydaySchoolOtMin = 0;
+  updateYdayTimeDisp();
+  calcYdaySchoolOt();
+  updateYdayTakehomeDisp();
+  updateYdaySummary();
+}
+
+function adjYdayTime(type, delta) {
+  if (type === 'start') ydayStartMin = Math.max(0, Math.min(23*60+59, ydayStartMin + delta));
+  else ydayEndMin = Math.max(0, Math.min(23*60+59, ydayEndMin + delta));
+  updateYdayTimeDisp();
+  calcYdaySchoolOt();
+}
+
+function updateYdayTimeDisp() {
+  const fmt = m => `${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`;
+  const ds = document.getElementById('yday-disp-start');
+  const de = document.getElementById('yday-disp-end');
+  if (ds) ds.textContent = fmt(ydayStartMin);
+  if (de) de.textContent = fmt(ydayEndMin);
+}
+
+function calcYdaySchoolOt() {
+  const workMin = ydayEndMin - ydayStartMin;
+  ydaySchoolOtMin = Math.max(0, workMin - FIXED_WORK_MIN);
+  const resultEl = document.getElementById('yday-school-ot-result');
+  const manualEl = document.getElementById('yday-school-ot-manual');
+  const h = Math.floor(ydaySchoolOtMin/60), m = ydaySchoolOtMin%60;
+  const str = ydaySchoolOtMin > 0 ? `${h>0?h+'時間':''}${m>0?m+'分':''}` : '0分';
+  if (resultEl) { resultEl.textContent = ydaySchoolOtMin > 0 ? `所定勤務時間を ${str} 超過` : '時間内退勤（0分）'; resultEl.style.color = ydaySchoolOtMin > 0 ? 'var(--amber)' : 'var(--text-s)'; }
+  if (manualEl) manualEl.textContent = str;
+  updateYdaySummary();
+}
+
+function adjYdaySchoolOt(delta) {
+  ydaySchoolOtMin = Math.max(0, ydaySchoolOtMin + delta);
+  const manualEl = document.getElementById('yday-school-ot-manual');
+  const h = Math.floor(ydaySchoolOtMin/60), m = ydaySchoolOtMin%60;
+  if (manualEl) manualEl.textContent = ydaySchoolOtMin > 0 ? `${h>0?h+'時間':''}${m>0?m+'分':''}` : '0分';
+  updateYdaySummary();
+}
+
+function adjYdayTakehome(delta) {
+  ydayTakehomeMin = Math.max(0, ydayTakehomeMin + delta);
+  updateYdayTakehomeDisp();
+  updateYdaySummary();
+}
+
+function updateYdayTakehomeDisp() {
+  const h = Math.floor(ydayTakehomeMin/60), m = ydayTakehomeMin%60;
+  const hEl = document.getElementById('yday-th-h');
+  const mEl = document.getElementById('yday-th-m');
+  const tEl = document.getElementById('yday-th-total');
+  if (hEl) hEl.textContent = h;
+  if (mEl) mEl.textContent = m;
+  if (tEl) tEl.textContent = ydayTakehomeMin > 0 ? `${h>0?h+'時間':''}${m>0?m+'分':'0分'}` : '0分';
+}
+
+function updateYdaySummary() {
+  const lunchOt = ydayLunch==='ng'?45 : ydayLunch==='20'?30 : ydayLunch==='10'?15 : 0;
+  const total = ydaySchoolOtMin + ydayTakehomeMin + lunchOt;
+  const fmt = m => m > 0 ? `${Math.floor(m/60)>0?Math.floor(m/60)+'時間':''}${m%60>0?m%60+'分':'0分'}` : '0分';
+  const el = (id, v) => { const e = document.getElementById(id); if(e) e.textContent = v; };
+  el('yday-summary-school',   fmt(ydaySchoolOtMin));
+  el('yday-summary-takehome', fmt(ydayTakehomeMin));
+  el('yday-summary-total',    fmt(total));
+}
+
+// =============================================
 // 昨日までの記録
 // =============================================
 let ydayMood = null, ydayMindMood = null, ydayLunch = null, ydaySelectedDate = null;
 
 function openYdayModal() {
+  try {
   const yday = new Date(); yday.setDate(yday.getDate() - 1);
   ydaySelectedDate = `${yday.getFullYear()}-${pad(yday.getMonth()+1)}-${pad(yday.getDate())}`;
   selectYdayDate('yday');
@@ -3533,11 +3446,13 @@ function openYdayModal() {
       const b = document.getElementById(`ymb-${type}-${x}`); if(b) b.className='mood-btn';
     })
   );
+  initYdayOtUI();
   updateYdaySelectedLabel();
   const days=['日','月','火','水','木','金','土'];
   document.getElementById('yday-date-label').textContent =
     `${yday.getMonth()+1}月${yday.getDate()}日（${days[yday.getDay()]}）`;
   openM('modal-yday');
+  } catch(e) { alert('エラー：' + e.message); }
 }
 
 function selectYdayDate(mode) {
@@ -3584,17 +3499,16 @@ async function saveYday() {
   const daily = JSON.parse(localStorage.getItem('mamoru_daily') || '[]');
   const idx = daily.findIndex(d => d.date === ydaySelectedDate);
 
-  // 既存データがある場合は確認
-  if (idx >= 0) {
-    const existing = daily[idx];
-    const hasData = existing.moodBody || existing.moodMind || existing.lunch || existing.memo;
-    if (hasData && !confirm(`${ydaySelectedDate} の記録が既にあります。上書きしますか？`)) return;
-  }
+  // 上書き確認
+  const existing2 = daily[idx >= 0 ? idx : -1];
+  const msg = idx >= 0
+    ? `${ydaySelectedDate} の記録は\n「${existing2?.memo?.includes('デフォルト設定から自動記録') ? 'デフォルト数値で自動記録' : '手動で入力済み'}」です。\n上書きしますか？`
+    : `${ydaySelectedDate} の記録はデフォルト数値で自動記録されていますが、それを上書きしますか？`;
+  if (!confirm(msg)) return;
 
-  // 昼休みの状況に応じて時間外勤務を自動加算、yステッパーの値も加算
+  // 昼休み加算・時間外在校等時間・持ち帰り業務
   const lunchOtY = ydayLunch==='ng'?45 : ydayLunch==='20'?30 : ydayLunch==='10'?15 : 0;
-  const stepOtY = step.y.h * 60 + step.y.m;
-  const totalOtY = lunchOtY + stepOtY;
+  const totalOtY = ydaySchoolOtMin + ydayTakehomeMin + lunchOtY;
 
   const record = {
     date: ydaySelectedDate,
@@ -3603,6 +3517,8 @@ async function saveYday() {
     mood: ydayMood || ydayMindMood || '',
     lunch: ydayLunch || '',
     lunchCat: ydayLunchCat || '',
+    schoolOt: ydaySchoolOtMin,
+    takehome: ydayTakehomeMin,
     ot: totalOtY,
     memo: document.getElementById('yday-memo')?.value.trim() || '',
   };
