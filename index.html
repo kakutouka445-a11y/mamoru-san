@@ -156,9 +156,8 @@ input,textarea{font-family:inherit;}
 .ot-val{font-weight:600;color:var(--amber);}
 
 /* 昼休み・しんどさ */
-.lunch-row{display:flex;gap:5px;margin-bottom:6px;}
-.lunch-btn{flex:1;padding:8px 2px;border-radius:var(--radius-s);border:1.5px solid var(--border);background:var(--gray-l);font-size:10px;font-weight:600;color:var(--text-s);text-align:center;line-height:1.4;}
-.lunch-btn{flex:1;padding:10px 6px;border-radius:var(--radius-s);border:1.5px solid var(--border);background:var(--gray-l);font-size:12px;font-weight:600;color:var(--text-s);text-align:center;line-height:1.4;}
+.lunch-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;}
+.lunch-btn{padding:10px 6px;border-radius:var(--radius-s);border:1.5px solid var(--border);background:var(--gray-l);font-size:12px;font-weight:600;color:var(--text-s);text-align:center;line-height:1.4;}
 .lunch-btn.ok{background:#EAF3DE;border-color:#97C459;color:#3B6B0C;}
 .lunch-btn.half{background:var(--amber-l);border-color:#EF9F27;color:#7A4B08;}
 .lunch-btn.ng{background:var(--red-l);border-color:#F09595;color:#891616;}
@@ -282,7 +281,15 @@ textarea{resize:none;height:56px;line-height:1.5;}
 .lunch-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
 .lunch-s-label{font-size:13px;color:var(--text-s);flex:1;}
 .lunch-s-val{font-size:13px;font-weight:600;}
-/* mini stat */
+/* 保存完了フィードバック */
+.save-celebration{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(0);z-index:9999;background:#fff;border-radius:20px;padding:28px 36px;text-align:center;box-shadow:0 8px 40px rgba(0,0,0,.18);transition:transform .25s cubic-bezier(.34,1.56,.64,1),opacity .3s;opacity:0;pointer-events:none;}
+.save-celebration.show{transform:translate(-50%,-50%) scale(1);opacity:1;}
+.save-celebration.hide{transform:translate(-50%,-50%) scale(0.8);opacity:0;}
+.save-celebration-emoji{font-size:52px;display:block;margin-bottom:8px;}
+.save-celebration-title{font-size:20px;font-weight:700;color:var(--green-d);margin-bottom:4px;}
+.save-celebration-sub{font-size:13px;color:var(--text-s);}
+.save-overlay{position:fixed;inset:0;background:rgba(0,0,0,.3);z-index:9998;opacity:0;transition:opacity .25s;pointer-events:none;}
+.save-overlay.show{opacity:1;}
 .mini-stat-row{display:flex;gap:6px;margin-bottom:8px;}
 .mini-stat-box{flex:1;background:var(--gray-l);border-radius:var(--radius-s);padding:4px 6px;text-align:center;}
 .mini-stat-num{font-size:11px;font-weight:700;color:var(--text);}
@@ -338,7 +345,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
 <div class="screen active" id="screen-home">
   <div class="header">
     <div class="header-row">
-      <div class="header-title">🌿 <span>私のタスク</span>　<strong>まもるさん</strong></div>
+      <div class="header-title">🌿 <span style="font-size:11px;font-weight:400;">私のタスク</span>　<strong>まもるさん</strong></div>
       <div style="display:flex;align-items:center;gap:8px;">
         <button class="settings-btn" onclick="openM('modal-settings')" title="設定"><i class="ti ti-settings"></i></button>
         <div class="date-badge" id="today-badge"></div>
@@ -400,7 +407,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
 
     <!-- 日コーナー：日次 -->
     <div id="ms-day" class="matome-section">
-      <div style="font-size:12px;color:var(--text-s);margin-bottom:4px;">1日あたり平均時間外勤務（縦軸：0〜5時間）</div>
+      <div style="font-size:12px;color:var(--text-s);margin-bottom:4px;">1日あたり平均時間外勤務（縦軸：0〜4時間）</div>
       <canvas id="chart-day-ot" style="width:100%;height:160px;display:block;margin-bottom:12px;"></canvas>
       <div class="avg-box"><div class="avg-label">時間外勤務（7日合計）</div><div class="avg-val" id="ms-day-ot-total">—</div></div>
       <div class="avg-box"><div class="avg-label">1日平均 時間外勤務</div><div class="avg-val" id="ms-day-ot-avg">—</div></div>
@@ -408,50 +415,44 @@ textarea{resize:none;height:56px;line-height:1.5;}
         <div class="mini-stat-box"><div class="mini-stat-num" id="ms-day-task-done">—</div><div class="mini-stat-label">完了タスク</div></div>
         <div class="mini-stat-box"><div class="mini-stat-num" id="ms-day-tokk">—</div><div class="mini-stat-label">突発対応</div></div>
       </div>
-      <div style="display:flex;gap:8px;margin-top:8px;">
-        <div class="card" style="flex:1;padding:10px;"><div class="card-title">体しんどさ💪</div><div id="ms-day-mood-body"></div></div>
-        <div class="card" style="flex:1;padding:10px;"><div class="card-title">心しんどさ❤️</div><div id="ms-day-mood-mind"></div></div>
-      </div>
+      <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;margin-top:12px;">体しんどさカレンダー💪</div>
+      <div class="cal-outer" id="ms-cal-body-day"></div>
+      <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;margin-top:4px;">心しんどさカレンダー❤️</div>
+      <div class="cal-outer" id="ms-cal-mind-day"></div>
     </div>
 
     <!-- 週コーナー：週次間 -->
     <div id="ms-week" class="matome-section" style="display:none;">
-      <div style="font-size:12px;color:var(--text-s);margin-bottom:4px;">1週あたり平均時間外勤務（1日平均・縦軸：0〜5時間）</div>
+      <div style="font-size:12px;color:var(--text-s);margin-bottom:4px;">1週あたり平均時間外勤務（1日平均・縦軸：0〜4時間）</div>
       <canvas id="chart-week-ot" style="width:100%;height:160px;display:block;margin-bottom:12px;"></canvas>
       <div class="avg-box"><div class="avg-label">時間外勤務</div><div class="avg-val" id="ms-week-ot-total">—</div></div>
       <div class="avg-box"><div class="avg-label">1日平均 時間外勤務</div><div class="avg-val" id="ms-week-ot-avg">—</div></div>
-      <div class="mini-stat-row" style="max-width:120px;">
+      <div class="mini-stat-row">
         <div class="mini-stat-box"><div class="mini-stat-num" id="ms-week-task-done">—</div><div class="mini-stat-label">完了タスク</div></div>
+        <div class="mini-stat-box"><div class="mini-stat-num" id="ms-week-tokk">—</div><div class="mini-stat-label">突発対応</div></div>
       </div>
       <div style="display:flex;gap:8px;margin-top:8px;">
         <div class="card" style="flex:1;padding:10px;"><div class="card-title">体しんどさ💪</div><div id="ms-week-mood-body"></div></div>
         <div class="card" style="flex:1;padding:10px;"><div class="card-title">心しんどさ❤️</div><div id="ms-week-mood-mind"></div></div>
       </div>
       <div class="card" style="margin-top:8px;"><div class="card-title">カテゴリ別時間（今週）</div><div class="bar-chart" id="ms-week-bar"></div></div>
-      <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;margin-top:12px;">体しんどさカレンダー💪</div>
-      <div class="cal-outer" id="ms-cal-body-week"></div>
-      <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;margin-top:4px;">心しんどさカレンダー❤️</div>
-      <div class="cal-outer" id="ms-cal-mind-week"></div>
     </div>
 
     <!-- 月コーナー：月次 -->
     <div id="ms-month" class="matome-section" style="display:none;">
-      <div style="font-size:12px;color:var(--text-s);margin-bottom:4px;">1か月あたり平均時間外勤務（1日平均・縦軸：0〜5時間）</div>
+      <div style="font-size:12px;color:var(--text-s);margin-bottom:4px;">1か月あたり平均時間外勤務（1日平均・縦軸：0〜4時間）</div>
       <canvas id="chart-month-ot" style="width:100%;height:160px;display:block;margin-bottom:12px;"></canvas>
       <div class="avg-box"><div class="avg-label">時間外勤務</div><div class="avg-val" id="ms-month-ot-total">—</div></div>
       <div class="avg-box"><div class="avg-label">1日平均 時間外勤務</div><div class="avg-val" id="ms-month-ot-avg">—</div></div>
-      <div class="mini-stat-row" style="max-width:120px;">
+      <div class="mini-stat-row">
         <div class="mini-stat-box"><div class="mini-stat-num" id="ms-month-task-done">—</div><div class="mini-stat-label">完了タスク</div></div>
+        <div class="mini-stat-box"><div class="mini-stat-num" id="ms-month-tokk">—</div><div class="mini-stat-label">突発対応</div></div>
       </div>
       <div style="display:flex;gap:8px;margin-top:8px;">
         <div class="card" style="flex:1;padding:10px;"><div class="card-title">体しんどさ💪</div><div id="ms-month-mood-body"></div></div>
         <div class="card" style="flex:1;padding:10px;"><div class="card-title">心しんどさ❤️</div><div id="ms-month-mood-mind"></div></div>
       </div>
       <div class="card" style="margin-top:8px;"><div class="card-title">カテゴリ別時間（今月）</div><div class="bar-chart" id="ms-month-bar"></div></div>
-      <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;margin-top:12px;">体しんどさカレンダー💪</div>
-      <div class="cal-outer" id="ms-cal-body"></div>
-      <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;margin-top:4px;">心しんどさカレンダー❤️</div>
-      <div class="cal-outer" id="ms-cal-mind"></div>
     </div>
 
   </div>
@@ -511,10 +512,10 @@ textarea{resize:none;height:56px;line-height:1.5;}
     <div id="workday-only-wrap">
     <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:7px;">🍱 昼休みに業務をしたか</div>
     <div class="lunch-row">
-      <button class="lunch-btn" id="lb-ok" onclick="selLunch('ok')">✅ なし</button>
-      <button class="lunch-btn" id="lb-10" onclick="selLunch('10')">⚠️ 15分</button>
-      <button class="lunch-btn" id="lb-20" onclick="selLunch('20')">😓 30分</button>
-      <button class="lunch-btn" id="lb-ng" onclick="selLunch('ng')">🚨 みっちり</button>
+      <button class="lunch-btn" id="lb-ok" onclick="selLunch('ok')">✅<br>なし</button>
+      <button class="lunch-btn" id="lb-10" onclick="selLunch('10')">⚠️<br>15分</button>
+      <button class="lunch-btn" id="lb-20" onclick="selLunch('20')">😓<br>30分</button>
+      <button class="lunch-btn" id="lb-ng" onclick="selLunch('ng')">🚨<br>40分</button>
     </div>
     <!-- 昼休み時間外：カテゴリ選択（した（ほぼ休めず）・少しの時のみ表示） -->
     <div id="lunch-cat-wrap" class="hidden" style="margin-bottom:8px;">
@@ -572,30 +573,34 @@ textarea{resize:none;height:56px;line-height:1.5;}
     </div><!-- /workday-only-wrap -->
 
     <!-- ── 持ち帰り業務 ── -->
-    <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px;">🏠 持ち帰り業務</div>
-    <div style="font-size:11px;color:var(--text-s);margin-bottom:7px;">自宅等で行った仕事の時間（文科省調査でいう「持ち帰り時間」に近い項目）</div>
-    <div id="takehome-btns" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;">
-      <button class="th-btn" onclick="selTakehome(0)">なし</button>
-      <button class="th-btn" onclick="selTakehome(15)">15分</button>
-      <button class="th-btn" onclick="selTakehome(30)">30分</button>
-      <button class="th-btn" onclick="selTakehome(45)">45分</button>
-      <button class="th-btn" onclick="selTakehome(60)">1時間</button>
-      <button class="th-btn" onclick="selTakehome(75)">1時間15分</button>
-      <button class="th-btn" onclick="selTakehome(90)">1時間30分</button>
-      <button class="th-btn" onclick="selTakehome(105)">1時間45分</button>
-      <button class="th-btn" onclick="selTakehome(120)">2時間</button>
-      <button class="th-btn" onclick="selTakehome(150)">2時間30分</button>
-      <button class="th-btn" onclick="selTakehome(180)">3時間</button>
-      <button class="th-btn" onclick="selTakehome(210)">3時間30分</button>
-      <button class="th-btn" onclick="selTakehome(240)">4時間</button>
-      <button class="th-btn" onclick="selTakehome(300)">5時間</button>
-      <button class="th-btn" onclick="selTakehomeCustom()" id="th-btn-custom">それ以上…</button>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+      <div style="font-size:13px;font-weight:700;color:var(--text);">🏠 持ち帰り業務</div>
+      <button onclick="openM('modal-work-default')" style="display:flex;align-items:center;gap:4px;background:var(--gray-l);border:1px solid var(--border);border-radius:var(--radius-s);padding:4px 10px;font-size:11px;color:var(--text-s);">
+        <i class="ti ti-settings" style="font-size:12px;"></i>デフォルトを設定
+      </button>
     </div>
-    <div id="takehome-custom-wrap" style="display:none;margin-bottom:8px;">
-      <input type="number" id="takehome-custom-input" placeholder="時間数を入力（例：6）" min="0" max="24" style="width:100%;font-size:13px;border:1px solid var(--border);border-radius:var(--radius-s);padding:8px 10px;background:var(--gray-l);color:var(--text);outline:none;" oninput="onTakehomeCustomInput()">
-      <div style="font-size:11px;color:var(--text-s);margin-top:3px;">※ 時間単位で入力してください</div>
+    <div style="font-size:11px;color:var(--text-s);margin-bottom:8px;">自宅等で行った仕事の時間</div>
+    <div class="stepper-box" style="margin-bottom:8px;">
+      <div class="stepper-row">
+        <div class="stepper-label">時間</div>
+        <div class="stepper-ctrl">
+          <button class="stepper-btn" onclick="adjTakehome(-60)">－</button>
+          <div class="stepper-val" id="th-h">0</div>
+          <button class="stepper-btn" onclick="adjTakehome(60)">＋</button>
+          <div class="stepper-unit">時間</div>
+        </div>
+      </div>
+      <div class="stepper-row">
+        <div class="stepper-label">分</div>
+        <div class="stepper-ctrl">
+          <button class="stepper-btn" onclick="adjTakehome(-10)">－</button>
+          <div class="stepper-val" id="th-m">0</div>
+          <button class="stepper-btn" onclick="adjTakehome(10)">＋</button>
+          <div class="stepper-unit">分（10分単位）</div>
+        </div>
+      </div>
+      <div class="total-box"><div class="total-label">合計</div><div class="total-val" id="th-total">—</div></div>
     </div>
-    <div id="takehome-result" style="font-size:12px;font-weight:600;color:var(--blue);margin-bottom:4px;min-height:18px;"></div>
 
     <!-- ── 今日の合計 ── -->
     <div id="today-ot-summary" style="background:var(--green-l);border-left:4px solid var(--green);border-radius:0 var(--radius-s) var(--radius-s) 0;padding:10px 14px;margin-bottom:12px;display:none;">
@@ -646,6 +651,14 @@ textarea{resize:none;height:56px;line-height:1.5;}
 </div>
 
 </div><!-- .app -->
+
+<!-- 保存完了フィードバック -->
+<div class="save-overlay" id="save-overlay"></div>
+<div class="save-celebration" id="save-celebration">
+  <img id="save-cel-img" src="" alt="まもるさん" style="width:100px;height:100px;object-fit:contain;margin-bottom:8px;display:block;margin-left:auto;margin-right:auto;">
+  <div class="save-celebration-title" id="save-cel-title">記録しました！</div>
+  <div class="save-celebration-sub" id="save-cel-sub">お疲れさまでした</div>
+</div>
 
 <!-- タブバー -->
 <div class="tab-bar">
@@ -1007,10 +1020,10 @@ textarea{resize:none;height:56px;line-height:1.5;}
 
     <div class="field-label">昼休みのデフォルト</div>
     <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;" id="default-lunch-btns">
-      <button class="lunch-btn" id="dlb-ok" onclick="selDefaultLunch('ok')">✅ なし</button>
-      <button class="lunch-btn" id="dlb-10" onclick="selDefaultLunch('10')">⚠️ 15分</button>
-      <button class="lunch-btn" id="dlb-20" onclick="selDefaultLunch('20')">😓 30分</button>
-      <button class="lunch-btn" id="dlb-ng" onclick="selDefaultLunch('ng')">🚨 みっちり</button>
+      <button class="lunch-btn" id="dlb-ok" onclick="selDefaultLunch('ok')">✅<br>なし</button>
+      <button class="lunch-btn" id="dlb-10" onclick="selDefaultLunch('10')">⚠️<br>15分</button>
+      <button class="lunch-btn" id="dlb-20" onclick="selDefaultLunch('20')">😓<br>30分</button>
+      <button class="lunch-btn" id="dlb-ng" onclick="selDefaultLunch('ng')">🚨<br>40分</button>
     </div>
 
     <button class="btn-primary" onclick="saveWorkDefault()">保存する</button>
@@ -1381,12 +1394,12 @@ textarea{resize:none;height:56px;line-height:1.5;}
     </div>
     <div id="yday-selected-date" style="font-size:12px;color:var(--green-d);font-weight:600;background:var(--green-l);padding:6px 12px;border-radius:var(--radius-s);margin-bottom:14px;"></div>
 
-    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:7px;">🍱 昼休み</div>
+    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:7px;">🍱 昼休みに業務をしたか</div>
     <div class="lunch-row" style="margin-bottom:8px;">
-      <button class="lunch-btn" id="ylb-ok" onclick="selYLunch('ok')">✅ なし</button>
-      <button class="lunch-btn" id="ylb-10" onclick="selYLunch('10')">⚠️ 15分</button>
-      <button class="lunch-btn" id="ylb-20" onclick="selYLunch('20')">😓 30分</button>
-      <button class="lunch-btn" id="ylb-ng" onclick="selYLunch('ng')">🚨 みっちり</button>
+      <button class="lunch-btn" id="ylb-ok" onclick="selYLunch('ok')">✅<br>なし</button>
+      <button class="lunch-btn" id="ylb-10" onclick="selYLunch('10')">⚠️<br>15分</button>
+      <button class="lunch-btn" id="ylb-20" onclick="selYLunch('20')">😓<br>30分</button>
+      <button class="lunch-btn" id="ylb-ng" onclick="selYLunch('ng')">🚨<br>40分</button>
     </div>
     <!-- 昼休み時間外：カテゴリ選択 -->
     <div id="ylunch-cat-wrap" style="display:none;margin-bottom:12px;">
@@ -1424,7 +1437,6 @@ textarea{resize:none;height:56px;line-height:1.5;}
       </div>
       <div class="total-box"><div class="total-label">合計</div><div class="total-val" id="y-total">—</div></div>
     </div>
-    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;">しんどさ（体）💪</div>
     <div class="mood-row" style="margin-bottom:12px;">
       <button class="mood-btn" id="ymb-body-great" onclick="selYMood('body','great')">😄<br>快調</button>
       <button class="mood-btn" id="ymb-body-ok" onclick="selYMood('body','ok')">🙂<br>まあまあ</button>
@@ -1498,7 +1510,7 @@ let currentMood = {body: null, mind: null}, currentLunch = null;
 function todayStr(){const d=new Date();return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;}
 function pad(n){return String(n).padStart(2,'0');}
 function fmtDate(){const d=new Date(),days=['日','月','火','水','木','金','土'];return `${d.getMonth()+1}月${d.getDate()}日（${days[d.getDay()]}）`;}
-['today-badge','deadline-badge','review-badge'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=fmtDate();});
+['today-badge','deadline-badge','review-badge','matome-badge'].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent=fmtDate();});
 
 // =============================================
 // タスク読み込み（起動時）
@@ -1607,8 +1619,8 @@ async function saveQuickYday() {
   try {
     showSync('記録中...');
     await apiPost({ action: 'saveDaily', data: record });
-    showSync('✅ 記録しました');
-  } catch(e) { showSync('✅ ローカルに記録しました'); }
+    showSync('✅ 記録しました'); showCelebration();
+  } catch(e) { showSync('✅ ローカルに記録しました'); showCelebration(); }
 
   renderWeekContent();
   renderMonthContent();
@@ -1619,32 +1631,6 @@ async function saveQuickYday() {
 // =============================================
 // クイック記録
 // =============================================
-function renderQuickSaved() {
-  const daily = JSON.parse(localStorage.getItem('mamoru_daily') || '[]');
-  const td = todayStr();
-  const rec = daily.find(d => d.date === td);
-  const saved = document.getElementById('quick-saved');
-  const savedVal = document.getElementById('quick-saved-val');
-  if (rec && rec.ot > 0) {
-    const h = Math.floor(rec.ot / 60), m = rec.ot % 60;
-    savedVal.textContent = `${h > 0 ? h+'時間' : ''}${m > 0 ? m+'分' : '0分'}`;
-    saved.classList.remove('hidden');
-  } else {
-    saved.classList.add('hidden');
-  }
-  // 日付バッジ更新
-  const badge = document.getElementById('quick-badge');
-  if (badge) badge.textContent = fmtDate();
-}
-
-function openQuickModal() {
-  resetStep('q');
-  const memo = document.getElementById('quick-memo');
-  if (memo) memo.value = '';
-  renderQuickSaved();
-  openM('modal-quick');
-}
-
 function renderQuickSaved() {
   const daily = JSON.parse(localStorage.getItem('mamoru_daily') || '[]');
   const td = todayStr();
@@ -1683,8 +1669,8 @@ async function saveQuick() {
   try {
     showSync('記録中...');
     await apiPost({ action: 'saveDaily', data: record });
-    showSync('✅ 記録しました');
-  } catch(e) { showSync('✅ ローカルに記録しました'); }
+    showSync('✅ 記録しました'); showCelebration();
+  } catch(e) { showSync('✅ ローカルに記録しました'); showCelebration(); }
 
   renderQuickSaved();
   renderMonthContent();
@@ -2145,30 +2131,6 @@ async function addTask(){
     showSync('✅ タスクを追加しました');
   } catch(e) { showSync('⚠ オフライン保存', true); }
 }
-async function saveTokk(){
-  const h = step.t.h, m = step.t.m;
-  const min = h*60 + m;
-  const when = document.querySelector('#tokk-when .chip.sel')?.textContent || '';
-  const memo = document.getElementById('tokk-memo').value;
-  closeM('modal-add');
-  try {
-    showSync('突発対応を記録中...');
-    await apiPost({ action:'saveTokk', data:{date:todayStr(), min, when, memo} });
-    showSync('✅ 突発対応を記録しました');
-  } catch(e) { showSync('⚠ オフライン', true); }
-}
-function openAddTask(){
-  openM('modal-add'); switchType('task');
-  document.getElementById('dl-input').value = '';
-  document.getElementById('sub-single').value = '';
-  document.getElementById('other-wrap').classList.add('hidden');
-  document.getElementById('other-input').value = '';
-  document.querySelectorAll('#cat-grid .cat-btn').forEach(b=>b.className='cat-btn');
-  document.querySelectorAll('#tokk-when .chip').forEach(c=>c.classList.remove('sel'));
-  document.getElementById('tokk-memo').value = '';
-  resetStep('t'); selCatName = null; selCatColor = 'gray';
-}
-
 // =============================================
 // 締切一覧
 // =============================================
@@ -2315,13 +2277,13 @@ function drawBarChart(canvasId, labels, data, color='#1D9E75') {
   const W = canvas.width, H = canvas.height;
   const padC = {top:20, bottom:36, left:42, right:8};
   const bw = (W - padC.left - padC.right) / data.length;
-  const MAX_MIN = 5 * 60; // 上限5時間固定
+  const MAX_MIN = 4 * 60; // 上限5時間固定
 
   ctx.fillStyle = '#F3F4F6';
   ctx.fillRect(0,0,W,H);
 
   // グリッド（1h=60, 2h=120, 3h=180, 4h=240, 5h=300）
-  [60,120,180,240,300].forEach(v=>{
+  [60,120,180,240].forEach(v=>{
     const y = padC.top + (H-padC.top-padC.bottom)*(1-v/MAX_MIN);
     ctx.strokeStyle='#E5E7EB'; ctx.lineWidth=1;
     ctx.beginPath(); ctx.moveTo(padC.left,y); ctx.lineTo(W-padC.right,y); ctx.stroke();
@@ -2398,10 +2360,8 @@ function renderMatomeDay() {
   el('ms-day-task-done', day7Tasks.length);
   el('ms-day-tokk', day7Tasks.filter(t=>t.tokk).length || '—');
 
-  const bodyEl = document.getElementById('ms-day-mood-body');
-  const mindEl = document.getElementById('ms-day-mood-mind');
-  if(bodyEl) bodyEl.innerHTML = moodMiniGrid(days7,'body');
-  if(mindEl) mindEl.innerHTML = moodMiniGrid(days7,'mind');
+  buildCalTo('ms-cal-body-day', 'body');
+  buildCalTo('ms-cal-mind-day', 'mind');
 }
 
 // ── 週コーナー（週次間） ──
@@ -2423,8 +2383,8 @@ function renderMatomeWeek() {
       const rec = daily.find(r=>r.date===ds) || {};
       ot += rec.ot||0;
       if (rec.ot > 0) recDays++;
-      if (rec.moodBody) bodyArr.push({moodBody:rec.moodBody});
-      if (rec.moodMind) mindArr.push({moodMind:rec.moodMind});
+      if (rec.moodBody) bodyArr.push({moodBody:rec.moodBody, moodMind:rec.moodMind||''});
+      if (rec.moodMind) mindArr.push({moodBody:rec.moodBody||'', moodMind:rec.moodMind});
     }
     weeks5.push({ label, ot, bodyArr, mindArr, recDays });
   }
@@ -2439,23 +2399,24 @@ function renderMatomeWeek() {
   const weekDays = Math.min(dow===0?7:dow, 7);
   el('ms-week-ot-avg', fmtMinShort(Math.round(thisWeek.ot/Math.max(weekDays,1))));
 
-  const bodyEl = document.getElementById('ms-week-mood-body');
-  const mindEl = document.getElementById('ms-week-mood-mind');
-  const allBody = weeks5[4].bodyArr;
-  const allMind = weeks5[4].mindArr;
-  if(bodyEl) bodyEl.innerHTML = moodMiniGrid(allBody,'body');
-  if(mindEl) mindEl.innerHTML = moodMiniGrid(allMind,'mind');
-
-  // 完了タスク・突発対応
+  // 完了タスク・突発対応・しんどさで共通利用する変数を先に定義
   const weekStartStr = `${monday.getFullYear()}-${pad(monday.getMonth()+1)}-${pad(monday.getDate())}`;
   const today2 = new Date(); const todayStr2 = `${today2.getFullYear()}-${pad(today2.getMonth()+1)}-${pad(today2.getDate())}`;
+
+  const bodyEl = document.getElementById('ms-week-mood-body');
+  const mindEl = document.getElementById('ms-week-mood-mind');
+  const thisWeekRecs = daily.filter(r => r.date >= weekStartStr && r.date <= todayStr2);
+  if(bodyEl) bodyEl.innerHTML = moodMiniGrid(thisWeekRecs,'body');
+  if(mindEl) mindEl.innerHTML = moodMiniGrid(thisWeekRecs,'mind');
+
+  // 完了タスク・突発対応
   const weekDoneTasks = tasks.filter(t => t.doneDate >= weekStartStr && t.doneDate <= todayStr2);
   el('ms-week-task-done', weekDoneTasks.length);
 
   // カテゴリ棒グラフ（今週）
   const thisWeekStart = new Date(monday); thisWeekStart.setDate(monday.getDate());
   const weekTasks = tasks.filter(t => t.doneDate >= `${thisWeekStart.getFullYear()}-${pad(thisWeekStart.getMonth()+1)}-${pad(thisWeekStart.getDate())}`);
-  renderBarChart('ms-week-bar', getCatBarData(weekTasks));
+  renderBar('ms-week-bar', getCatBarData(weekTasks));
 
   // しんどさカレンダー
   buildCalTo('ms-cal-body-week', 'body');
@@ -2503,7 +2464,7 @@ function renderMatomeMonth() {
   // カテゴリ棒グラフ
   const d0 = new Date(today.getFullYear(), today.getMonth(), 1);
   const monthTasks = tasks.filter(t => t.doneDate >= `${d0.getFullYear()}-${pad(d0.getMonth()+1)}-01`);
-  renderBarChart('ms-month-bar', getCatBarData(monthTasks));
+  renderBar('ms-month-bar', getCatBarData(monthTasks));
 
   // しんどさカレンダー
   buildCalTo('ms-cal-body', 'body');
@@ -2636,7 +2597,8 @@ async function saveDaily(){
     showSync('記録を保存中...');
     await apiPost({ action:'saveDaily', data: record });
     showSync('✅ 今日の記録を保存しました');
-  } catch(e) { showSync('⚠ オフライン保存', true); }
+    showCelebration();
+  } catch(e) { showSync('⚠ オフライン保存', true); showCelebration(); }
   renderMonthContent();
 }
 
@@ -2687,8 +2649,9 @@ function renderBar(id,data){
   if(!data||!data.length){el.innerHTML='<div style="font-size:12px;color:var(--text-s);padding:8px 0;">データがありません</div>';return;}
   const max=Math.max(...data.map(d=>d.h),1);
   el.innerHTML=data.map(d=>{
-    const h=Math.floor(d.h/60), m=d.h%60;
-    const label = h>0 ? (m>0?`${h}h${m}m`:`${h}h`) : `${m}m`;
+    // hは時間（小数）単位
+    const hh = Math.floor(d.h), mm = Math.round((d.h - hh) * 60);
+    const label = hh>0 ? (mm>0?`${hh}h${mm}m`:`${hh}h`) : `${mm}m`;
     return `<div class="bar-row"><div class="bar-lbl">${d.l}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(d.h/max*100)}%;background:${d.c};"><span>${label}</span></div></div></div>`;
   }).join('');
 }
@@ -2716,51 +2679,6 @@ function getCatBarData(targetTasks) {
 // =============================================
 // 今週の表示
 // =============================================
-function renderWeekContent() {
-  const daily = JSON.parse(localStorage.getItem('mamoru_daily') || '[]');
-  const now = new Date();
-  // 今週の月曜〜今日
-  const dayOfWeek = now.getDay() === 0 ? 6 : now.getDay() - 1;
-  const monday = new Date(now); monday.setDate(now.getDate() - dayOfWeek); monday.setHours(0,0,0,0);
-
-  const weekDates = [];
-  for (let i = 0; i <= dayOfWeek; i++) {
-    const d = new Date(monday); d.setDate(monday.getDate() + i);
-    weekDates.push(`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`);
-  }
-
-  const weekDaily = daily.filter(d => weekDates.includes(d.date));
-  const weekTasks = tasks.filter(t => t.done && t.doneDate && weekDates.includes(t.doneDate));
-
-  // 勤務時間外
-  const otTotal = weekDaily.reduce((s,d)=>s+(Number(d.ot)||0),0);
-  const otH = Math.floor(otTotal/60), otM = otTotal%60;
-  const otStr = otTotal>0 ? `${otH>0?otH+'時間':''}${otM>0?otM+'分':''}` : '0分';
-  const otAvg = weekDates.length>0 ? Math.round(otTotal/weekDates.length) : 0;
-
-  const el = (id, val) => { const e=document.getElementById(id); if(e) e.textContent=val; };
-  el('week-ot-total', otStr);
-  el('week-ot-avg', `${Math.floor(otAvg/60)>0?Math.floor(otAvg/60)+'時間':''}${otAvg%60}分`);
-  el('week-task-done', weekTasks.length);
-  
-  // しんどさ（体・心）
-  const bodyCount = {great:0,ok:0,hard:0,limit:0};
-  const mindCount = {great:0,ok:0,hard:0,limit:0};
-  weekDaily.forEach(d => {
-    const bm = d.moodBody || (d.moodMind ? '' : d.mood) || '';
-    const mm = d.moodMind || '';
-    if (bm && bodyCount[bm] !== undefined) bodyCount[bm]++;
-    if (mm && mindCount[mm] !== undefined) mindCount[mm]++;
-  });
-  const bodyEl = document.getElementById('week-mood-body');
-  const mindEl = document.getElementById('week-mood-mind');
-  if (bodyEl) bodyEl.innerHTML = moodBarHtml(bodyCount);
-  if (mindEl) mindEl.innerHTML = moodBarHtml(mindCount);
-
-  // カテゴリ別
-  renderBar('week-bar', getCatBarData(weekTasks));
-}
-
 function moodBarHtml(mc) {
   const total = Object.values(mc).reduce((a,b)=>a+b, 0);
   if (total === 0) return '<div style="font-size:11px;color:var(--text-s);">記録なし</div>';
@@ -3003,50 +2921,6 @@ function renderTodayAchieve() {
 // =============================================
 // 月次表示（実データ）
 // =============================================
-function renderMonthContent() {
-  const daily = JSON.parse(localStorage.getItem('mamoru_daily') || '[]');
-  const now = new Date();
-  const yr = now.getFullYear(), mo = now.getMonth();
-  const thisMonth = daily.filter(d => {
-    if (!d.date) return false;
-    const date = new Date(d.date);
-    return date.getFullYear() === yr && date.getMonth() === mo;
-  });
-  const monthTasks = tasks.filter(t => {
-    if (!t.done || !t.doneDate) return false;
-    const date = new Date(t.doneDate);
-    return date.getFullYear() === yr && date.getMonth() === mo;
-  });
-
-  const el = (id, val) => { const e=document.getElementById(id); if(e) e.textContent=val; };
-
-  // 勤務時間外
-  const otTotal = thisMonth.reduce((s,d)=>s+(Number(d.ot)||0),0);
-  const otH = Math.floor(otTotal/60), otM = otTotal%60;
-  const otStr = otTotal>0 ? `${otH>0?otH+'時間':''}${otM>0?otM+'分':''}` : '0分';
-  const otAvg = thisMonth.length>0 ? Math.round(otTotal/thisMonth.length) : 0;
-  el('month-ot-total', otStr);
-  el('month-ot-avg', `${Math.floor(otAvg/60)>0?Math.floor(otAvg/60)+'時間':''}${otAvg%60}分`);
-  el('month-task-done', monthTasks.length);
-  
-  // しんどさ（体・心）
-  const bodyCount = {great:0,ok:0,hard:0,limit:0};
-  const mindCount = {great:0,ok:0,hard:0,limit:0};
-  thisMonth.forEach(d => {
-    const bm = d.moodBody || (d.moodMind ? '' : d.mood) || '';
-    const mm = d.moodMind || '';
-    if (bm && bodyCount[bm] !== undefined) bodyCount[bm]++;
-    if (mm && mindCount[mm] !== undefined) mindCount[mm]++;
-  });
-  const bodyEl = document.getElementById('month-mood-body');
-  const mindEl = document.getElementById('month-mood-mind');
-  if (bodyEl) bodyEl.innerHTML = moodBarHtml(bodyCount);
-  if (mindEl) mindEl.innerHTML = moodBarHtml(mindCount);
-
-  // カテゴリ別
-  renderBar('month-bar', getCatBarData(monthTasks));
-}
-
 // =============================================
 // 時間外勤務グラフ（月次）
 // =============================================
@@ -3125,8 +2999,8 @@ async function saveVoice() {
   try {
     showSync('記録中...');
     await apiPost({ action: 'saveVoice', data: record });
-    showSync('✅ 記録しました');
-  } catch(e) { showSync('✅ ローカルに記録しました'); }
+    showSync('✅ 記録しました'); showCelebration();
+  } catch(e) { showSync('✅ ローカルに記録しました'); showCelebration(); }
 
   document.getElementById('voice-send-wrap').classList.remove('hidden');
 }
@@ -3247,7 +3121,7 @@ function doExport(allTasks, daily) {
 
   // 日次記録＋タスク完了をマージして日付でソート
   const moodLabel = {great:'😄 快調', ok:'🙂 まあまあ', hard:'😓 しんどい', limit:'🚨 限界'};
-  const lunchLabel = {ok:'✅ していない（休憩できた）', half:'⚠️ 少しした（10〜20分程度）', ng:'😓 した（ほぼ休めず）'};
+  const lunchLabel = {ok:'✅ していない', '10':'⚠️ 15分した', '20':'😓 30分した', ng:'🚨 40分した'};
 
   // 日次記録をdate→オブジェクトのマップに
   const dailyMap = {};
@@ -3310,8 +3184,9 @@ function doExport(allTasks, daily) {
         }
         // 昼休み（ci=8）
         if (ci===8) {
-          if (d.lunch==='ok')   { bg2='EAF3DE'; fg='3B6B0C'; }
-          else if (d.lunch==='half') { bg2=C.amberL; fg=C.amber; }
+          if (d.lunch==='ok')    { bg2='EAF3DE'; fg='3B6B0C'; }
+          else if (d.lunch==='10') { bg2=C.amberL; fg=C.amber; }
+          else if (d.lunch==='20') { bg2=C.amberL; fg=C.amber; }
           else if (d.lunch==='ng')   { bg2=C.redL; fg=C.red; }
           else bg2=C.blueL;
         }
@@ -3352,7 +3227,8 @@ function doExport(allTasks, daily) {
     else if (d.mood==='hard') m.hard++;
     else if (d.mood==='limit') m.limit++;
     if (d.lunch==='ok') m.lok++;
-    else if (d.lunch==='half') m.lhalf++;
+    else if (d.lunch==='10') m.lhalf++;
+    else if (d.lunch==='20') m.lhalf++;
     else if (d.lunch==='ng') m.lng++;
   });
   // タスク完了数を月別に
@@ -3412,9 +3288,10 @@ function doExport(allTasks, daily) {
       {v:'心🙂\nまあまあ',bg:'7C3AED'},
       {v:'心😓\nしんどい',bg:'B91C1C'},
       {v:'心🚨\n限界',bg:'7F1D1D'},
-      {v:'🍱 昼休み\n取れた',bg:C.green},
-      {v:'🥡 昼休み\n少し',bg:C.amber},
-      {v:'😞 昼休み\nした（ほぼ休めず）',bg:C.red},
+      {v:'🍱 昼休み\nしていない',bg:C.green},
+      {v:'⚠️ 昼休み\n15分した',bg:C.amber},
+      {v:'😓 昼休み\n30分した',bg:C.amber},
+      {v:'🚨 昼休み\n40分した',bg:C.red},
     ];
     gh.forEach((h,ci) => {
       const addr = XLSX.utils.encode_cell({r:r2,c:ci});
@@ -4004,23 +3881,6 @@ async function deleteSampleData() {
 // saveDaily：ローカルにも保存
 // =============================================
 const _origSaveDaily = saveDaily;
-async function saveDaily() {
-  const daily = JSON.parse(localStorage.getItem('mamoru_daily') || '[]');
-  const td = todayStr();
-  const idx = daily.findIndex(d => d.date === td);
-  const record = { date: td, mood: currentMood||'', lunch: currentLunch||'', ot: 0 };
-  if (idx >= 0) daily[idx] = record; else daily.push(record);
-  localStorage.setItem('mamoru_daily', JSON.stringify(daily));
-  try {
-    showSync('記録を保存中...');
-    await apiPost({ action:'saveDaily', data: record });
-    showSync('✅ 今日の記録を保存しました');
-  } catch(e) { showSync('✅ ローカルに保存しました'); }
-  // 今月タブも即時反映
-  renderMonthContent();
-}
-
-
 
 // =============================================
 // デフォルト勤務時刻設定
@@ -4324,14 +4184,60 @@ function initTodayOtUI() {
   const endDefault   = localStorage.getItem('mamoru_work_end')   || '16:45';
   const thDefault    = Number(localStorage.getItem('mamoru_takehome_default') || 0);
 
-  const [sh, sm] = startDefault.split(':').map(Number);
-  const [eh, em] = endDefault.split(':').map(Number);
-  startTotalMin = sh * 60 + sm;
-  endTotalMin   = eh * 60 + em;
+  // 今日の既存記録を確認
+  const daily = JSON.parse(localStorage.getItem('mamoru_daily') || '[]');
+  const td = todayStr();
+  const existing = daily.find(d => d.date === td);
+
+  if (existing && (existing.ot > 0 || existing.schoolOt > 0 || existing.takehome > 0)) {
+    // 既存記録を反映
+    const savedSchoolOt = existing.schoolOt || 0;
+    const savedTakehome = existing.takehome || 0;
+
+    // 勤務時刻の逆算（schoolOt + 所定時間 = 勤務時間）
+    const [sh, sm] = startDefault.split(':').map(Number);
+    startTotalMin = sh * 60 + sm;
+    endTotalMin = startTotalMin + (7*60+45) + savedSchoolOt;
+    schoolOtMin = savedSchoolOt;
+
+    takehomeMin = savedTakehome;
+
+    // しんどさを反映
+    if (existing.moodBody) {
+      currentMood.body = existing.moodBody;
+      ['great','ok','hard','limit'].forEach(x => {
+        const b = document.getElementById(`mb-body-${x}`);
+        if(b) b.className = 'mood-btn' + (x===existing.moodBody?' '+(x==='ok'?'ok2':x):'');
+      });
+    }
+    if (existing.moodMind) {
+      currentMood.mind = existing.moodMind;
+      ['great','ok','hard','limit'].forEach(x => {
+        const b = document.getElementById(`mb-mind-${x}`);
+        if(b) b.className = 'mood-btn' + (x===existing.moodMind?' '+(x==='ok'?'ok2':x):'');
+      });
+    }
+
+    // 昼休みを反映
+    if (existing.lunch) selLunch(existing.lunch);
+
+    // メモを反映
+    const memoEl = document.getElementById('today-memo');
+    if (memoEl && existing.memo && !existing.memo.includes('デフォルト設定から自動記録')) {
+      memoEl.value = existing.memo;
+    }
+
+  } else {
+    // 既存記録なし→デフォルト値をセット
+    const [sh, sm] = startDefault.split(':').map(Number);
+    const [eh, em] = endDefault.split(':').map(Number);
+    startTotalMin = sh * 60 + sm;
+    endTotalMin   = eh * 60 + em;
+    takehomeMin = thDefault;
+  }
 
   updateTimeDisp();
 
-  // 休日の場合はschoolOtMinを0にする
   if (isNonWorkday(todayStr())) {
     schoolOtMin = 0;
     updateTodayOtSummary();
@@ -4339,8 +4245,8 @@ function initTodayOtUI() {
     calcSchoolOt();
   }
 
-  if (thDefault > 0) selTakehome(thDefault);
-  else selTakehome(0);
+  updateTakehomeDisp();
+  updateTodayOtSummary();
 }
 
 function adjTime(type, deltMin) {
@@ -4386,39 +4292,23 @@ function adjustSchoolOt(delta) {
   updateTodayOtSummary();
 }
 
-function selTakehome(min) {
-  takehomeMin = min;
-  document.querySelectorAll('.th-btn').forEach(b => b.classList.remove('sel'));
-  document.getElementById('takehome-custom-wrap').style.display = 'none';
-  const btns = document.querySelectorAll('#takehome-btns .th-btn');
-  const vals = [0,15,30,45,60,75,90,105,120,150,180,210,240,300];
-  const idx = vals.indexOf(min);
-  if (idx >= 0) btns[idx].classList.add('sel');
-  const resultEl = document.getElementById('takehome-result');
-  if (min > 0) {
-    const h = Math.floor(min/60), m = min%60;
-    resultEl.textContent = `持ち帰り業務：${h>0?h+'時間':''}${m>0?m+'分':''}`;
-  } else {
-    resultEl.textContent = '';
-  }
+function adjTakehome(deltMin) {
+  takehomeMin = Math.max(0, takehomeMin + deltMin);
+  updateTakehomeDisp();
   updateTodayOtSummary();
 }
 
-function selTakehomeCustom() {
-  document.querySelectorAll('.th-btn').forEach(b => b.classList.remove('sel'));
-  document.getElementById('th-btn-custom').classList.add('sel');
-  document.getElementById('takehome-custom-wrap').style.display = 'block';
-  document.getElementById('takehome-custom-input').focus();
-}
-
-function onTakehomeCustomInput() {
-  const v = Number(document.getElementById('takehome-custom-input').value);
-  if (!isNaN(v) && v > 0) {
-    takehomeMin = Math.round(v * 60);
-    const resultEl = document.getElementById('takehome-result');
-    resultEl.textContent = `持ち帰り業務：${v}時間`;
-    updateTodayOtSummary();
-  }
+function updateTakehomeDisp() {
+  const h = Math.floor(takehomeMin / 60);
+  const m = takehomeMin % 60;
+  const hEl = document.getElementById('th-h');
+  const mEl = document.getElementById('th-m');
+  const totalEl = document.getElementById('th-total');
+  if (hEl) hEl.textContent = h;
+  if (mEl) mEl.textContent = m;
+  if (totalEl) totalEl.textContent = takehomeMin > 0
+    ? `${h > 0 ? h + '時間' : ''}${m > 0 ? m + '分' : ''}`
+    : '0分';
 }
 
 function updateTodayOtSummary() {
@@ -4440,6 +4330,42 @@ function fmtOtMin(m) {
   if (!m || m <= 0) return '0分';
   const h = Math.floor(m/60), min = m%60;
   return `${h>0?h+'時間':''}${min>0?min+'分':''}`;
+}
+
+// =============================================
+// 保存完了フィードバック
+// =============================================
+const celebrationMessages = [
+  { emoji: '🎉', title: '記録したまも！', sub: 'お疲れさまも🍺', img: 'mamorusanpng1.png' },
+  { emoji: '✨', title: '自分を守るふりかえり、できたまも！', sub: 'すごいまも◎', img: 'mamorusanpng2.png' },
+  { emoji: '🌿', title: '記録完了！', sub: '私が見守ってるまも❣️', img: 'mamorusanpng4.png' },
+  { emoji: '💪', title: 'エライまも！', sub: '自分を守ってるまも🌝', img: 'mamorusanpng4.png' },
+  { emoji: '🙌', title: 'ナイスだまも！', sub: '応援してるまも✓✓', img: 'mamorusanpng1.png' },
+  { emoji: '⭐', title: '今日も記録できたまも！', sub: 'がんばったまも◎', img: 'mamorusanpng2.png' },
+  { emoji: '❣️', title: '記録したまも◎', sub: 'しんどかったら、相談していいまもよ◎', img: 'mamorusanpng4.png' },
+];
+
+function showCelebration() {
+  const msg = celebrationMessages[Math.floor(Math.random() * celebrationMessages.length)];
+  const imgEl = document.getElementById('save-cel-img');
+  const baseUrl = 'https://kakutouka445-a11y.github.io/mamoru-san/';
+  if (imgEl) imgEl.src = baseUrl + msg.img;
+  document.getElementById('save-cel-title').textContent = msg.title;
+  document.getElementById('save-cel-sub').textContent = msg.sub;
+
+  const cel = document.getElementById('save-celebration');
+  const overlay = document.getElementById('save-overlay');
+
+  overlay.classList.add('show');
+  cel.classList.add('show');
+
+  setTimeout(() => {
+    cel.classList.add('hide');
+    overlay.classList.remove('show');
+    setTimeout(() => {
+      cel.classList.remove('show', 'hide');
+    }, 300);
+  }, 1800);
 }
 
 // =============================================
