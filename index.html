@@ -727,7 +727,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
       </div>
     </div>
 
-    <button class="btn-cancel" onclick="closeM('modal-voice')">閉じる</button>
+    <button class="btn-cancel" onclick="closeM('modal-voice')">キャンセル</button>
   </div>
 </div>
 
@@ -743,7 +743,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <div style="font-size:13px;color:var(--text-s);line-height:1.7;margin-bottom:14px;">労働条件・ハラスメント・メンタルヘルスなど、幅広い相談に対応しています。</div>
       <a href="https://kenkyouren.jp/" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;padding:10px 14px;border-radius:var(--radius-s);border:1.5px solid #93C5FD;background:var(--blue-l);color:var(--blue);text-decoration:none;"><i class="ti ti-external-link" style="font-size:17px;"></i>公式サイトはこちら</a>
     </div>
-    <button class="btn-cancel" onclick="closeM('modal-consult')">閉じる</button>
+    <button class="btn-cancel" onclick="closeM('modal-consult')">キャンセル</button>
   </div>
 </div>
 
@@ -845,7 +845,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <i class="ti ti-chevron-right settings-item-arrow"></i>
     </button>
 
-    <button class="btn-cancel" onclick="closeM('modal-settings')">閉じる</button>
+    <button class="btn-cancel" onclick="closeM('modal-settings')">キャンセル</button>
   </div>
 </div>
 
@@ -915,7 +915,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
       開発者は取得した情報を、アプリの運営・改善および教職員の働き方改善の目的以外に使用しません。
     </div>
 
-    <button class="btn-cancel" onclick="closeM('modal-disclaimer')">閉じる</button>
+    <button class="btn-cancel" onclick="closeM('modal-disclaimer')">キャンセル</button>
   </div>
 </div>
 
@@ -1027,7 +1027,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
       </div>
     </div>
 
-    <button class="btn-cancel" onclick="closeM('modal-howto')">閉じる</button>
+    <button class="btn-cancel" onclick="closeM('modal-howto')">キャンセル</button>
   </div>
 </div>
 
@@ -1059,7 +1059,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <div id="import-summary-text" style="font-size:13px;color:var(--green-d);background:var(--green-l);padding:8px 12px;border-radius:var(--radius-s);margin-bottom:10px;"></div>
       <button class="btn-primary" id="btn-do-import" onclick="executeTaskImport()">インポート実行</button>
     </div>
-    <button class="btn-cancel" onclick="closeM('modal-excel-import')">閉じる</button>
+    <button class="btn-cancel" onclick="closeM('modal-excel-import')">キャンセル</button>
   </div>
 </div>
 
@@ -1083,7 +1083,57 @@ textarea{resize:none;height:56px;line-height:1.5;}
         <div style="font-size:11px;margin-top:8px;color:var(--text-s);">将来的には「みんなのタスク みえるさん」と連携予定</div>
       </div>
     </div>
-    <button class="btn-cancel" onclick="closeM('modal-account')">閉じる</button>
+    <button class="btn-cancel" onclick="closeM('modal-account')">キャンセル</button>
+  </div>
+</div>
+
+<!-- modal: 昨日までのクイック記録 -->
+<div class="modal-bg" id="modal-quick-yday" onclick="closeBg('modal-quick-yday',event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title">⚡ 昨日までのクイック記録</div>
+
+    <!-- 日付選択 -->
+    <div class="field-label">📅 いつの記録ですか？</div>
+    <div style="display:flex;gap:8px;margin-bottom:14px;">
+      <button class="yday-date-btn active" id="qydatebtn-yday" onclick="selQYdayDate('yday')">
+        昨日<br><span id="qyday-date-label" style="font-size:11px;font-weight:400;"></span>
+      </button>
+      <button class="yday-date-btn" id="qydatebtn-pick" onclick="selQYdayDate('pick')">
+        日付を選ぶ<br><span style="font-size:11px;font-weight:400;">カレンダー</span>
+      </button>
+    </div>
+    <div id="qyday-date-picker-wrap" class="hidden" style="margin-bottom:12px;">
+      <input type="date" id="qyday-date-input" onchange="onQYdayDateChange()">
+    </div>
+    <div id="qyday-selected-date" style="font-size:12px;color:var(--green-d);font-weight:600;background:var(--green-l);padding:6px 12px;border-radius:var(--radius-s);margin-bottom:14px;"></div>
+
+    <!-- 時間入力 -->
+    <div style="font-size:13px;color:var(--text-s);margin-bottom:12px;text-align:center;">その日の時間外勤務時間は？</div>
+    <div class="stepper-box" style="margin-bottom:16px;">
+      <div class="stepper-row">
+        <div class="stepper-label">時間</div>
+        <div class="stepper-ctrl">
+          <button class="stepper-btn" style="width:44px;height:44px;font-size:22px;" onclick="chTime('qy','h',-1)">－</button>
+          <div class="stepper-val" id="qy-h" style="font-size:26px;min-width:44px;">0</div>
+          <button class="stepper-btn" style="width:44px;height:44px;font-size:22px;" onclick="chTime('qy','h',1)">＋</button>
+          <div class="stepper-unit">時間</div>
+        </div>
+      </div>
+      <div class="stepper-row">
+        <div class="stepper-label">分</div>
+        <div class="stepper-ctrl">
+          <button class="stepper-btn" style="width:44px;height:44px;font-size:22px;" onclick="chTime('qy','m',-1)">－</button>
+          <div class="stepper-val" id="qy-m" style="font-size:26px;min-width:44px;">0</div>
+          <button class="stepper-btn" style="width:44px;height:44px;font-size:22px;" onclick="chTime('qy','m',1)">＋</button>
+          <div class="stepper-unit">分（10分単位）</div>
+        </div>
+      </div>
+      <div class="total-box"><div class="total-label">合計</div><div class="total-val" id="qy-total" style="font-size:22px;">—</div></div>
+    </div>
+
+    <button class="btn-primary" style="font-size:16px;padding:14px;" onclick="saveQuickYday()">記録する</button>
+    <button class="btn-cancel" onclick="closeM('modal-quick-yday')">キャンセル</button>
   </div>
 </div>
 
@@ -1126,10 +1176,10 @@ textarea{resize:none;height:56px;line-height:1.5;}
     </div>
 
     <button class="btn-primary" style="font-size:16px;padding:14px;" onclick="saveQuick()">今日の記録をする</button>
-    <button class="yday-btn" style="margin-top:8px;" onclick="closeM('modal-quick');openYdayModal()">
-      <i class="ti ti-clock-minus" style="font-size:18px;"></i>　昨日までの記録を保存する
+    <button class="yday-btn" style="margin-top:8px;" onclick="openQuickYday()">
+      <i class="ti ti-clock-minus" style="font-size:18px;"></i>　昨日までのクイック記録
     </button>
-    <button class="btn-cancel" onclick="closeM('modal-quick')">閉じる</button>
+    <button class="btn-cancel" onclick="closeM('modal-quick')">キャンセル</button>
   </div>
 </div>
 
@@ -1199,7 +1249,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <button class="lunch-btn" id="ylb-ng" onclick="selYLunch('ng')">😞 取れなかった<br><span style="font-size:10px;font-weight:400;">0〜5分</span></button>
     </div>
     <!-- 昼休み時間外：カテゴリ選択 -->
-    <div id="ylunch-cat-wrap" class="hidden" style="margin-bottom:12px;">
+    <div id="ylunch-cat-wrap" style="display:none;margin-bottom:12px;">
       <div style="font-size:11px;color:var(--text-s);margin-bottom:5px;">昼休みに何をしていましたか？</div>
       <div class="cat-grid" id="ylunch-cat-grid" style="margin-bottom:0;">
         <button class="cat-btn" data-n="分掌" onclick="selYLunchCat(this)">分掌</button>
@@ -1300,7 +1350,7 @@ const CAT_INITIAL = {'分掌':'分','保護者対応':'保','生徒指導':'生'
 let tasks = [];
 let nextId = 1;
 let activeIdx = -1, selTaskId = null;
-const step = {s:{h:0,m:0}, e:{h:0,m:0}, t:{h:0,m:0}, p:{h:0,m:0}, q:{h:0,m:0}, y:{h:0,m:0}};
+const step = {s:{h:0,m:0}, e:{h:0,m:0}, t:{h:0,m:0}, p:{h:0,m:0}, q:{h:0,m:0}, y:{h:0,m:0}, qy:{h:0,m:0}};
 let selCatName = null, selCatColor = 'gray';
 let currentMood = {body: null, mind: null}, currentLunch = null;
 
@@ -1346,6 +1396,82 @@ function loadLocalTasks() {
 
 function saveLocalTasks() {
   localStorage.setItem('mamoru_tasks', JSON.stringify(tasks));
+}
+
+// =============================================
+// 昨日までのクイック記録
+// =============================================
+let qydaySelectedDate = null;
+
+function openQuickYday() {
+  closeM('modal-quick');
+  const yday = new Date(); yday.setDate(yday.getDate()-1);
+  qydaySelectedDate = `${yday.getFullYear()}-${pad(yday.getMonth()+1)}-${pad(yday.getDate())}`;
+  const days=['日','月','火','水','木','金','土'];
+  const el = document.getElementById('qyday-date-label');
+  if(el) el.textContent = `${yday.getMonth()+1}月${yday.getDate()}日（${days[yday.getDay()]}）`;
+  selQYdayDate('yday');
+  resetStep('qy');
+  updateQYdayLabel();
+  openM('modal-quick-yday');
+}
+
+function selQYdayDate(mode) {
+  document.getElementById('qydatebtn-yday').classList.toggle('active', mode==='yday');
+  document.getElementById('qydatebtn-pick').classList.toggle('active', mode==='pick');
+  document.getElementById('qyday-date-picker-wrap').classList.toggle('hidden', mode!=='pick');
+  if (mode === 'yday') {
+    const yday = new Date(); yday.setDate(yday.getDate()-1);
+    qydaySelectedDate = `${yday.getFullYear()}-${pad(yday.getMonth()+1)}-${pad(yday.getDate())}`;
+    updateQYdayLabel();
+  } else {
+    const pickerEl = document.getElementById('qyday-date-input');
+    const yday = new Date(); yday.setDate(yday.getDate()-1);
+    pickerEl.max = `${yday.getFullYear()}-${pad(yday.getMonth()+1)}-${pad(yday.getDate())}`;
+    pickerEl.value = qydaySelectedDate || '';
+    pickerEl.focus();
+  }
+}
+
+function onQYdayDateChange() {
+  const val = document.getElementById('qyday-date-input').value;
+  if (val) { qydaySelectedDate = val; updateQYdayLabel(); }
+}
+
+function updateQYdayLabel() {
+  const el = document.getElementById('qyday-selected-date');
+  if (!el || !qydaySelectedDate) return;
+  const d = new Date(qydaySelectedDate);
+  const days=['日','月','火','水','木','金','土'];
+  el.textContent = `📅 選択中：${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日（${days[d.getDay()]}）`;
+}
+
+async function saveQuickYday() {
+  if (!qydaySelectedDate) { alert('日付を選択してください'); return; }
+  const totalMin = step.qy.h * 60 + step.qy.m;
+  if (totalMin === 0) { alert('時間を入力してください'); return; }
+
+  const daily = JSON.parse(localStorage.getItem('mamoru_daily') || '[]');
+  const idx = daily.findIndex(d => d.date === qydaySelectedDate);
+  if (idx >= 0 && daily[idx].ot > 0) {
+    if (!confirm(`${qydaySelectedDate} の記録が既にあります。上書きしますか？`)) return;
+  }
+  const record = idx >= 0
+    ? { ...daily[idx], ot: totalMin }
+    : { date: qydaySelectedDate, moodBody:'', moodMind:'', mood:'', lunch:'', ot: totalMin, memo:'' };
+  if (idx >= 0) daily[idx] = record; else daily.push(record);
+  localStorage.setItem('mamoru_daily', JSON.stringify(daily));
+
+  try {
+    showSync('記録中...');
+    await apiPost({ action: 'saveDaily', data: record });
+    showSync('✅ 記録しました');
+  } catch(e) { showSync('✅ ローカルに記録しました'); }
+
+  renderWeekContent();
+  renderMonthContent();
+  resetStep('qy');
+  closeM('modal-quick-yday');
 }
 
 // =============================================
@@ -2056,10 +2182,13 @@ function selYLunch(t) {
     document.getElementById('ylb-'+x).className = 'lunch-btn' + (x===t?' '+t:'');
   });
   const wrap = document.getElementById('ylunch-cat-wrap');
-  if (wrap) wrap.classList.toggle('hidden', t === 'ok');
+  if (!wrap) return;
   if (t === 'ok') {
+    wrap.style.display = 'none';
     ydayLunchCat = '';
     document.querySelectorAll('#ylunch-cat-grid .cat-btn').forEach(b => b.className='cat-btn');
+  } else {
+    wrap.style.display = 'block';
   }
 }
 
@@ -3033,7 +3162,7 @@ function openYdayModal() {
   const ydayMemoEl = document.getElementById('yday-memo');
   if (ydayMemoEl) ydayMemoEl.value = '';
   const ywrap = document.getElementById('ylunch-cat-wrap');
-  if (ywrap) ywrap.classList.add('hidden');
+  if (ywrap) ywrap.style.display = 'none';
   document.querySelectorAll('#ylunch-cat-grid .cat-btn').forEach(b => b.className='cat-btn');
   ['ok','half','ng'].forEach(x => { document.getElementById('ylb-'+x).className='lunch-btn'; });
   ['body','mind'].forEach(type =>
@@ -3506,9 +3635,38 @@ async function autoFillLunchMemo() {
 // 起動
 // =============================================
 
+// =============================================
+// スマホ「戻る」ボタン対応
+// =============================================
+function pushModalState() {
+  history.pushState({ modal: true }, '');
+}
+
+window.addEventListener('popstate', (e) => {
+  // 開いているモーダルを探して閉じる
+  const openModal = document.querySelector('.modal-bg.open');
+  if (openModal) {
+    openModal.classList.remove('open');
+    // 次の戻るに備えてstateを積み直す必要はない
+  } else {
+    // モーダルが開いていない場合はアプリを閉じないよう履歴を積み直す
+    history.pushState({ modal: false }, '');
+  }
+});
+
+// モーダルを開く時に履歴を積む
+const _origOpenM = openM;
+function openM(id) {
+  _origOpenM(id);
+  history.pushState({ modal: true, id }, '');
+}
+
 loadTasks();
 setTimeout(renderTodayAchieve, 500);
 setTimeout(updateHideFarUI, 100);
+
+// 初期状態を履歴に積む
+history.pushState({ modal: false }, '');
 setTimeout(autoFillLunchMemo, 500);
 </script>
 </body>
