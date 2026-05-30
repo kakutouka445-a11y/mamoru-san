@@ -32,7 +32,7 @@ input,textarea{font-family:inherit;}
 /* ヘッダー */
 .header{background:var(--green-l);padding:12px 20px 10px;border-bottom:1px solid var(--green-b);flex-shrink:0;}
 .header-row{display:flex;align-items:center;justify-content:space-between;}
-.header-title{font-size:13px;color:var(--green-d);}
+.header-title{font-size:20px;color:var(--green-d);line-height:1;}
 .header-title span{font-weight:400;}
 .header-title strong{font-weight:700;}
 .date-badge{background:var(--green-b);color:var(--green-d);font-size:11px;padding:3px 10px;border-radius:20px;font-weight:600;}
@@ -90,13 +90,27 @@ input,textarea{font-family:inherit;}
 
 /* タブバー */
 .tab-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--bg-card);border-top:1px solid var(--border);display:flex;align-items:stretch;height:64px;z-index:50;}
-.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:none;background:transparent;padding:6px 0 10px;}
+.tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:none;background:transparent;padding:6px 0 10px;border-top:3px solid transparent;transition:background .15s;}
 .tab i{font-size:22px;color:var(--text-s);}
 .tab span{font-size:10px;color:var(--text-s);}
-.tab.quick-tab i { color: #2563EB; }
-.tab.quick-tab span { color: #2563EB; }
-.tab.quick-tab.active i { color: #2563EB; }
-.tab.quick-tab.active span { color: #2563EB; }
+.tab.active{background:#F0FDF4;border-top:3px solid var(--green);}
+.tab.active i{color:var(--green-d);font-size:24px;}
+.tab.active span{color:var(--green-d);font-weight:700;}
+/* 締切タブ：桃色 */
+#tab-deadline.active{background:#FFF0F5;border-top:3px solid #F472B6;}
+#tab-deadline.active i{color:#BE185D;}
+#tab-deadline.active span{color:#BE185D;font-weight:700;}
+/* ふりかえりタブ：アンバー */
+.tab.today-tab i { color: var(--text-s); }
+.tab.today-tab span { color: var(--text-s); }
+.tab.today-tab { background: #FFFBEB; border-top: 3px solid transparent; }
+.tab.today-tab.active { background: #FDE68A; border-top: 3px solid #D97706; }
+.tab.today-tab.active i { color: #92400E; font-size:24px; }
+.tab.today-tab.active span { color: #92400E; font-weight: 700; }
+/* まとめタブ：紫 */
+#tab-matome.active { background: #F5F3FF; border-top: 3px solid #7C3AED; }
+#tab-matome.active i { color: #5B21B6; }
+#tab-matome.active span { color: #5B21B6; font-weight: 700; }
 .tab-add{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:none;background:var(--green);padding:6px 0 10px;cursor:pointer;}
 .tab-add i{font-size:24px;color:#fff;}
 .tab-add span{font-size:10px;color:rgba(255,255,255,.9);font-weight:600;}
@@ -142,7 +156,8 @@ input,textarea{font-family:inherit;}
 .ot-val{font-weight:600;color:var(--amber);}
 
 /* 昼休み・しんどさ */
-.lunch-row{display:flex;gap:8px;margin-bottom:6px;}
+.lunch-row{display:flex;gap:5px;margin-bottom:6px;}
+.lunch-btn{flex:1;padding:8px 2px;border-radius:var(--radius-s);border:1.5px solid var(--border);background:var(--gray-l);font-size:10px;font-weight:600;color:var(--text-s);text-align:center;line-height:1.4;}
 .lunch-btn{flex:1;padding:10px 6px;border-radius:var(--radius-s);border:1.5px solid var(--border);background:var(--gray-l);font-size:12px;font-weight:600;color:var(--text-s);text-align:center;line-height:1.4;}
 .lunch-btn.ok{background:#EAF3DE;border-color:#97C459;color:#3B6B0C;}
 .lunch-btn.half{background:var(--amber-l);border-color:#EF9F27;color:#7A4B08;}
@@ -208,6 +223,8 @@ textarea{resize:none;height:56px;line-height:1.5;}
 .add-sub-btn{display:flex;align-items:center;gap:5px;background:none;border:1px dashed var(--border);border-radius:var(--radius-s);padding:6px 10px;color:var(--text-s);font-size:13px;width:100%;margin-bottom:4px;}
 .section-title{font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;margin-top:12px;}
 .save-btn-lg{background:var(--green);color:#fff;border:none;border-radius:var(--radius);padding:13px;width:100%;font-size:15px;font-weight:700;margin-top:4px;}
+.th-btn{background:var(--gray-l);border:1.5px solid var(--border);border-radius:var(--radius-s);padding:7px 10px;font-size:12px;color:var(--text-s);white-space:nowrap;}
+.th-btn.sel{background:var(--blue-l);border-color:#93C5FD;color:var(--blue);font-weight:700;}
 .yday-btn{display:flex;align-items:center;gap:10px;background:var(--amber-l);border:1.5px solid var(--amber-b);border-radius:var(--radius-s);padding:11px 14px;width:100%;font-size:13px;color:var(--amber);font-weight:600;margin-top:8px;}
 .consult-wrap{padding:28px 0 0;}
 .consult-divider{border:none;border-top:1px solid var(--border);margin-bottom:18px;}
@@ -241,7 +258,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
 .sheet-btn{display:flex;align-items:center;justify-content:center;gap:8px;background:#1A73E8;color:#fff;border:none;border-radius:var(--radius-s);padding:11px 14px;width:100%;font-size:14px;font-weight:600;margin-bottom:12px;}
 .cal-outer{overflow-x:auto;padding-bottom:4px;margin-bottom:12px;}
 .cal-months{display:flex;gap:12px;width:max-content;}
-.cal-month{background:var(--bg-card);border-radius:var(--radius);padding:10px;min-width:230px;}
+.cal-month{background:var(--bg-card);border-radius:var(--radius);padding:10px;min-width:230px;border:1px solid var(--border);}
 .cal-month-title{font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:8px;text-align:center;}
 .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:3px;}
 .cal-dow{font-size:10px;color:var(--text-s);text-align:center;padding:2px 0;}
@@ -258,18 +275,18 @@ textarea{resize:none;height:56px;line-height:1.5;}
 .bar-row{display:flex;align-items:center;gap:8px;margin-bottom:10px;}
 .bar-row:last-child{margin-bottom:0;}
 .bar-lbl{font-size:12px;color:var(--text-s);width:72px;flex-shrink:0;text-align:right;}
-.bar-track{flex:1;background:var(--gray-l);border-radius:4px;height:18px;overflow:hidden;}
-.bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;}
+.bar-track{flex:1;background:#D1D5DB;border-radius:4px;height:22px;overflow:hidden;}
+.bar-fill{height:100%;border-radius:4px;display:flex;align-items:center;justify-content:flex-end;padding-right:6px;filter:saturate(1.5) brightness(0.85);}
 .bar-fill span{font-size:11px;font-weight:600;color:#fff;}
 .lunch-summary{display:flex;align-items:center;gap:6px;margin-bottom:6px;}
 .lunch-dot{width:10px;height:10px;border-radius:50%;flex-shrink:0;}
 .lunch-s-label{font-size:13px;color:var(--text-s);flex:1;}
 .lunch-s-val{font-size:13px;font-weight:600;}
 /* mini stat */
-.mini-stat-row{display:flex;gap:8px;margin-bottom:10px;}
-.mini-stat-box{flex:1;background:var(--gray-l);border-radius:var(--radius);padding:8px 10px;text-align:center;}
-.mini-stat-num{font-size:16px;font-weight:700;color:var(--text);}
-.mini-stat-label{font-size:10px;color:var(--text-s);margin-top:2px;}
+.mini-stat-row{display:flex;gap:6px;margin-bottom:8px;}
+.mini-stat-box{flex:1;background:var(--gray-l);border-radius:var(--radius-s);padding:4px 6px;text-align:center;}
+.mini-stat-num{font-size:11px;font-weight:700;color:var(--text);}
+.mini-stat-label{font-size:9px;color:var(--text-s);margin-top:1px;}
 /* リセット */
 .reset-divider{border:none;border-top:1px solid var(--border);margin:20px 0 16px;}
 .reset-btn{display:flex;align-items:center;justify-content:center;gap:6px;background:var(--red-l);border:1.5px solid #FCA5A5;border-radius:var(--radius-s);padding:10px 14px;width:100%;font-size:13px;font-weight:600;color:#991B1B;}
@@ -359,50 +376,242 @@ textarea{resize:none;height:56px;line-height:1.5;}
   </div>
 </div>
 
+<!-- まとめ -->
+<div class="screen" id="screen-matome">
+  <div class="header">
+    <div class="header-row">
+      <div class="header-title">📊 <strong>まとめ</strong></div>
+      <div style="display:flex;align-items:center;gap:6px;">
+        <button onclick="exportExcel()" style="display:flex;align-items:center;gap:4px;background:var(--green);color:#fff;border:none;border-radius:var(--radius-s);padding:5px 10px;font-size:11px;font-weight:700;white-space:nowrap;">
+          <i class="ti ti-file-spreadsheet" style="font-size:13px;"></i>Excel出力
+        </button>
+        <button class="settings-btn" onclick="openM('modal-settings')" title="設定"><i class="ti ti-settings"></i></button>
+        <div class="date-badge" id="matome-badge"></div>
+      </div>
+    </div>
+  </div>
+  <!-- 日・週・月タブ（ヘッダーの下・1段下げ） -->
+  <div class="subtab-bar" style="display:flex;border-bottom:1px solid var(--border);">
+    <button class="subtab active" id="mstab-day" onclick="switchMatomeTab('day')" style="flex:1;color:#15803D;border-bottom:3px solid #16A34A;">日次</button>
+    <button class="subtab" id="mstab-week" onclick="switchMatomeTab('week')" style="flex:1;color:#1D4ED8;border-bottom:3px solid transparent;">週次</button>
+    <button class="subtab" id="mstab-month" onclick="switchMatomeTab('month')" style="flex:1;color:#6D28D9;border-bottom:3px solid transparent;">月次</button>
+  </div>
+  <div style="overflow-y:auto;flex:1;padding:10px 14px;">
+
+    <!-- 日コーナー：日次 -->
+    <div id="ms-day" class="matome-section">
+      <div style="font-size:12px;color:var(--text-s);margin-bottom:4px;">1日あたり平均時間外勤務（縦軸：0〜5時間）</div>
+      <canvas id="chart-day-ot" style="width:100%;height:160px;display:block;margin-bottom:12px;"></canvas>
+      <div class="avg-box"><div class="avg-label">時間外勤務（7日合計）</div><div class="avg-val" id="ms-day-ot-total">—</div></div>
+      <div class="avg-box"><div class="avg-label">1日平均 時間外勤務</div><div class="avg-val" id="ms-day-ot-avg">—</div></div>
+      <div class="mini-stat-row">
+        <div class="mini-stat-box"><div class="mini-stat-num" id="ms-day-task-done">—</div><div class="mini-stat-label">完了タスク</div></div>
+        <div class="mini-stat-box"><div class="mini-stat-num" id="ms-day-tokk">—</div><div class="mini-stat-label">突発対応</div></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:8px;">
+        <div class="card" style="flex:1;padding:10px;"><div class="card-title">体しんどさ💪</div><div id="ms-day-mood-body"></div></div>
+        <div class="card" style="flex:1;padding:10px;"><div class="card-title">心しんどさ❤️</div><div id="ms-day-mood-mind"></div></div>
+      </div>
+    </div>
+
+    <!-- 週コーナー：週次間 -->
+    <div id="ms-week" class="matome-section" style="display:none;">
+      <div style="font-size:12px;color:var(--text-s);margin-bottom:4px;">1週あたり平均時間外勤務（1日平均・縦軸：0〜5時間）</div>
+      <canvas id="chart-week-ot" style="width:100%;height:160px;display:block;margin-bottom:12px;"></canvas>
+      <div class="avg-box"><div class="avg-label">時間外勤務</div><div class="avg-val" id="ms-week-ot-total">—</div></div>
+      <div class="avg-box"><div class="avg-label">1日平均 時間外勤務</div><div class="avg-val" id="ms-week-ot-avg">—</div></div>
+      <div class="mini-stat-row" style="max-width:120px;">
+        <div class="mini-stat-box"><div class="mini-stat-num" id="ms-week-task-done">—</div><div class="mini-stat-label">完了タスク</div></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:8px;">
+        <div class="card" style="flex:1;padding:10px;"><div class="card-title">体しんどさ💪</div><div id="ms-week-mood-body"></div></div>
+        <div class="card" style="flex:1;padding:10px;"><div class="card-title">心しんどさ❤️</div><div id="ms-week-mood-mind"></div></div>
+      </div>
+      <div class="card" style="margin-top:8px;"><div class="card-title">カテゴリ別時間（今週）</div><div class="bar-chart" id="ms-week-bar"></div></div>
+      <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;margin-top:12px;">体しんどさカレンダー💪</div>
+      <div class="cal-outer" id="ms-cal-body-week"></div>
+      <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;margin-top:4px;">心しんどさカレンダー❤️</div>
+      <div class="cal-outer" id="ms-cal-mind-week"></div>
+    </div>
+
+    <!-- 月コーナー：月次 -->
+    <div id="ms-month" class="matome-section" style="display:none;">
+      <div style="font-size:12px;color:var(--text-s);margin-bottom:4px;">1か月あたり平均時間外勤務（1日平均・縦軸：0〜5時間）</div>
+      <canvas id="chart-month-ot" style="width:100%;height:160px;display:block;margin-bottom:12px;"></canvas>
+      <div class="avg-box"><div class="avg-label">時間外勤務</div><div class="avg-val" id="ms-month-ot-total">—</div></div>
+      <div class="avg-box"><div class="avg-label">1日平均 時間外勤務</div><div class="avg-val" id="ms-month-ot-avg">—</div></div>
+      <div class="mini-stat-row" style="max-width:120px;">
+        <div class="mini-stat-box"><div class="mini-stat-num" id="ms-month-task-done">—</div><div class="mini-stat-label">完了タスク</div></div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:8px;">
+        <div class="card" style="flex:1;padding:10px;"><div class="card-title">体しんどさ💪</div><div id="ms-month-mood-body"></div></div>
+        <div class="card" style="flex:1;padding:10px;"><div class="card-title">心しんどさ❤️</div><div id="ms-month-mood-mind"></div></div>
+      </div>
+      <div class="card" style="margin-top:8px;"><div class="card-title">カテゴリ別時間（今月）</div><div class="bar-chart" id="ms-month-bar"></div></div>
+      <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;margin-top:12px;">体しんどさカレンダー💪</div>
+      <div class="cal-outer" id="ms-cal-body"></div>
+      <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;margin-top:4px;">心しんどさカレンダー❤️</div>
+      <div class="cal-outer" id="ms-cal-mind"></div>
+    </div>
+
+  </div>
+</div>
+
 <!-- ふりかえり -->
 <div class="screen" id="screen-review">
   <div class="header">
     <div class="header-row">
-      <div class="header-title">🌙 <strong>ふりかえり</strong></div>
+      <div class="header-title" style="color:#B45309;">🌙 <strong>今日のふりかえり</strong></div>
       <div style="display:flex;align-items:center;gap:8px;">
         <button class="settings-btn" onclick="openM('modal-settings')" title="設定"><i class="ti ti-settings"></i></button>
         <div class="date-badge" id="review-badge"></div>
       </div>
     </div>
   </div>
-  <div class="subtab-row">
-    <button class="subtab active" id="stab-today" onclick="switchSubTab('today')">今日</button>
-    <button class="subtab" id="stab-week" onclick="switchSubTab('week')">今週</button>
-    <button class="subtab" id="stab-month" onclick="switchSubTab('month')">今月</button>
-    <button class="subtab matome" id="stab-matome" onclick="switchSubTab('matome')">まとめ</button>
-  </div>
+
   <!-- 今日 -->
   <div class="subtab-content active" id="sc-today">
+    <!-- 休日バナー（土日自動 or 手動設定時） -->
+    <div id="holiday-banner" style="display:none;background:var(--blue-l);border-left:4px solid var(--blue);border-radius:0 var(--radius-s) var(--radius-s) 0;padding:10px 14px;margin-bottom:8px;">
+      <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+        <span style="font-size:13px;font-weight:600;color:var(--blue);" id="holiday-banner-text">🏖️ 今日は休日です</span>
+        <button onclick="toggleCorrectWrap()" style="font-size:11px;color:var(--text-s);background:none;border:1px solid var(--border);border-radius:4px;padding:2px 8px;">訂正▼</button>
+      </div>
+      <!-- 明日も休日ボタン（バナー内） -->
+      <button onclick="setHolidayDate('tomorrow')" id="btn-holiday-tomorrow-banner" style="width:100%;background:#fff;border:1px solid #93C5FD;border-radius:var(--radius-s);padding:7px;font-size:12px;color:var(--blue);font-weight:600;">
+        🏖️ 明日も休日にする
+      </button>
+    </div>
+
+    <!-- 平日時のボタン -->
+    <div id="holiday-btn-wrap-weekday" style="display:flex;gap:6px;margin-bottom:10px;">
+      <button onclick="setHolidayDate('today')" id="btn-holiday-today" style="flex:1;background:var(--gray-l);border:1.5px solid var(--border);border-radius:var(--radius-s);padding:8px;font-size:12px;color:var(--text-s);">
+        🏖️ 今日は休日にする
+      </button>
+      <button onclick="setHolidayDate('tomorrow')" id="btn-holiday-tomorrow" style="flex:1;background:var(--gray-l);border:1.5px solid var(--border);border-radius:var(--radius-s);padding:8px;font-size:12px;color:var(--text-s);">
+        🏖️ 明日は休日にする
+      </button>
+    </div>
+
+    <!-- 訂正パネル -->
+    <div id="correct-wrap" style="display:none;background:var(--amber-l);border:1.5px solid var(--amber-b);border-radius:var(--radius-s);padding:8px 12px;margin-bottom:10px;">
+      <div style="font-size:11px;color:var(--amber);margin-bottom:6px;font-weight:600;">出勤日に戻す</div>
+      <div style="display:flex;gap:8px;">
+        <button onclick="cancelHolidayDate('today')" style="flex:1;background:#fff;border:1px solid var(--amber-b);border-radius:var(--radius-s);padding:8px;font-size:12px;color:var(--amber);font-weight:600;">今日は出勤日</button>
+        <button onclick="cancelHolidayDate('tomorrow')" style="flex:1;background:#fff;border:1px solid var(--amber-b);border-radius:var(--radius-s);padding:8px;font-size:12px;color:var(--amber);font-weight:600;">明日は出勤日</button>
+      </div>
+    </div>
+
+    <div id="holiday-work-wrap">
     <div class="ot-card" id="ot-card" style="display:none;">
       <div class="ot-header"><i class="ti ti-clock-exclamation"></i><span>時間外勤務の記録</span></div>
       <div id="ot-rows"></div>
     </div>
-    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:7px;">🍱 今日の昼休み</div>
+
+    <div id="workday-only-wrap">
+    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:7px;">🍱 昼休みに業務をしたか</div>
     <div class="lunch-row">
-      <button class="lunch-btn" id="lb-ok" onclick="selLunch('ok')">🍱 取れた<br><span style="font-size:10px;font-weight:400;">20分以上</span></button>
-      <button class="lunch-btn" id="lb-half" onclick="selLunch('half')">🥡 少し<br><span style="font-size:10px;font-weight:400;">10分程度</span></button>
-      <button class="lunch-btn" id="lb-ng" onclick="selLunch('ng')">😞 取れなかった<br><span style="font-size:10px;font-weight:400;">0〜5分</span></button>
+      <button class="lunch-btn" id="lb-ok" onclick="selLunch('ok')">✅ なし</button>
+      <button class="lunch-btn" id="lb-10" onclick="selLunch('10')">⚠️ 15分</button>
+      <button class="lunch-btn" id="lb-20" onclick="selLunch('20')">😓 30分</button>
+      <button class="lunch-btn" id="lb-ng" onclick="selLunch('ng')">🚨 みっちり</button>
     </div>
-    <!-- 昼休み時間外：カテゴリ選択（取れなかった・少しの時のみ表示） -->
+    <!-- 昼休み時間外：カテゴリ選択（した（ほぼ休めず）・少しの時のみ表示） -->
     <div id="lunch-cat-wrap" class="hidden" style="margin-bottom:8px;">
       <div style="font-size:11px;color:var(--text-s);margin-bottom:5px;">昼休みに何をしていましたか？</div>
       <div class="cat-grid" id="lunch-cat-grid" style="margin-bottom:0;">
-        <button class="cat-btn" data-n="分掌" onclick="selLunchCat(this)">分掌</button>
-        <button class="cat-btn" data-n="保護者対応" onclick="selLunchCat(this)">保護者対応</button>
-        <button class="cat-btn" data-n="生徒指導" onclick="selLunchCat(this)">生徒指導</button>
-        <button class="cat-btn" data-n="学年" onclick="selLunchCat(this)">学年</button>
-        <button class="cat-btn" data-n="学級" onclick="selLunchCat(this)">学級</button>
-        <button class="cat-btn" data-n="会議" onclick="selLunchCat(this)">会議</button>
-        <button class="cat-btn" data-n="授業準備・宿題等" onclick="selLunchCat(this)">授業準備・宿題等</button>
-        <button class="cat-btn" data-n="その他" onclick="selLunchCat(this)" style="grid-column:span 2;">その他</button>
+        <button class="cat-btn" data-n="分掌" onclick="togLunchCat(this)">分掌</button>
+        <button class="cat-btn" data-n="保護者対応" onclick="togLunchCat(this)">保護者対応</button>
+        <button class="cat-btn" data-n="生徒指導" onclick="togLunchCat(this)">生徒指導</button>
+        <button class="cat-btn" data-n="学年" onclick="togLunchCat(this)">学年</button>
+        <button class="cat-btn" data-n="学級" onclick="togLunchCat(this)">学級</button>
+        <button class="cat-btn" data-n="会議" onclick="togLunchCat(this)">会議</button>
+        <button class="cat-btn" data-n="授業準備・宿題等" onclick="togLunchCat(this)">授業準備・宿題等</button>
+        <button class="cat-btn" data-n="その他" onclick="togLunchCat(this)" style="grid-column:span 2;">その他</button>
       </div>
     </div>
     <div style="font-size:12px;color:var(--text-s);margin:4px 0 10px;" id="lunch-result"></div>
+
+    <!-- ── 時間外在校等時間 ── -->
+    <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;">⏱ 時間外在校等時間</div>
+    <div style="display:flex;gap:8px;margin-bottom:6px;">
+      <!-- 勤務開始 -->
+      <div style="flex:1;background:var(--gray-l);border-radius:var(--radius-s);padding:8px 10px;">
+        <div style="font-size:11px;color:var(--text-s);margin-bottom:5px;text-align:center;">勤務開始</div>
+        <div style="font-size:22px;font-weight:700;color:var(--text);text-align:center;margin-bottom:6px;" id="disp-start">08:00</div>
+        <div style="display:flex;gap:4px;justify-content:center;">
+          <button onclick="adjTime('start',-60)" style="flex:1;background:#DBEAFE;border:1px solid #93C5FD;border-radius:4px;font-size:11px;padding:4px 0;color:#1E3A8A;font-weight:600;">－1h</button>
+          <button onclick="adjTime('start',60)" style="flex:1;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:4px;font-size:11px;padding:4px 0;color:#991B1B;font-weight:600;">＋1h</button>
+          <button onclick="adjTime('start',-15)" style="flex:1;background:#DBEAFE;border:1px solid #93C5FD;border-radius:4px;font-size:11px;padding:4px 0;color:#1E3A8A;font-weight:600;">－15分</button>
+          <button onclick="adjTime('start',15)" style="flex:1;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:4px;font-size:11px;padding:4px 0;color:#991B1B;font-weight:600;">＋15分</button>
+        </div>
+      </div>
+      <!-- 退勤時刻 -->
+      <div style="flex:1;background:var(--gray-l);border-radius:var(--radius-s);padding:8px 10px;">
+        <div style="font-size:11px;color:var(--text-s);margin-bottom:5px;text-align:center;">退勤時刻</div>
+        <div style="font-size:22px;font-weight:700;color:var(--amber);text-align:center;margin-bottom:6px;" id="disp-end">16:45</div>
+        <div style="display:flex;gap:4px;justify-content:center;">
+          <button onclick="adjTime('end',-60)" style="flex:1;background:#DBEAFE;border:1px solid #93C5FD;border-radius:4px;font-size:11px;padding:4px 0;color:#1E3A8A;font-weight:600;">－1h</button>
+          <button onclick="adjTime('end',60)" style="flex:1;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:4px;font-size:11px;padding:4px 0;color:#991B1B;font-weight:600;">＋1h</button>
+          <button onclick="adjTime('end',-15)" style="flex:1;background:#DBEAFE;border:1px solid #93C5FD;border-radius:4px;font-size:11px;padding:4px 0;color:#1E3A8A;font-weight:600;">－15分</button>
+          <button onclick="adjTime('end',15)" style="flex:1;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:4px;font-size:11px;padding:4px 0;color:#991B1B;font-weight:600;">＋15分</button>
+        </div>
+      </div>
+    </div>
+    <div id="school-ot-result" style="font-size:12px;color:var(--text-s);margin-bottom:4px;min-height:18px;text-align:center;"></div>
+    <div style="font-size:11px;color:var(--text-s);margin-bottom:6px;display:flex;align-items:center;gap:6px;">
+      手動微調整：
+      <button onclick="adjustSchoolOt(-10)" style="border:1px solid var(--border);border-radius:4px;background:var(--gray-l);padding:2px 8px;font-size:12px;">－10分</button>
+      <span id="school-ot-manual" style="font-weight:600;color:var(--green-d);">—</span>
+      <button onclick="adjustSchoolOt(10)" style="border:1px solid var(--border);border-radius:4px;background:var(--gray-l);padding:2px 8px;font-size:12px;">＋10分</button>
+    </div>
+    <button onclick="openWorkDefaultModal()" style="display:flex;align-items:center;gap:6px;background:var(--gray-l);border:1px solid var(--border);border-radius:var(--radius-s);padding:7px 12px;font-size:12px;color:var(--text-s);margin-bottom:12px;">
+      <i class="ti ti-settings" style="font-size:13px;"></i>デフォルトの勤務時刻を設定する
+    </button>
+
+    </div><!-- /workday-only-wrap -->
+
+    <!-- ── 持ち帰り業務 ── -->
+    <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px;">🏠 持ち帰り業務</div>
+    <div style="font-size:11px;color:var(--text-s);margin-bottom:7px;">自宅等で行った仕事の時間（文科省調査でいう「持ち帰り時間」に近い項目）</div>
+    <div id="takehome-btns" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:8px;">
+      <button class="th-btn" onclick="selTakehome(0)">なし</button>
+      <button class="th-btn" onclick="selTakehome(15)">15分</button>
+      <button class="th-btn" onclick="selTakehome(30)">30分</button>
+      <button class="th-btn" onclick="selTakehome(45)">45分</button>
+      <button class="th-btn" onclick="selTakehome(60)">1時間</button>
+      <button class="th-btn" onclick="selTakehome(75)">1時間15分</button>
+      <button class="th-btn" onclick="selTakehome(90)">1時間30分</button>
+      <button class="th-btn" onclick="selTakehome(105)">1時間45分</button>
+      <button class="th-btn" onclick="selTakehome(120)">2時間</button>
+      <button class="th-btn" onclick="selTakehome(150)">2時間30分</button>
+      <button class="th-btn" onclick="selTakehome(180)">3時間</button>
+      <button class="th-btn" onclick="selTakehome(210)">3時間30分</button>
+      <button class="th-btn" onclick="selTakehome(240)">4時間</button>
+      <button class="th-btn" onclick="selTakehome(300)">5時間</button>
+      <button class="th-btn" onclick="selTakehomeCustom()" id="th-btn-custom">それ以上…</button>
+    </div>
+    <div id="takehome-custom-wrap" style="display:none;margin-bottom:8px;">
+      <input type="number" id="takehome-custom-input" placeholder="時間数を入力（例：6）" min="0" max="24" style="width:100%;font-size:13px;border:1px solid var(--border);border-radius:var(--radius-s);padding:8px 10px;background:var(--gray-l);color:var(--text);outline:none;" oninput="onTakehomeCustomInput()">
+      <div style="font-size:11px;color:var(--text-s);margin-top:3px;">※ 時間単位で入力してください</div>
+    </div>
+    <div id="takehome-result" style="font-size:12px;font-weight:600;color:var(--blue);margin-bottom:4px;min-height:18px;"></div>
+
+    <!-- ── 今日の合計 ── -->
+    <div id="today-ot-summary" style="background:var(--green-l);border-left:4px solid var(--green);border-radius:0 var(--radius-s) var(--radius-s) 0;padding:10px 14px;margin-bottom:12px;display:none;">
+      <div style="font-size:11px;color:var(--green-d);margin-bottom:2px;">📊 今日の合計</div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--green-d);">
+        <span>時間外在校等時間</span><span id="summary-school" style="font-weight:700;">—</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--blue);">
+        <span>持ち帰り業務</span><span id="summary-takehome" style="font-weight:700;">—</span>
+      </div>
+      <div style="display:flex;justify-content:space-between;font-size:14px;font-weight:700;color:var(--text);border-top:1px solid var(--border);margin-top:6px;padding-top:6px;">
+        <span>合　計</span><span id="summary-total">—</span>
+      </div>
+    </div>
+
+
     <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;">今日のしんどさ（体）💪</div>
     <div class="mood-row" style="margin-bottom:12px;">
       <button class="mood-btn" id="mb-body-great" onclick="selMood('body','great')">😄<br>快調</button>
@@ -420,6 +629,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
     <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;">📝 体調メモ <span style="font-weight:400;font-size:11px;">（任意・自由記述）</span></div>
     <textarea id="today-memo" placeholder="気になること、体の状態など…" style="width:100%;font-size:13px;border:1px solid var(--border);border-radius:var(--radius-s);padding:9px 11px;background:var(--gray-l);color:var(--text);outline:none;resize:none;height:64px;line-height:1.6;margin-bottom:10px;"></textarea>
     <button class="save-btn-lg" onclick="saveDaily()">今日の記録を保存する</button>    <button class="yday-btn" onclick="openYdayModal()"><i class="ti ti-clock-minus" style="font-size:18px;"></i>　昨日までの記録を保存する</button>
+    </div><!-- /holiday-work-wrap -->
     <div class="consult-wrap">
       <hr class="consult-divider">
       <button class="voice-btn" onclick="openM('modal-voice')">
@@ -432,68 +642,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
       </button>
     </div>
   </div>
-  <!-- 今週 -->
-  <div class="subtab-content" id="sc-week">
-    <!-- 大：勤務時間外 -->
-    <div class="avg-box" style="margin-top:10px;"><div class="avg-label">時間外勤務（週計）</div><div class="avg-val" id="week-ot-total">—</div></div>
-    <div class="avg-box"><div class="avg-label">1日平均 時間外勤務</div><div class="avg-val" id="week-ot-avg">—</div></div>
-    <!-- 小：完了タスク・突発対応 -->
-    <div class="mini-stat-row">
-      <div class="mini-stat-box"><div class="mini-stat-num" id="week-task-done">—</div><div class="mini-stat-label">完了タスク</div></div>
-      <div class="mini-stat-box"><div class="mini-stat-num" id="week-tokk">—</div><div class="mini-stat-label">突発対応</div></div>
-    </div>
-      <div style="display:flex;gap:8px;margin-bottom:10px;">
-        <div class="card" style="flex:1;padding:10px;">
-          <div class="card-title">体しんどさ💪</div>
-          <div id="week-mood-body"></div>
-        </div>
-        <div class="card" style="flex:1;padding:10px;">
-          <div class="card-title">心しんどさ❤️</div>
-          <div id="week-mood-mind"></div>
-        </div>
-      </div>
-    <!-- カテゴリ別時間 -->
-    <div class="card-title">カテゴリ別時間</div>
-    <div class="bar-chart" id="week-bar"></div>
-  </div>
-  <!-- 今月 -->
-  <div class="subtab-content" id="sc-month">
-    <!-- 大：勤務時間外 -->
-    <div class="avg-box" style="margin-top:10px;" id="month-ot-total-box"><div class="avg-label">時間外勤務（月計）</div><div class="avg-val" id="month-ot-total">—</div></div>
-    <div class="avg-box" id="month-ot-avg-box"><div class="avg-label">1日平均 時間外勤務</div><div class="avg-val" id="month-ot-avg">—</div></div>
-    <!-- 小：完了タスク・突発対応 -->
-    <div class="mini-stat-row">
-      <div class="mini-stat-box"><div class="mini-stat-num" id="month-task-done">—</div><div class="mini-stat-label">完了タスク</div></div>
-      <div class="mini-stat-box"><div class="mini-stat-num" id="month-tokk">—</div><div class="mini-stat-label">突発対応</div></div>
-    </div>
-      <div style="display:flex;gap:8px;margin-bottom:10px;">
-        <div class="card" style="flex:1;padding:10px;">
-          <div class="card-title">体しんどさ💪</div>
-          <div id="month-mood-body"></div>
-        </div>
-        <div class="card" style="flex:1;padding:10px;">
-          <div class="card-title">心しんどさ❤️</div>
-          <div id="month-mood-mind"></div>
-        </div>
-      </div>
-    <!-- カテゴリ別時間 -->
-    <div class="card-title">カテゴリ別時間</div>
-    <div class="bar-chart" id="month-bar"></div>
-  </div>
-  <!-- まとめ -->
-  <div class="subtab-content" id="sc-matome">
-    <!-- 時間外勤務グラフ -->
-    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:8px;">📊 時間外勤務の推移（過去5か月）</div>
-    <div class="card" style="padding:14px;">
-      <canvas id="ot-chart" style="width:100%;height:160px;display:block;"></canvas>
-    </div>
-    <!-- しんどさカレンダー（体・心） -->
-    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;">体しんどさ💪</div>
-    <div class="cal-outer" id="cal-outer-body"></div>
-    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;margin-top:4px;">心しんどさ❤️</div>
-    <div class="cal-outer" id="cal-outer-mind"></div>
 
-  </div>
 </div>
 
 </div><!-- .app -->
@@ -502,8 +651,8 @@ textarea{resize:none;height:56px;line-height:1.5;}
 <div class="tab-bar">
   <button class="tab active" id="tab-home" onclick="switchTab('home')"><i class="ti ti-home"></i><span>ホーム</span></button>
   <button class="tab" id="tab-deadline" onclick="switchTab('deadline')"><i class="ti ti-calendar-due"></i><span>締切</span></button>
-  <button class="tab" id="tab-review" onclick="switchTab('review')"><i class="ti ti-moon"></i><span>ふりかえり</span></button>
-  <button class="tab quick-tab" id="tab-quick" onclick="openQuickModal()"><i class="ti ti-bolt"></i><span>クイック</span></button>
+  <button class="tab today-tab" id="tab-review" onclick="switchTab('review')"><i class="ti ti-moon"></i><span>ふりかえり</span></button>
+  <button class="tab" id="tab-matome" onclick="switchTab('matome')"><i class="ti ti-chart-bar"></i><span>まとめ</span></button>
   <button class="tab-add" onclick="openAddTask()"><i class="ti ti-plus"></i><span>タスクを追加</span></button>
 </div>
 
@@ -598,8 +747,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
     <div class="modal-title">タスクを追加</div>
     <div class="type-toggle">
       <button class="type-btn task" id="tt-task" onclick="switchType('task')">📋 通常タスク</button>
-      <button class="type-btn" id="tt-past" onclick="switchType('past')">🕐 過去のタスク</button>
-      <button class="type-btn" id="tt-tokk" onclick="switchType('tokk')">⚡ 突発対応</button>
+      <button class="type-btn" id="tt-past" onclick="switchType('past')">🕐 完了済みタスクを記録</button>
     </div>
     <div class="field-label" style="margin-top:0;">カテゴリ <span style="font-weight:400;color:var(--text-s);">（任意）</span></div>
     <div class="cat-grid" id="cat-grid">
@@ -622,7 +770,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
     </div>
     <!-- 過去のタスク -->
     <div id="past-section" class="hidden">
-      <div class="field-label">やること</div>
+      <div class="field-label">やったこと <span style="font-weight:400;color:var(--text-s);">（任意）</span></div>
       <input type="text" id="past-sub" placeholder="例：水泳指導計画・備品発注" style="margin-bottom:8px;">
       <div class="field-label">実行した日付</div>
       <input type="date" id="past-date" style="margin-bottom:8px;">
@@ -655,41 +803,10 @@ textarea{resize:none;height:56px;line-height:1.5;}
         <div class="chip" onclick="togChip(this)">昼休み（勤務外）</div>
         <div class="chip" onclick="togChip(this)">勤務時間外</div>
       </div>
-      <button class="btn-primary" style="margin-top:8px;" onclick="addPastTask()">完了済みとして登録</button>
-    </div>
-    <div id="tokk-section" class="hidden">
-      <div class="field-label" style="margin-top:4px;">どれくらい？</div>
-      <div class="stepper-box">
-        <div class="stepper-row">
-          <div class="stepper-label">時間</div>
-          <div class="stepper-ctrl">
-            <button class="stepper-btn" style="border-color:var(--coral-b);background:var(--coral-l);" onclick="chTime('t','h',-1)">－</button>
-            <div class="stepper-val" id="t-h">0</div>
-            <button class="stepper-btn" style="border-color:var(--coral-b);background:var(--coral-l);" onclick="chTime('t','h',1)">＋</button>
-            <div class="stepper-unit">時間</div>
-          </div>
-        </div>
-        <div class="stepper-row">
-          <div class="stepper-label">分</div>
-          <div class="stepper-ctrl">
-            <button class="stepper-btn" style="border-color:var(--coral-b);background:var(--coral-l);" onclick="chTime('t','m',-1)">－</button>
-            <div class="stepper-val" id="t-m">0</div>
-            <button class="stepper-btn" style="border-color:var(--coral-b);background:var(--coral-l);" onclick="chTime('t','m',1)">＋</button>
-            <div class="stepper-unit">分（10分単位）</div>
-          </div>
-        </div>
-        <div class="total-box" style="background:var(--coral-l);border-color:var(--coral-b);"><div class="total-label" style="color:#7A1C00;">合計</div><div class="total-val" style="color:#4A1B0C;" id="t-total">—</div></div>
+      <div style="display:flex;gap:8px;margin-top:10px;">
+        <button class="btn-primary" style="flex:1;" onclick="addPastTask(false)">完了済みとして登録</button>
+        <button class="btn-coral" style="flex:1;margin-top:0;" onclick="addPastTask(true)">⚡ 突発として登録</button>
       </div>
-      <div class="field-label">いつ？</div>
-      <div class="chips" id="tokk-when">
-        <div class="chip coral" onclick="selChip(this,'tokk-when')">空きコマ</div>
-        <div class="chip coral" onclick="selChip(this,'tokk-when')">昼休み</div>
-        <div class="chip coral" onclick="selChip(this,'tokk-when')">放課後</div>
-        <div class="chip coral" onclick="selChip(this,'tokk-when')">勤務時間外</div>
-      </div>
-      <div class="field-label">メモ <span style="font-weight:400;color:var(--text-s);">（任意）</span></div>
-      <textarea id="tokk-memo" placeholder="例：トイレ掃除、コピー機の不具合対応…"></textarea>
-      <button class="btn-coral" onclick="saveTokk()">記録する</button>
     </div>
     <button class="btn-cancel" onclick="closeM('modal-add')">キャンセル</button>
   </div>
@@ -862,6 +979,45 @@ textarea{resize:none;height:56px;line-height:1.5;}
   </div>
 </div>
 
+<!-- modal: デフォルト勤務時刻設定 -->
+<div class="modal-bg" id="modal-work-default" onclick="closeBg('modal-work-default',event)">
+  <div class="modal" onclick="event.stopPropagation()">
+    <div class="modal-handle"></div>
+    <div class="modal-title">⚙️ デフォルト勤務時刻の設定</div>
+    <div style="font-size:12px;color:var(--text-s);margin-bottom:14px;line-height:1.7;">毎日の基本時刻を設定しておくと、「今日のふりかえり」を開いた時に自動でセットされます。</div>
+
+    <div class="field-label">勤務開始時刻</div>
+    <input type="time" id="default-start-input" style="width:100%;font-size:16px;border:1px solid var(--border);border-radius:var(--radius-s);padding:8px 12px;background:var(--gray-l);color:var(--text);outline:none;margin-bottom:14px;">
+
+    <div class="field-label">退勤時刻（定時）</div>
+    <input type="time" id="default-end-input" style="width:100%;font-size:16px;border:1px solid var(--border);border-radius:var(--radius-s);padding:8px 12px;background:var(--gray-l);color:var(--text);outline:none;margin-bottom:14px;">
+
+    <div class="field-label">持ち帰り業務のデフォルト</div>
+    <div id="default-th-btns" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;">
+      <button class="th-btn" onclick="selDefaultTh(0)">なし</button>
+      <button class="th-btn" onclick="selDefaultTh(15)">15分</button>
+      <button class="th-btn" onclick="selDefaultTh(30)">30分</button>
+      <button class="th-btn" onclick="selDefaultTh(45)">45分</button>
+      <button class="th-btn" onclick="selDefaultTh(60)">1時間</button>
+      <button class="th-btn" onclick="selDefaultTh(90)">1時間30分</button>
+      <button class="th-btn" onclick="selDefaultTh(120)">2時間</button>
+      <button class="th-btn" onclick="selDefaultTh(150)">2時間30分</button>
+      <button class="th-btn" onclick="selDefaultTh(180)">3時間</button>
+    </div>
+
+    <div class="field-label">昼休みのデフォルト</div>
+    <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;" id="default-lunch-btns">
+      <button class="lunch-btn" id="dlb-ok" onclick="selDefaultLunch('ok')">✅ なし</button>
+      <button class="lunch-btn" id="dlb-10" onclick="selDefaultLunch('10')">⚠️ 15分</button>
+      <button class="lunch-btn" id="dlb-20" onclick="selDefaultLunch('20')">😓 30分</button>
+      <button class="lunch-btn" id="dlb-ng" onclick="selDefaultLunch('ng')">🚨 みっちり</button>
+    </div>
+
+    <button class="btn-primary" onclick="saveWorkDefault()">保存する</button>
+    <button class="btn-cancel" onclick="closeM('modal-work-default')">キャンセル</button>
+  </div>
+</div>
+
 <!-- modal: 免責事項 -->
 <div class="modal-bg" id="modal-disclaimer" onclick="closeBg('modal-disclaimer',event)">
   <div class="modal" onclick="event.stopPropagation()">
@@ -928,11 +1084,12 @@ textarea{resize:none;height:56px;line-height:1.5;}
     <div style="background:var(--green-l);border-left:4px solid var(--green);border-radius:0 var(--radius-s) var(--radius-s) 0;padding:12px 14px;margin-bottom:16px;font-size:13px;color:var(--green-d);line-height:1.8;">
       🌿 <strong>私のタスク まもるさん</strong><br>
       教職員のための<br>
-      ✅ タスク管理<br>
-      ✅ 業務記録<br>
-      ✅ 体調記録<br>
+      ✅ タスク・締切管理<br>
+      ✅ 業務・体調記録<br>
+      ✅ 時間外勤務の可視化<br>
+      ✅ 現場の声を届ける<br>
       アプリです。<br>
-      日々の働き方を見える化し、自分を守ります。
+      日々の働き方を見える化し、自分を<strong>守り</strong>ます。
     </div>
 
     <div class="howto-item">
@@ -941,20 +1098,11 @@ textarea{resize:none;height:56px;line-height:1.5;}
         <div class="howto-title">ホーム画面</div>
         <div class="howto-desc">
           タスクの一覧が表示されます。<br>
-          <b>▶ボタン</b>：タスクを開始・完了します。完了時にかかった時間・いつ実行したかを記録できます。<br>
-          <b>📌ボタン</b>：ピン固定してリスト先頭に表示します。何個でも固定できます。<br>
-          <b>タップ</b>：タスク名をタップするとその場で編集・締切の追加・消去・削除ができます。<br>
-          <b>ドラッグ</b>：左端の「≡」を長押しして並べ替えができます。<br>
-          <b>並び順</b>：ピン固定→締切7日以内（近い順）→その他（手動順）→完了済み。
+          <b>▶ボタン</b>：タスクを開始・完了します。<br>
+          <b>📌ボタン</b>：ピン固定してリスト先頭に表示。<br>
+          <b>タップ</b>：タスク名をタップするとその場で編集・削除できます。<br>
+          <b>並び順</b>：ピン固定→締切7日以内→その他→完了済み。
         </div>
-      </div>
-    </div>
-
-    <div class="howto-item">
-      <div class="howto-icon">⚡</div>
-      <div>
-        <div class="howto-title">クイック記録</div>
-        <div class="howto-desc">時間外勤務時間を「＋時間・＋10分」のボタンで素早く記録します。多忙で細かい記録が難しい日でも、合計時間だけ入力できます。昨日までの記録も入力できます。</div>
       </div>
     </div>
 
@@ -963,9 +1111,8 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <div>
         <div class="howto-title">締切</div>
         <div class="howto-desc">
-          締切日のあるタスクを一覧表示します。タップで編集・消去もできます。<br>
-          🔴 期限超過・🟠 もうすぐ・🔵 今後、の3段階で色分けされます。<br>
-          一覧の下に<b>月別カレンダー</b>が表示され、締切日が色付きで確認できます。
+          締切日のあるタスクを一覧表示。タップで編集・消去もできます。<br>
+          🔴 期限超過・🟠 もうすぐ・🔵 今後の3段階で色分け。下部に月別カレンダーを表示。
         </div>
       </div>
     </div>
@@ -973,13 +1120,19 @@ textarea{resize:none;height:56px;line-height:1.5;}
     <div class="howto-item">
       <div class="howto-icon">🌙</div>
       <div>
-        <div class="howto-title">ふりかえり</div>
+        <div class="howto-title">ふりかえり（今日）</div>
         <div class="howto-desc">
-          <b>今日</b>：しんどさ（体💪・心❤️）・昼休み・体調メモを記録します。「声を届ける」から働き方改革案・要望・困りごとを記録・送信できます。<br>
-          <b>今週・今月</b>：時間外勤務（合計・1日平均）・体しんどさ💪・心しんどさ❤️（横棒グラフ）・カテゴリ別時間を集計して表示します。<br>
-          <b>まとめ</b>：過去5か月の時間外勤務推移グラフと、体・心それぞれのしんどさカレンダー。<br>
-          <b>（忘れていた）昨日までの記録</b>：日付を選んで過去の記録を後から入力できます。
+          昼休み・時間外在校等時間・持ち帰り業務・しんどさ（体💪・心❤️）・体調メモを記録します。<br>
+          「昨日までの記録」で過去分の入力も可能。「声を届ける」で要望・困りごとを記録・送信できます。
         </div>
+      </div>
+    </div>
+
+    <div class="howto-item">
+      <div class="howto-icon">📊</div>
+      <div>
+        <div class="howto-title">まとめ</div>
+        <div class="howto-desc">日次・週次・月次で時間外勤務・しんどさを見える化。Excel出力もここから。</div>
       </div>
     </div>
 
@@ -988,9 +1141,8 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <div>
         <div class="howto-title">タスクを追加</div>
         <div class="howto-desc">
-          <b>通常タスク</b>：カテゴリ・締切日・やること（1件）を入力します。<br>
-          <b>🕐 過去のタスク</b>：昨日までに実行したタスクを完了済みとして登録できます。<br>
-          <b>⚡突発対応</b>：予定外の対応を素早く記録します。
+          <b>通常タスク</b>：カテゴリ・締切日・やること（1件）を入力。<br>
+          <b>🕐 完了済みタスクを記録</b>：昨日までのタスクを登録。⚡突発として登録すると別カウントされます。
         </div>
       </div>
     </div>
@@ -1000,29 +1152,9 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <div>
         <div class="howto-title">設定（右上⚙️ボタン）</div>
         <div class="howto-desc">
-          どの画面の右上からでも開けます。<br>
-          <b>スプレッドシートで確認</b>：Googleドライブを開きます。データは自動同期中です。<br>
-          <b>Excelに出力</b>：日次記録・月次まとめ・声を届けるを色付きの.xlsxで保存します。<br>
-          <b>Excelからタスクを一括入力</b>：ひな形をDL→入力→インポートで一括追加できます。<br>
-          <b>1か月以上先の締切タスクを非表示</b>：ホームと締切一覧に反映されます。<br>
-          <b>サンプルデータを投入/削除</b>：前月・前々月分のサンプルを追加・削除します。
-        </div>
-      </div>
-    </div>
-
-    <div class="howto-item">
-      <div class="howto-icon">📊</div>
-      <div>
-        <div class="howto-title">スプレッドシートとExcel出力の違い</div>
-        <div class="howto-desc">
-          <b>スプレッドシート（自動同期）</b><br>
-          　→ 日々のデータ蓄積・バックアップ用<br>
-          　→ 常に最新データが自動反映<br>
-          　→ 将来の「職場のタスク　みえるさん」連携の土台<br><br>
-          <b>Excelに出力（.xlsx）</b><br>
-          　→ 月末・学期末のまとめ・報告書用<br>
-          　→ 色分け・月次まとめシート付きの完成版<br>
-          　→ 管理職への報告・教職員団体等への相談資料に活用できます
+          <b>デフォルト勤務時刻の設定</b>：勤務開始・退勤・持ち帰り業務のデフォルト値を設定できます。<br>
+          <b>Excelに出力</b>：日次記録・月次まとめ・声を届けるを.xlsxで保存。管理職報告・相談資料に。<br>
+          <b>スプレッドシートで確認</b>：データは自動同期中。将来の「職場のタスク みえるさん」連携の土台。
         </div>
       </div>
     </div>
@@ -1132,6 +1264,9 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <div class="total-box"><div class="total-label">合計</div><div class="total-val" id="qy-total" style="font-size:22px;">—</div></div>
     </div>
 
+    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;margin-top:4px;">📝 メモ <span style="font-weight:400;font-size:11px;">（任意・音声入力可）</span></div>
+    <textarea id="qyday-memo" placeholder="例：怪我の件で20時まで保護者対応。急な研修が入って放課後がなくなった…など" style="width:100%;font-size:13px;border:1px solid var(--border);border-radius:var(--radius-s);padding:9px 11px;background:var(--gray-l);color:var(--text);outline:none;resize:none;height:72px;line-height:1.6;margin-bottom:12px;"></textarea>
+
     <button class="btn-primary" style="font-size:16px;padding:14px;" onclick="saveQuickYday()">記録する</button>
     <button class="btn-cancel" onclick="closeM('modal-quick-yday')">キャンセル</button>
   </div>
@@ -1174,6 +1309,10 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <span style="font-size:12px;color:var(--green-d);">✅ 今日の記録済み</span>
       <span style="font-size:16px;font-weight:700;color:var(--green-d);" id="quick-saved-val">—</span>
     </div>
+
+    <!-- 自由記述 -->
+    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;margin-top:4px;">📝 今日のメモ <span style="font-weight:400;font-size:11px;">（任意・音声入力可）</span></div>
+    <textarea id="quick-memo" placeholder="例：怪我の件で20時まで保護者対応。綱紀保持研修が急に入って放課後がなくなった…など、何でも" style="width:100%;font-size:13px;border:1px solid var(--border);border-radius:var(--radius-s);padding:9px 11px;background:var(--gray-l);color:var(--text);outline:none;resize:none;height:80px;line-height:1.6;margin-bottom:12px;"></textarea>
 
     <button class="btn-primary" style="font-size:16px;padding:14px;" onclick="saveQuick()">今日の記録をする</button>
     <button class="yday-btn" style="margin-top:8px;" onclick="openQuickYday()">
@@ -1244,22 +1383,23 @@ textarea{resize:none;height:56px;line-height:1.5;}
 
     <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:7px;">🍱 昼休み</div>
     <div class="lunch-row" style="margin-bottom:8px;">
-      <button class="lunch-btn" id="ylb-ok" onclick="selYLunch('ok')">🍱 取れた<br><span style="font-size:10px;font-weight:400;">20分以上</span></button>
-      <button class="lunch-btn" id="ylb-half" onclick="selYLunch('half')">🥡 少し<br><span style="font-size:10px;font-weight:400;">10分程度</span></button>
-      <button class="lunch-btn" id="ylb-ng" onclick="selYLunch('ng')">😞 取れなかった<br><span style="font-size:10px;font-weight:400;">0〜5分</span></button>
+      <button class="lunch-btn" id="ylb-ok" onclick="selYLunch('ok')">✅ なし</button>
+      <button class="lunch-btn" id="ylb-10" onclick="selYLunch('10')">⚠️ 15分</button>
+      <button class="lunch-btn" id="ylb-20" onclick="selYLunch('20')">😓 30分</button>
+      <button class="lunch-btn" id="ylb-ng" onclick="selYLunch('ng')">🚨 みっちり</button>
     </div>
     <!-- 昼休み時間外：カテゴリ選択 -->
     <div id="ylunch-cat-wrap" style="display:none;margin-bottom:12px;">
       <div style="font-size:11px;color:var(--text-s);margin-bottom:5px;">昼休みに何をしていましたか？</div>
       <div class="cat-grid" id="ylunch-cat-grid" style="margin-bottom:0;">
-        <button class="cat-btn" data-n="分掌" onclick="selYLunchCat(this)">分掌</button>
-        <button class="cat-btn" data-n="保護者対応" onclick="selYLunchCat(this)">保護者対応</button>
-        <button class="cat-btn" data-n="生徒指導" onclick="selYLunchCat(this)">生徒指導</button>
-        <button class="cat-btn" data-n="学年" onclick="selYLunchCat(this)">学年</button>
-        <button class="cat-btn" data-n="学級" onclick="selYLunchCat(this)">学級</button>
-        <button class="cat-btn" data-n="会議" onclick="selYLunchCat(this)">会議</button>
-        <button class="cat-btn" data-n="授業準備・宿題等" onclick="selYLunchCat(this)">授業準備・宿題等</button>
-        <button class="cat-btn" data-n="その他" onclick="selYLunchCat(this)" style="grid-column:span 2;">その他</button>
+        <button class="cat-btn" data-n="分掌" onclick="togYLunchCat(this)">分掌</button>
+        <button class="cat-btn" data-n="保護者対応" onclick="togYLunchCat(this)">保護者対応</button>
+        <button class="cat-btn" data-n="生徒指導" onclick="togYLunchCat(this)">生徒指導</button>
+        <button class="cat-btn" data-n="学年" onclick="togYLunchCat(this)">学年</button>
+        <button class="cat-btn" data-n="学級" onclick="togYLunchCat(this)">学級</button>
+        <button class="cat-btn" data-n="会議" onclick="togYLunchCat(this)">会議</button>
+        <button class="cat-btn" data-n="授業準備・宿題等" onclick="togYLunchCat(this)">授業準備・宿題等</button>
+        <button class="cat-btn" data-n="その他" onclick="togYLunchCat(this)" style="grid-column:span 2;">その他</button>
       </div>
     </div>
     <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;">⏱ 時間外勤務時間 <span style="font-weight:400;font-size:11px;">（任意）</span></div>
@@ -1412,6 +1552,8 @@ function openQuickYday() {
   if(el) el.textContent = `${yday.getMonth()+1}月${yday.getDate()}日（${days[yday.getDay()]}）`;
   selQYdayDate('yday');
   resetStep('qy');
+  const m = document.getElementById('qyday-memo');
+  if (m) m.value = '';
   updateQYdayLabel();
   openM('modal-quick-yday');
 }
@@ -1457,8 +1599,8 @@ async function saveQuickYday() {
     if (!confirm(`${qydaySelectedDate} の記録が既にあります。上書きしますか？`)) return;
   }
   const record = idx >= 0
-    ? { ...daily[idx], ot: totalMin }
-    : { date: qydaySelectedDate, moodBody:'', moodMind:'', mood:'', lunch:'', ot: totalMin, memo:'' };
+    ? { ...daily[idx], ot: totalMin, memo: document.getElementById('qyday-memo')?.value.trim() || daily[idx].memo || '' }
+    : { date: qydaySelectedDate, moodBody:'', moodMind:'', mood:'', lunch:'', ot: totalMin, memo: document.getElementById('qyday-memo')?.value.trim() || '' };
   if (idx >= 0) daily[idx] = record; else daily.push(record);
   localStorage.setItem('mamoru_daily', JSON.stringify(daily));
 
@@ -1497,6 +1639,8 @@ function renderQuickSaved() {
 
 function openQuickModal() {
   resetStep('q');
+  const memo = document.getElementById('quick-memo');
+  if (memo) memo.value = '';
   renderQuickSaved();
   openM('modal-quick');
 }
@@ -1530,8 +1674,8 @@ async function saveQuick() {
   }
 
   const record = idx >= 0
-    ? { ...daily[idx], ot: totalMin }
-    : { date: td, moodBody:'', moodMind:'', mood:'', lunch:'', ot: totalMin, memo:'' };
+    ? { ...daily[idx], ot: totalMin, memo: document.getElementById('quick-memo')?.value.trim() || daily[idx].memo || '' }
+    : { date: td, moodBody:'', moodMind:'', mood:'', lunch:'', ot: totalMin, memo: document.getElementById('quick-memo')?.value.trim() || '' };
 
   if (idx >= 0) daily[idx] = record; else daily.push(record);
   localStorage.setItem('mamoru_daily', JSON.stringify(daily));
@@ -1919,16 +2063,11 @@ async function completeTask(){
 function switchType(t){
   document.getElementById('tt-task').className = 'type-btn' + (t==='task'?' task':'');
   document.getElementById('tt-past').className = 'type-btn' + (t==='past'?' task':'');
-  document.getElementById('tt-tokk').className = 'type-btn' + (t==='tokk'?' tokk':'');
   document.getElementById('task-section').classList.toggle('hidden', t!=='task');
   document.getElementById('past-section').classList.toggle('hidden', t!=='past');
-  document.getElementById('tokk-section').classList.toggle('hidden', t!=='tokk');
-  // カテゴリグリッドは通常・過去タスクで表示、突発対応では非表示
-  document.getElementById('cat-grid').parentElement.querySelector('.field-label').style.display = t==='tokk' ? 'none' : '';
-  document.getElementById('cat-grid').style.display = t==='tokk' ? 'none' : '';
 }
 
-async function addPastTask() {
+async function addPastTask(isTokk = false){
   let name = null, color = 'gray';
   if(selCatName==='__other__'){ name = document.getElementById('other-input').value.trim(); }
   else if(selCatName){ name = selCatName; color = selCatColor; }
@@ -1951,13 +2090,14 @@ async function addPastTask() {
     done: true,
     doneDate,
     time,
+    tokk: isTokk,
   };
   tasks.push(newTask); renderTasks(); saveLocalTasks(); closeM('modal-add');
   try {
     showSync('保存中...');
     const res = await apiPost({ action:'saveTask', data: newTask });
     if(res.id){ newTask.id = res.id; saveLocalTasks(); }
-    showSync('✅ 過去のタスクを登録しました');
+    showSync(isTokk ? '⚡ 突発対応として登録しました' : '✅ 完了済みタスクを登録しました');
   } catch(e){ showSync('⚠ オフライン保存', true); }
 }
 
@@ -1970,9 +2110,7 @@ function openAddTask(){
   document.getElementById('other-wrap').classList.add('hidden');
   document.getElementById('other-input').value = '';
   document.querySelectorAll('#cat-grid .cat-btn').forEach(b=>b.className='cat-btn');
-  document.querySelectorAll('#tokk-when .chip').forEach(c=>c.classList.remove('sel'));
   document.querySelectorAll('#past-when .chip').forEach(c=>c.classList.remove('sel'));
-  document.getElementById('tokk-memo').value = '';
   resetStep('t'); resetStep('p'); selCatName = null; selCatColor = 'gray';
 }
 function selCat(el){
@@ -2153,33 +2291,298 @@ async function dlDeleteTask(id) {
 }
 
 // =============================================
-// ふりかえり
+// まとめタブ（日・週・月）
+// =============================================
+function getDaily() {
+  return JSON.parse(localStorage.getItem('mamoru_daily') || '[]');
+}
+
+function fmtMinShort(m) {
+  if (!m || m<=0) return '0分';
+  const h = Math.floor(m/60), mn = m%60;
+  if (h > 0 && mn > 0) return `${h}時間${mn}分`;
+  if (h > 0) return `${h}時間`;
+  return `${mn}分`;
+}
+
+function drawBarChart(canvasId, labels, data, color='#1D9E75') {
+  const canvas = document.getElementById(canvasId);
+  if (!canvas) return;
+  canvas.width  = canvas.offsetWidth || 320;
+  canvas.height = 160;
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  const W = canvas.width, H = canvas.height;
+  const padC = {top:20, bottom:36, left:42, right:8};
+  const bw = (W - padC.left - padC.right) / data.length;
+  const MAX_MIN = 5 * 60; // 上限5時間固定
+
+  ctx.fillStyle = '#F3F4F6';
+  ctx.fillRect(0,0,W,H);
+
+  // グリッド（1h=60, 2h=120, 3h=180, 4h=240, 5h=300）
+  [60,120,180,240,300].forEach(v=>{
+    const y = padC.top + (H-padC.top-padC.bottom)*(1-v/MAX_MIN);
+    ctx.strokeStyle='#E5E7EB'; ctx.lineWidth=1;
+    ctx.beginPath(); ctx.moveTo(padC.left,y); ctx.lineTo(W-padC.right,y); ctx.stroke();
+    ctx.fillStyle='#9CA3AF'; ctx.font='10px Arial'; ctx.textAlign='right';
+    ctx.fillText(`${v/60}h`, padC.left-3, y+4);
+  });
+
+  // バー
+  data.forEach((v,i)=>{
+    const bh = (Math.min(v,MAX_MIN)/MAX_MIN)*(H-padC.top-padC.bottom);
+    const x = padC.left + i*bw + bw*0.15;
+    const y = padC.top + (H-padC.top-padC.bottom) - bh;
+    ctx.fillStyle = v>0 ? color : '#E5E7EB';
+    ctx.fillRect(x, y, bw*0.7, bh);
+    ctx.fillStyle='#6B7280'; ctx.font='10px Arial'; ctx.textAlign='center';
+    ctx.fillText(labels[i], x+bw*0.35, H-padC.bottom+14);
+    if (v>0) {
+      ctx.fillStyle='#111827'; ctx.font='9px Arial';
+      ctx.fillText(fmtMinShort(v), x+bw*0.35, Math.max(y-3, padC.top+8));
+    }
+  });
+}
+
+function moodMiniGrid(dailyArr, moodType) {
+  const moodLabel = {great:'😄',ok:'🙂',hard:'😓',limit:'🚨'};
+  const count = {great:0,ok:0,hard:0,limit:0};
+  dailyArr.forEach(d => {
+    const m = moodType==='body' ? (d.moodBody||'') : (d.moodMind||'');
+    if (count[m]!==undefined) count[m]++;
+  });
+  const total = Object.values(count).reduce((a,b)=>a+b,0);
+  if (total===0) return '<div style="font-size:11px;color:var(--text-s);">記録なし</div>';
+  return Object.entries(count).map(([k,v])=>{
+    const pct = total>0 ? Math.round(v/total*100) : 0;
+    const colors = {great:'#DBEAFE',ok:'#D1FAE5',hard:'#FEF3C7',limit:'#FEE2E2'};
+    const textColors = {great:'#1E3A8A',ok:'#3B6B0C',hard:'#92400E',limit:'#991B1B'};
+    return `<div style="margin-bottom:4px;">
+      <div style="display:flex;justify-content:space-between;font-size:10px;margin-bottom:1px;">
+        <span>${moodLabel[k]}</span><span style="color:${textColors[k]};font-weight:600;">${v}日</span>
+      </div>
+      <div style="background:#E5E7EB;border-radius:3px;height:6px;">
+        <div style="width:${pct}%;height:100%;background:${colors[k]};border-radius:3px;min-width:${v>0?3:0}px;"></div>
+      </div>
+    </div>`;
+  }).join('');
+}
+
+// ── 日コーナー（日次） ──
+function renderMatomeDay() {
+  const daily = getDaily();
+  const days7 = [];
+  for (let i=6; i>=0; i--) {
+    const d = new Date(); d.setDate(d.getDate()-i);
+    const ds = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+    const rec = daily.find(r=>r.date===ds) || {};
+    const dayNames = ['日','月','火','水','木','金','土'];
+    days7.push({ label:`${d.getMonth()+1}/${d.getDate()}\n(${dayNames[d.getDay()]})`, ot: rec.ot||0, moodBody: rec.moodBody||'', moodMind: rec.moodMind||'' });
+  }
+  // グラフは1日平均
+  drawBarChart('chart-day-ot', days7.map(d=>d.label), days7.map(d=>d.ot));
+
+  // 集計
+  const totalOt7 = days7.reduce((s,d)=>s+d.ot,0);
+  const recDays7 = days7.filter(d=>d.ot>0).length;
+  const el = (id,v) => { const e=document.getElementById(id); if(e) e.textContent=v; };
+  el('ms-day-ot-total', fmtMinShort(totalOt7));
+  el('ms-day-ot-avg', recDays7>0 ? fmtMinShort(Math.round(totalOt7/recDays7)) : '—');
+
+  // 完了タスク・突発対応（過去7日）
+  const today7 = new Date(); const todayStr7 = `${today7.getFullYear()}-${pad(today7.getMonth()+1)}-${pad(today7.getDate())}`;
+  const from7 = new Date(); from7.setDate(from7.getDate()-6);
+  const from7Str = `${from7.getFullYear()}-${pad(from7.getMonth()+1)}-${pad(from7.getDate())}`;
+  const day7Tasks = tasks.filter(t => t.doneDate >= from7Str && t.doneDate <= todayStr7);
+  el('ms-day-task-done', day7Tasks.length);
+  el('ms-day-tokk', day7Tasks.filter(t=>t.tokk).length || '—');
+
+  const bodyEl = document.getElementById('ms-day-mood-body');
+  const mindEl = document.getElementById('ms-day-mood-mind');
+  if(bodyEl) bodyEl.innerHTML = moodMiniGrid(days7,'body');
+  if(mindEl) mindEl.innerHTML = moodMiniGrid(days7,'mind');
+}
+
+// ── 週コーナー（週次間） ──
+function renderMatomeWeek() {
+  const daily = getDaily();
+  const today = new Date();
+  const dow = today.getDay();
+  const monday = new Date(today); monday.setDate(today.getDate() - (dow===0?6:dow-1));
+
+  const weeks5 = [];
+  for (let w=4; w>=0; w--) {
+    const wStart = new Date(monday); wStart.setDate(monday.getDate() - w*7);
+    const wEnd = new Date(wStart); wEnd.setDate(wStart.getDate()+6);
+    const label = `${wStart.getMonth()+1}/${wStart.getDate()}`;
+    let ot=0, bodyArr=[], mindArr=[], recDays=0;
+    for (let d=0; d<7; d++) {
+      const dd = new Date(wStart); dd.setDate(wStart.getDate()+d);
+      const ds = `${dd.getFullYear()}-${pad(dd.getMonth()+1)}-${pad(dd.getDate())}`;
+      const rec = daily.find(r=>r.date===ds) || {};
+      ot += rec.ot||0;
+      if (rec.ot > 0) recDays++;
+      if (rec.moodBody) bodyArr.push({moodBody:rec.moodBody});
+      if (rec.moodMind) mindArr.push({moodMind:rec.moodMind});
+    }
+    weeks5.push({ label, ot, bodyArr, mindArr, recDays });
+  }
+  // グラフは1日平均（週の合計÷記録日数）
+  const weekAvgs = weeks5.map(w => w.recDays > 0 ? Math.round(w.ot / w.recDays) : 0);
+  drawBarChart('chart-week-ot', weeks5.map(w=>w.label), weekAvgs, '#2563EB');
+
+  // 今週の集計
+  const thisWeek = weeks5[4];
+  const el = (id, v) => { const e=document.getElementById(id); if(e) e.textContent=v; };
+  el('ms-week-ot-total', fmtMinShort(thisWeek.ot));
+  const weekDays = Math.min(dow===0?7:dow, 7);
+  el('ms-week-ot-avg', fmtMinShort(Math.round(thisWeek.ot/Math.max(weekDays,1))));
+
+  const bodyEl = document.getElementById('ms-week-mood-body');
+  const mindEl = document.getElementById('ms-week-mood-mind');
+  const allBody = weeks5[4].bodyArr;
+  const allMind = weeks5[4].mindArr;
+  if(bodyEl) bodyEl.innerHTML = moodMiniGrid(allBody,'body');
+  if(mindEl) mindEl.innerHTML = moodMiniGrid(allMind,'mind');
+
+  // 完了タスク・突発対応
+  const weekStartStr = `${monday.getFullYear()}-${pad(monday.getMonth()+1)}-${pad(monday.getDate())}`;
+  const today2 = new Date(); const todayStr2 = `${today2.getFullYear()}-${pad(today2.getMonth()+1)}-${pad(today2.getDate())}`;
+  const weekDoneTasks = tasks.filter(t => t.doneDate >= weekStartStr && t.doneDate <= todayStr2);
+  el('ms-week-task-done', weekDoneTasks.length);
+
+  // カテゴリ棒グラフ（今週）
+  const thisWeekStart = new Date(monday); thisWeekStart.setDate(monday.getDate());
+  const weekTasks = tasks.filter(t => t.doneDate >= `${thisWeekStart.getFullYear()}-${pad(thisWeekStart.getMonth()+1)}-${pad(thisWeekStart.getDate())}`);
+  renderBarChart('ms-week-bar', getCatBarData(weekTasks));
+
+  // しんどさカレンダー
+  buildCalTo('ms-cal-body-week', 'body');
+  buildCalTo('ms-cal-mind-week', 'mind');
+}
+
+// ── 月コーナー（月次） ──
+function renderMatomeMonth() {
+  const daily = getDaily();
+  const today = new Date();
+  const months5 = [];
+  for (let m=4; m>=0; m--) {
+    const d = new Date(today.getFullYear(), today.getMonth()-m, 1);
+    const yr = d.getFullYear(), mo = d.getMonth();
+    const label = `${mo+1}月`;
+    const recs = daily.filter(r => {
+      const rd = new Date(r.date);
+      return rd.getFullYear()===yr && rd.getMonth()===mo;
+    });
+    const ot = recs.reduce((s,r)=>s+(r.ot||0), 0);
+    months5.push({ label, ot, recs });
+  }
+  // グラフは1日平均
+  const monthAvgs = months5.map(m => m.recs.length > 0 ? Math.round(m.recs.reduce((s,r)=>s+(r.ot||0),0) / m.recs.length) : 0);
+  drawBarChart('chart-month-ot', months5.map(m=>m.label), monthAvgs, '#7C3AED');
+
+  // 今月の集計
+  const thisMonth = months5[4].recs;
+  const el = (id,v) => { const e=document.getElementById(id); if(e) e.textContent=v; };
+  const totalOt = thisMonth.reduce((s,d)=>s+(d.ot||0),0);
+  el('ms-month-ot-total', fmtMinShort(totalOt));
+  el('ms-month-ot-avg', thisMonth.length>0 ? fmtMinShort(Math.round(totalOt/thisMonth.length)) : '—');
+
+  // 完了タスク・突発対応
+  const d0month = new Date(today.getFullYear(), today.getMonth(), 1);
+  const d0monthStr = `${d0month.getFullYear()}-${pad(d0month.getMonth()+1)}-01`;
+  const monthDoneTasks = tasks.filter(t => t.doneDate >= d0monthStr);
+  el('ms-month-task-done', monthDoneTasks.length);
+
+  const bodyEl = document.getElementById('ms-month-mood-body');
+  const mindEl = document.getElementById('ms-month-mood-mind');
+  if(bodyEl) bodyEl.innerHTML = moodMiniGrid(thisMonth,'body');
+  if(mindEl) mindEl.innerHTML = moodMiniGrid(thisMonth,'mind');
+
+  // カテゴリ棒グラフ
+  const d0 = new Date(today.getFullYear(), today.getMonth(), 1);
+  const monthTasks = tasks.filter(t => t.doneDate >= `${d0.getFullYear()}-${pad(d0.getMonth()+1)}-01`);
+  renderBarChart('ms-month-bar', getCatBarData(monthTasks));
+
+  // しんどさカレンダー
+  buildCalTo('ms-cal-body', 'body');
+  buildCalTo('ms-cal-mind', 'mind');
+}
+
+function buildCalTo(outerId, type) {
+  const outer = document.getElementById(outerId); if(!outer) return;
+  const today = new Date();
+  const tStr = todayStr();
+  const dailyArr = JSON.parse(localStorage.getItem('mamoru_daily') || '[]');
+  const moodData = {};
+  dailyArr.forEach(d => {
+    if (!d.date) return;
+    const m = type==='body' ? (d.moodBody||'') : (d.moodMind||'');
+    if (m) moodData[d.date] = m;
+  });
+  const cont = document.createElement('div'); cont.className='cal-months';
+  for(let m=4;m>=0;m--){
+    const base = new Date(today.getFullYear(),today.getMonth()-m,1);
+    const yr=base.getFullYear(), mo=base.getMonth();
+    const dim=new Date(yr,mo+1,0).getDate(), fd=new Date(yr,mo,1).getDay();
+    const md=document.createElement('div'); md.className='cal-month';
+    let html=`<div class="cal-month-title">${yr}年${mo+1}月</div><div class="cal-grid">`;
+    ['日','月','火','水','木','金','土'].forEach(d=>html+=`<div class="cal-dow">${d}</div>`);
+    for(let i=0;i<fd;i++) html+=`<div></div>`;
+    for(let d=1;d<=dim;d++){
+      const k=`${yr}-${pad(mo+1)}-${pad(d)}`;
+      const mood=moodData[k];
+      let cls='cal-day'+(mood?' '+mood:'')+(k===tStr?' today':'');
+      const emoji=mood?{great:'😄',ok:'🙂',hard:'😓',limit:'🚨'}[mood]:'';
+      html+=`<div class="${cls}">${emoji||d}</div>`;
+    }
+    html+='</div>'; md.innerHTML=html; cont.appendChild(md);
+  }
+  outer.innerHTML=''; outer.appendChild(cont);
+  setTimeout(()=>{outer.scrollLeft=outer.scrollWidth;},50);
+}
+
+// =============================================
+// ふりかえり（旧）集計 - 後方互換のため残す
 // =============================================
 let currentLunchCat = '', ydayLunchCat = '';
 
 function selLunch(t){
   currentLunch = t;
-  ['ok','half','ng'].forEach(x=>{document.getElementById('lb-'+x).className='lunch-btn'+(x===t?' '+t:'');});
-  // 取れなかった・少しの場合にカテゴリ選択を表示
+  ['ok','10','20','ng'].forEach(x=>{
+    const b = document.getElementById('lb-'+x);
+    if(b) b.className='lunch-btn'+(x===t?' '+t:'');
+  });
   const wrap = document.getElementById('lunch-cat-wrap');
-  if (wrap) wrap.classList.toggle('hidden', t === 'ok');
+  if (wrap) wrap.style.display = (t === 'ok') ? 'none' : 'block';
   if (t === 'ok') {
     currentLunchCat = '';
     document.querySelectorAll('#lunch-cat-grid .cat-btn').forEach(b => b.className='cat-btn');
   }
-  document.getElementById('lunch-result').textContent = '記録しました：'+({ok:'🍱 取れた（20分以上）',half:'🥡 少し（10分程度）',ng:'😞 取れなかった'})[t];
+  const addMin = t==='ng'?40 : t==='20'?20 : t==='10'?10 : 0;
+  const resultEl = document.getElementById('lunch-result');
+  if (resultEl) {
+    resultEl.textContent = addMin > 0 ? `昼休みに業務：${addMin}分を時間外勤務に加算` : '';
+    resultEl.style.color = addMin > 0 ? 'var(--amber)' : '';
+  }
 }
 
-function selLunchCat(el) {
-  document.querySelectorAll('#lunch-cat-grid .cat-btn').forEach(b => b.className='cat-btn');
-  el.classList.add('sel-g');
-  currentLunchCat = el.dataset.n;
+function togLunchCat(el) {
+  el.classList.toggle('sel-g');
+  currentLunchCat = [...document.querySelectorAll('#lunch-cat-grid .cat-btn.sel-g')].map(b=>b.dataset.n).join('・');
+}
+
+function togYLunchCat(el) {
+  el.classList.toggle('sel-g');
+  ydayLunchCat = [...document.querySelectorAll('#ylunch-cat-grid .cat-btn.sel-g')].map(b=>b.dataset.n).join('・');
 }
 
 function selYLunch(t) {
   ydayLunch = t;
-  ['ok','half','ng'].forEach(x => {
-    document.getElementById('ylb-'+x).className = 'lunch-btn' + (x===t?' '+t:'');
+  ['ok','10','20','ng'].forEach(x => {
+    const b = document.getElementById('ylb-'+x);
+    if(b) b.className = 'lunch-btn' + (x===t?' '+t:'');
   });
   const wrap = document.getElementById('ylunch-cat-wrap');
   if (!wrap) return;
@@ -2192,11 +2595,6 @@ function selYLunch(t) {
   }
 }
 
-function selYLunchCat(el) {
-  document.querySelectorAll('#ylunch-cat-grid .cat-btn').forEach(b => b.className='cat-btn');
-  el.classList.add('sel-g');
-  ydayLunchCat = el.dataset.n;
-}
 function selMood(type, val){
   currentMood[type] = val;
   ['great','ok','hard','limit'].forEach(x=>{
@@ -2212,12 +2610,13 @@ async function saveDaily(){
   // 既存データがある場合は確認
   if (idx >= 0) {
     const existing = daily[idx];
-    const hasData = existing.moodBody || existing.moodMind || existing.lunch || existing.memo;
+    const hasData = existing.moodBody || existing.moodMind || existing.lunch || existing.memo || existing.ot > 0 || existing.schoolOt > 0;
     if (hasData && !confirm('今日の記録が既にあります。上書きしますか？')) return;
   }
 
   // 昼休みの状況に応じて時間外勤務を自動加算
-  const lunchOt = currentLunch === 'ng' ? 45 : currentLunch === 'half' ? 20 : 0;
+  const lunchOt = currentLunch==='ng'?45 : currentLunch==='20'?30 : currentLunch==='10'?15 : 0;
+  const totalOt = schoolOtMin + takehomeMin + lunchOt;
 
   const record = {
     date: td,
@@ -2226,7 +2625,9 @@ async function saveDaily(){
     mood: currentMood.body || currentMood.mind || '',
     lunch: currentLunch || '',
     lunchCat: currentLunchCat || '',
-    ot: lunchOt,
+    schoolOt: schoolOtMin,
+    takehome: takehomeMin,
+    ot: totalOt,
     memo: document.getElementById('today-memo')?.value.trim() || '',
   };
   if (idx >= 0) daily[idx] = record; else daily.push(record);
@@ -2234,7 +2635,7 @@ async function saveDaily(){
   try {
     showSync('記録を保存中...');
     await apiPost({ action:'saveDaily', data: record });
-    showSync(`✅ 今日の記録を保存しました${lunchOt > 0 ? `（昼休み${lunchOt}分を時間外勤務に加算）` : ''}`);
+    showSync('✅ 今日の記録を保存しました');
   } catch(e) { showSync('⚠ オフライン保存', true); }
   renderMonthContent();
 }
@@ -2285,7 +2686,11 @@ function renderBar(id,data){
   const el=document.getElementById(id); if(!el) return;
   if(!data||!data.length){el.innerHTML='<div style="font-size:12px;color:var(--text-s);padding:8px 0;">データがありません</div>';return;}
   const max=Math.max(...data.map(d=>d.h),1);
-  el.innerHTML=data.map(d=>`<div class="bar-row"><div class="bar-lbl">${d.l}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(d.h/max*100)}%;background:${d.c};"><span>${d.h}h</span></div></div></div>`).join('');
+  el.innerHTML=data.map(d=>{
+    const h=Math.floor(d.h/60), m=d.h%60;
+    const label = h>0 ? (m>0?`${h}h${m}m`:`${h}h`) : `${m}m`;
+    return `<div class="bar-row"><div class="bar-lbl">${d.l}</div><div class="bar-track"><div class="bar-fill" style="width:${Math.round(d.h/max*100)}%;background:${d.c};"><span>${label}</span></div></div></div>`;
+  }).join('');
 }
 
 // カテゴリ別時間をタスクデータから集計
@@ -2337,8 +2742,7 @@ function renderWeekContent() {
   el('week-ot-total', otStr);
   el('week-ot-avg', `${Math.floor(otAvg/60)>0?Math.floor(otAvg/60)+'時間':''}${otAvg%60}分`);
   el('week-task-done', weekTasks.length);
-  el('week-tokk', '—');
-
+  
   // しんどさ（体・心）
   const bodyCount = {great:0,ok:0,hard:0,limit:0};
   const mindCount = {great:0,ok:0,hard:0,limit:0};
@@ -2527,27 +2931,40 @@ function closeBg(id,e){ if(e.target===document.getElementById(id)) closeM(id); }
 // 画面切替
 // =============================================
 function switchTab(tab){
-  ['home','deadline','review'].forEach(t=>{
-    document.getElementById('screen-'+t).classList.toggle('active',t===tab);
+  ['home','deadline','review','matome'].forEach(t=>{
+    const screen = document.getElementById('screen-'+t);
+    if(screen) screen.classList.toggle('active',t===tab);
     const btn = document.getElementById('tab-'+t);
     if(btn) btn.classList.toggle('active',t===tab);
   });
   if(tab==='deadline') { renderDeadlines(); renderDeadlineCalendar(); }
-  if(tab==='review') renderWeekContent();
-
+  if(tab==='review') { initTodayOtUI(); updateHolidayUI(); }
+  if(tab==='matome') { switchMatomeTab('day'); }
+}
+function switchMatomeTab(sub) {
+  const colors = { day: '#16A34A', week: '#2563EB', month: '#8B5CF6' };
+  ['day','week','month'].forEach(t => {
+    const btn = document.getElementById('mstab-'+t);
+    if(btn) btn.style.borderBottom = t===sub ? `3px solid ${colors[t]}` : '3px solid transparent';
+    if(btn) btn.classList.toggle('active', t===sub);
+    const sec = document.getElementById('ms-'+t);
+    if(sec) sec.style.display = t===sub ? 'block' : 'none';
+  });
+  if(sub==='day')   setTimeout(renderMatomeDay, 50);
+  if(sub==='week')  setTimeout(renderMatomeWeek, 50);
+  if(sub==='month') setTimeout(renderMatomeMonth, 50);
 }
 function switchSubTab(sub){
   ['today','week','month','matome'].forEach(t=>{
     document.getElementById('stab-'+t).classList.toggle('active',t===sub);
     document.getElementById('sc-'+t).classList.toggle('active',t===sub);
   });
-  if(sub==='today') renderTodayAchieve();
+  if(sub==='today') { renderTodayAchieve(); initTodayOtUI(); }
   if(sub==='week')  renderWeekContent();
   if(sub==='month') renderMonthContent();
   if(sub==='matome'){
     buildCal('body');
     buildCal('mind');
-    // スマホでCanvasが確実に描画されるよう少し遅延
     setTimeout(() => {
       const canvas = document.getElementById('ot-chart');
       if (canvas) {
@@ -2611,8 +3028,7 @@ function renderMonthContent() {
   el('month-ot-total', otStr);
   el('month-ot-avg', `${Math.floor(otAvg/60)>0?Math.floor(otAvg/60)+'時間':''}${otAvg%60}分`);
   el('month-task-done', monthTasks.length);
-  el('month-tokk', '—');
-
+  
   // しんどさ（体・心）
   const bodyCount = {great:0,ok:0,hard:0,limit:0};
   const mindCount = {great:0,ok:0,hard:0,limit:0};
@@ -2632,7 +3048,7 @@ function renderMonthContent() {
 }
 
 // =============================================
-// 時間外勤務グラフ（過去5か月）
+// 時間外勤務グラフ（月次）
 // =============================================
 function renderOtChart() {
   const canvas = document.getElementById('ot-chart');
@@ -2821,8 +3237,8 @@ function doExport(allTasks, daily) {
   // シート1：日次記録
   // =============================================
   const ws1 = {};
-  const h1 = ['日付','曜日','タスク名','カテゴリ','かかった時間','いつ行ったか','突発対応','しんどさ（体）','しんどさ（心）','昼休み','体調メモ'];
-  const hColors1 = [C.green,C.green,C.green,C.green,C.green,C.green,C.amber,C.blue,C.blue,C.blue,C.gray];
+  const h1 = ['日付','曜日','タスク名','カテゴリ','かかった時間','いつ行ったか','しんどさ（体）','しんどさ（心）','昼休み','体調メモ'];
+  const hColors1 = [C.green,C.green,C.green,C.green,C.green,C.green,C.blue,C.blue,C.blue,C.gray];
 
   h1.forEach((h,i) => {
     const addr = XLSX.utils.encode_cell({r:0,c:i});
@@ -2831,7 +3247,7 @@ function doExport(allTasks, daily) {
 
   // 日次記録＋タスク完了をマージして日付でソート
   const moodLabel = {great:'😄 快調', ok:'🙂 まあまあ', hard:'😓 しんどい', limit:'🚨 限界'};
-  const lunchLabel = {ok:'🍱 取れた（20分以上）', half:'🥡 少し（10分程度）', ng:'😞 取れなかった'};
+  const lunchLabel = {ok:'✅ していない（休憩できた）', half:'⚠️ 少しした（10〜20分程度）', ng:'😓 した（ほぼ休めず）'};
 
   // 日次記録をdate→オブジェクトのマップに
   const dailyMap = {};
@@ -2867,7 +3283,6 @@ function doExport(allTasks, daily) {
         t ? t.name : '',
         timeStr,
         whenStr,
-        '',  // 突発対応
         ti===0 ? (moodLabel[bodyMood] || '') : '',
         ti===0 ? (moodLabel[mindMood] || '') : '',
         ti===0 ? (lunchLabel[d.lunch] || '') : '',
@@ -2876,40 +3291,40 @@ function doExport(allTasks, daily) {
       row.forEach((v,ci) => {
         const addr = XLSX.utils.encode_cell({r:r1,c:ci});
         let bg2 = bg, fg = C.text, bold = false;
-        if (ci===6) { bg2 = bg; fg = C.amber; }
-        // 体のしんどさ（ci=7）
-        if (ci===7) {
+
+        // 体のしんどさ（ci=6）
+        if (ci===6) {
           if (bodyMood==='great') { bg2=C.blueL; fg='1E3A8A'; }
           else if (bodyMood==='ok') { bg2='D1FAE5'; fg='3B6B0C'; }
           else if (bodyMood==='hard') { bg2='FEF3C7'; fg='92400E'; }
           else if (bodyMood==='limit') { bg2=C.redL; fg=C.red; }
           else bg2=C.blueL;
         }
-        // 心のしんどさ（ci=8）
-        if (ci===8) {
+        // 心のしんどさ（ci=7）
+        if (ci===7) {
           if (mindMood==='great') { bg2=C.blueL; fg='1E3A8A'; }
           else if (mindMood==='ok') { bg2='D1FAE5'; fg='3B6B0C'; }
           else if (mindMood==='hard') { bg2='FEF3C7'; fg='92400E'; }
           else if (mindMood==='limit') { bg2=C.redL; fg=C.red; }
           else bg2=C.blueL;
         }
-        // 昼休み（ci=9）
-        if (ci===9) {
+        // 昼休み（ci=8）
+        if (ci===8) {
           if (d.lunch==='ok')   { bg2='EAF3DE'; fg='3B6B0C'; }
           else if (d.lunch==='half') { bg2=C.amberL; fg=C.amber; }
           else if (d.lunch==='ng')   { bg2=C.redL; fg=C.red; }
           else bg2=C.blueL;
         }
-        // 体調メモ（ci=10）
-        if (ci===10) { bg2=C.grayL; fg=C.gray; }
+        // 体調メモ（ci=9）
+        if (ci===9) { bg2=C.grayL; fg=C.gray; }
         setCell(ws1, addr, v, dataStyle(bg2, fg, bold, ci<=1||ci>=4));
       });
       r1++;
     });
   });
 
-  ws1['!ref'] = XLSX.utils.encode_range({s:{r:0,c:0},e:{r:r1-1,c:10}});
-  ws1['!cols'] = [{wch:14},{wch:6},{wch:20},{wch:14},{wch:14},{wch:22},{wch:10},{wch:18},{wch:18},{wch:22},{wch:28}];
+  ws1['!ref'] = XLSX.utils.encode_range({s:{r:0,c:0},e:{r:r1-1,c:9}});
+  ws1['!cols'] = [{wch:14},{wch:6},{wch:20},{wch:14},{wch:14},{wch:22},{wch:18},{wch:18},{wch:22},{wch:28}];
   ws1['!rows'] = Array(r1).fill(null).map((_,i)=>({hpt:i===0?22:18}));
   XLSX.utils.book_append_sheet(wb, ws1, '日次記録');
 
@@ -2999,7 +3414,7 @@ function doExport(allTasks, daily) {
       {v:'心🚨\n限界',bg:'7F1D1D'},
       {v:'🍱 昼休み\n取れた',bg:C.green},
       {v:'🥡 昼休み\n少し',bg:C.amber},
-      {v:'😞 昼休み\n取れなかった',bg:C.red},
+      {v:'😞 昼休み\nした（ほぼ休めず）',bg:C.red},
     ];
     gh.forEach((h,ci) => {
       const addr = XLSX.utils.encode_cell({r:r2,c:ci});
@@ -3164,7 +3579,7 @@ function openYdayModal() {
   const ywrap = document.getElementById('ylunch-cat-wrap');
   if (ywrap) ywrap.style.display = 'none';
   document.querySelectorAll('#ylunch-cat-grid .cat-btn').forEach(b => b.className='cat-btn');
-  ['ok','half','ng'].forEach(x => { document.getElementById('ylb-'+x).className='lunch-btn'; });
+  ['ok','10','20','ng'].forEach(x => { const b=document.getElementById('ylb-'+x); if(b) b.className='lunch-btn'; });
   ['body','mind'].forEach(type =>
     ['great','ok','hard','limit'].forEach(x => {
       const b = document.getElementById(`ymb-${type}-${x}`); if(b) b.className='mood-btn';
@@ -3208,12 +3623,6 @@ function updateYdaySelectedLabel() {
   el.textContent = `📅 選択中：${d.getFullYear()}年${d.getMonth()+1}月${d.getDate()}日（${days[d.getDay()]}）`;
 }
 
-function selYLunch(t) {
-  ydayLunch = t;
-  ['ok','half','ng'].forEach(x => {
-    document.getElementById('ylb-'+x).className = 'lunch-btn' + (x===t?' '+t:'');
-  });
-}
 function selYMood(type, val) {
   if (type === 'body') ydayMood = val;
   else ydayMindMood = val;
@@ -3235,7 +3644,7 @@ async function saveYday() {
   }
 
   // 昼休みの状況に応じて時間外勤務を自動加算、yステッパーの値も加算
-  const lunchOtY = ydayLunch === 'ng' ? 45 : ydayLunch === 'half' ? 20 : 0;
+  const lunchOtY = ydayLunch==='ng'?40 : ydayLunch==='20'?20 : ydayLunch==='10'?10 : 0;
   const stepOtY = step.y.h * 60 + step.y.m;
   const totalOtY = lunchOtY + stepOtY;
 
@@ -3265,7 +3674,7 @@ async function saveYday() {
       if(b) b.className = 'mood-btn';
     })
   );
-  ['ok','half','ng'].forEach(x => { document.getElementById('ylb-'+x).className='lunch-btn'; });
+  ['ok','10','20','ng'].forEach(x => { const b=document.getElementById('ylb-'+x); if(b) b.className='lunch-btn'; });
   closeM('modal-yday');
 }
 
@@ -3323,48 +3732,57 @@ async function insertSampleData() {
   ];
 
   const sampleDaily = [
-    {date:'2026-03-05',mood:'hard',lunch:'half',ot:30},
-    {date:'2026-03-06',mood:'ok',lunch:'ok',ot:0},
-    {date:'2026-03-07',mood:'hard',lunch:'ng',ot:90},
-    {date:'2026-03-10',mood:'ok',lunch:'half',ot:0},
-    {date:'2026-03-11',mood:'hard',lunch:'ng',ot:60},
-    {date:'2026-03-12',mood:'limit',lunch:'ng',ot:30},
-    {date:'2026-03-13',mood:'ok',lunch:'half',ot:0},
-    {date:'2026-03-14',mood:'hard',lunch:'ng',ot:120},
-    {date:'2026-03-17',mood:'ok',lunch:'ok',ot:0},
-    {date:'2026-03-18',mood:'hard',lunch:'ng',ot:120},
-    {date:'2026-03-19',mood:'ok',lunch:'half',ot:0},
-    {date:'2026-03-24',mood:'great',lunch:'ok',ot:0},
-    {date:'2026-03-25',mood:'ok',lunch:'ok',ot:0},
-    {date:'2026-03-26',mood:'hard',lunch:'ng',ot:90},
-    {date:'2026-03-27',mood:'ok',lunch:'half',ot:30},
-    {date:'2026-03-28',mood:'great',lunch:'ok',ot:0},
-    {date:'2026-04-03',mood:'ok',lunch:'half',ot:60},
-    {date:'2026-04-04',mood:'ok',lunch:'ok',ot:0},
-    {date:'2026-04-07',mood:'hard',lunch:'ng',ot:120},
-    {date:'2026-04-08',mood:'hard',lunch:'ng',ot:90},
-    {date:'2026-04-09',mood:'ok',lunch:'half',ot:0},
-    {date:'2026-04-10',mood:'ok',lunch:'ok',ot:0},
-    {date:'2026-04-11',mood:'hard',lunch:'ng',ot:60},
-    {date:'2026-04-14',mood:'great',lunch:'ok',ot:0},
-    {date:'2026-04-15',mood:'hard',lunch:'ng',ot:120},
-    {date:'2026-04-16',mood:'ok',lunch:'half',ot:0},
-    {date:'2026-04-17',mood:'hard',lunch:'ng',ot:90},
-    {date:'2026-04-18',mood:'ok',lunch:'half',ot:30},
-    {date:'2026-04-21',mood:'ok',lunch:'ok',ot:0},
-    {date:'2026-04-22',mood:'hard',lunch:'ng',ot:60},
-    {date:'2026-04-23',mood:'ok',lunch:'half',ot:0},
-    {date:'2026-04-24',mood:'great',lunch:'ok',ot:0},
-    {date:'2026-04-25',mood:'limit',lunch:'ng',ot:120},
-    {date:'2026-04-28',mood:'hard',lunch:'ng',ot:90},
-    {date:'2026-04-30',mood:'ok',lunch:'half',ot:30},
-    // 5月26〜29日（今週）
-    {date:'2026-05-26',mood:'ok',lunch:'half',ot:0},
-    {date:'2026-05-27',mood:'hard',lunch:'ng',ot:90},
-    {date:'2026-05-28',mood:'ok',lunch:'ok',ot:60},
-    {date:'2026-05-28',mood:'hard',lunch:'ng',ot:120},
-    {date:'2026-05-29',mood:'ok',lunch:'half',ot:0},
-    {date:'2026-05-29',mood:'hard',lunch:'ng',ot:120},
+    {date:'2026-03-05',mood:'hard',moodBody:'hard',moodMind:'hard',lunch:'10',ot:30},
+    {date:'2026-03-06',mood:'ok',moodBody:'ok',moodMind:'ok',lunch:'ok',ot:0},
+    {date:'2026-03-07',mood:'hard',moodBody:'hard',moodMind:'limit',lunch:'ng',ot:90},
+    {date:'2026-03-10',mood:'ok',moodBody:'ok',moodMind:'ok',lunch:'10',ot:0},
+    {date:'2026-03-11',mood:'hard',moodBody:'hard',moodMind:'hard',lunch:'ng',ot:60},
+    {date:'2026-03-12',mood:'limit',moodBody:'limit',moodMind:'limit',lunch:'ng',ot:30},
+    {date:'2026-03-13',mood:'ok',moodBody:'ok',moodMind:'hard',lunch:'10',ot:0},
+    {date:'2026-03-14',mood:'hard',moodBody:'hard',moodMind:'hard',lunch:'ng',ot:120},
+    {date:'2026-03-17',mood:'ok',moodBody:'great',moodMind:'ok',lunch:'ok',ot:0},
+    {date:'2026-03-18',mood:'hard',moodBody:'hard',moodMind:'hard',lunch:'ng',ot:120},
+    {date:'2026-03-19',mood:'ok',moodBody:'ok',moodMind:'ok',lunch:'10',ot:0},
+    {date:'2026-03-24',mood:'great',moodBody:'great',moodMind:'great',lunch:'ok',ot:0},
+    {date:'2026-03-25',mood:'ok',moodBody:'ok',moodMind:'ok',lunch:'ok',ot:0},
+    {date:'2026-03-26',mood:'hard',moodBody:'hard',moodMind:'hard',lunch:'ng',ot:90},
+    {date:'2026-03-27',mood:'ok',moodBody:'ok',moodMind:'hard',lunch:'10',ot:30},
+    {date:'2026-03-28',mood:'great',moodBody:'great',moodMind:'ok',lunch:'ok',ot:0},
+    {date:'2026-04-03',mood:'ok',moodBody:'ok',moodMind:'ok',lunch:'10',ot:60},
+    {date:'2026-04-04',mood:'ok',moodBody:'ok',moodMind:'great',lunch:'ok',ot:0},
+    {date:'2026-04-07',mood:'hard',moodBody:'hard',moodMind:'hard',lunch:'ng',ot:120},
+    {date:'2026-04-08',mood:'hard',moodBody:'hard',moodMind:'limit',lunch:'ng',ot:90},
+    {date:'2026-04-09',mood:'ok',moodBody:'ok',moodMind:'hard',lunch:'10',ot:0},
+    {date:'2026-04-10',mood:'ok',moodBody:'ok',moodMind:'ok',lunch:'ok',ot:0},
+    {date:'2026-04-11',mood:'hard',moodBody:'hard',moodMind:'hard',lunch:'ng',ot:60},
+    {date:'2026-04-14',mood:'great',moodBody:'great',moodMind:'great',lunch:'ok',ot:0},
+    {date:'2026-04-15',mood:'hard',moodBody:'limit',moodMind:'hard',lunch:'ng',ot:120},
+    {date:'2026-04-16',mood:'ok',moodBody:'ok',moodMind:'ok',lunch:'10',ot:0},
+    {date:'2026-04-17',mood:'hard',moodBody:'hard',moodMind:'hard',lunch:'ng',ot:90},
+    {date:'2026-04-18',mood:'ok',moodBody:'ok',moodMind:'ok',lunch:'20',ot:30},
+    {date:'2026-04-21',mood:'ok',moodBody:'great',moodMind:'ok',lunch:'ok',ot:0},
+    {date:'2026-04-22',mood:'hard',moodBody:'hard',moodMind:'hard',lunch:'ng',ot:60},
+    {date:'2026-04-23',mood:'ok',moodBody:'ok',moodMind:'ok',lunch:'10',ot:0},
+    {date:'2026-04-24',mood:'great',moodBody:'great',moodMind:'great',lunch:'ok',ot:0},
+    {date:'2026-04-25',mood:'limit',moodBody:'limit',moodMind:'limit',lunch:'ng',ot:120},
+    {date:'2026-04-28',mood:'hard',moodBody:'hard',moodMind:'hard',lunch:'ng',ot:90},
+    {date:'2026-04-30',mood:'ok',moodBody:'ok',moodMind:'ok',lunch:'20',ot:30},
+    // 5月分
+    {date:'2026-05-07',mood:'ok',moodBody:'ok',moodMind:'ok',lunch:'ok',ot:30},
+    {date:'2026-05-08',mood:'hard',moodBody:'hard',moodMind:'hard',lunch:'ng',ot:60},
+    {date:'2026-05-12',mood:'ok',moodBody:'ok',moodMind:'ok',lunch:'10',ot:0},
+    {date:'2026-05-13',mood:'great',moodBody:'great',moodMind:'ok',lunch:'ok',ot:0},
+    {date:'2026-05-14',mood:'ok',moodBody:'ok',moodMind:'ok',lunch:'10',ot:30},
+    {date:'2026-05-15',mood:'hard',moodBody:'hard',moodMind:'hard',lunch:'ng',ot:90},
+    {date:'2026-05-19',mood:'ok',moodBody:'ok',moodMind:'great',lunch:'ok',ot:0},
+    {date:'2026-05-20',mood:'ok',moodBody:'ok',moodMind:'ok',lunch:'10',ot:30},
+    {date:'2026-05-21',mood:'ok',moodBody:'great',moodMind:'ok',lunch:'ok',ot:0},
+    {date:'2026-05-22',mood:'ok',moodBody:'ok',moodMind:'ok',lunch:'10',ot:30},
+    {date:'2026-05-23',mood:'ok',moodBody:'ok',moodMind:'hard',lunch:'20',ot:60},
+    {date:'2026-05-26',mood:'ok',moodBody:'ok',moodMind:'ok',lunch:'20',ot:60},
+    {date:'2026-05-27',mood:'hard',moodBody:'hard',moodMind:'hard',lunch:'ng',ot:90},
+    {date:'2026-05-28',mood:'ok',moodBody:'ok',moodMind:'ok',lunch:'ok',ot:60},
+    {date:'2026-05-29',mood:'hard',moodBody:'hard',moodMind:'hard',lunch:'ng',ot:120},
   ];
 
   // タスクをマージ（同じIDは上書きしない）
@@ -3605,6 +4023,426 @@ async function saveDaily() {
 
 
 // =============================================
+// デフォルト勤務時刻設定
+// =============================================
+let defaultLunch = 'ok';
+
+function openWorkDefaultModal() {
+  const start = localStorage.getItem('mamoru_work_start') || '08:00';
+  const end   = localStorage.getItem('mamoru_work_end')   || '16:45';
+  const th    = Number(localStorage.getItem('mamoru_takehome_default') || 0);
+  const lunch = localStorage.getItem('mamoru_default_lunch') || 'ok';
+
+  document.getElementById('default-start-input').value = start;
+  document.getElementById('default-end-input').value   = end;
+
+  // 持ち帰りデフォルトボタン
+  document.querySelectorAll('#default-th-btns .th-btn').forEach(b => b.classList.remove('sel'));
+  const vals = [0,15,30,45,60,90,120,150,180];
+  const idx = vals.indexOf(th);
+  if (idx >= 0) document.querySelectorAll('#default-th-btns .th-btn')[idx].classList.add('sel');
+
+  // 昼休みデフォルト
+  selDefaultLunch(lunch);
+  openM('modal-work-default');
+}
+
+function selDefaultTh(min) {
+  document.querySelectorAll('#default-th-btns .th-btn').forEach(b => b.classList.remove('sel'));
+  const vals = [0,15,30,45,60,90,120,150,180];
+  const idx = vals.indexOf(min);
+  if (idx >= 0) document.querySelectorAll('#default-th-btns .th-btn')[idx].classList.add('sel');
+}
+
+function selDefaultLunch(t) {
+  defaultLunch = t;
+  ['ok','10','20','ng'].forEach(x => {
+    const b = document.getElementById('dlb-'+x);
+    if (b) b.className = 'lunch-btn' + (x===t?' '+t:'');
+  });
+}
+
+function saveWorkDefault() {
+  const start = document.getElementById('default-start-input').value;
+  const end   = document.getElementById('default-end-input').value;
+  const selTh = document.querySelector('#default-th-btns .th-btn.sel');
+  const thVal = selTh ? [0,15,30,45,60,90,120,150,180][[...document.querySelectorAll('#default-th-btns .th-btn')].indexOf(selTh)] : 0;
+
+  localStorage.setItem('mamoru_work_start', start);
+  localStorage.setItem('mamoru_work_end', end);
+  localStorage.setItem('mamoru_takehome_default', thVal);
+  localStorage.setItem('mamoru_default_lunch', defaultLunch);
+
+  closeM('modal-work-default');
+  initTodayOtUI();
+  showSync('✅ デフォルト設定を保存しました');
+}
+
+// =============================================
+// 23:50 自動記録
+// =============================================
+function scheduleAutoRecord() {
+  const now = new Date();
+  const target = new Date(now.getFullYear(), now.getMonth(), now.getDate(), 23, 50, 0);
+  const diff = target - now;
+  if (diff <= 0) return; // すでに23:50を過ぎている場合はスキップ
+
+  setTimeout(async () => {
+    const td = todayStr();
+    const daily = JSON.parse(localStorage.getItem('mamoru_daily') || '[]');
+    const existing = daily.find(d => d.date === td);
+
+    // 今日すでに記録がある場合はスキップ
+    if (existing && (existing.ot > 0 || existing.moodBody || existing.lunch)) return;
+
+    // デフォルト設定から自動計算
+    const startDefault = localStorage.getItem('mamoru_work_start') || '08:00';
+    const endDefault   = localStorage.getItem('mamoru_work_end')   || '16:45';
+    const thDefault    = Number(localStorage.getItem('mamoru_takehome_default') || 0);
+    const lunchDefault = localStorage.getItem('mamoru_default_lunch') || 'ok';
+
+    const [sh, sm] = startDefault.split(':').map(Number);
+    const [eh, em] = endDefault.split(':').map(Number);
+    const workMin = (eh*60+em) - (sh*60+sm);
+    const autoSchoolOt = Math.max(0, workMin - FIXED_WORK_MIN);
+    const autoLunchOt  = lunchDefault==='ng'?45 : lunchDefault==='20'?30 : lunchDefault==='10'?15 : 0;
+    const autoTotal    = autoSchoolOt + thDefault + autoLunchOt;
+
+    const record = {
+      date: td,
+      moodBody: '', moodMind: '', mood: '',
+      lunch: lunchDefault,
+      schoolOt: autoSchoolOt,
+      takehome: thDefault,
+      ot: autoTotal,
+      memo: '（デフォルト設定から自動記録）',
+      autoRecorded: true,
+    };
+
+    const idx = daily.findIndex(d => d.date === td);
+    if (idx >= 0) daily[idx] = record; else daily.push(record);
+    localStorage.setItem('mamoru_daily', JSON.stringify(daily));
+
+    try {
+      await apiPost({ action: 'saveDaily', data: record });
+    } catch(e) {}
+
+    showSync('📋 今日の記録をデフォルト値で自動保存しました');
+  }, diff);
+}
+
+// =============================================
+// 休日・非出勤日管理
+// =============================================
+function isWeekend(dateStr) {
+  const d = new Date(dateStr + 'T00:00:00');
+  const dow = d.getDay();
+  return dow === 0 || dow === 6;
+}
+
+function isHoliday(dateStr) {
+  const holidays = JSON.parse(localStorage.getItem('mamoru_holidays') || '[]');
+  return holidays.includes(dateStr);
+}
+
+function isNonWorkday(dateStr) {
+  return isWeekend(dateStr) || isHoliday(dateStr);
+}
+
+function setHolidayDate(when) {
+  const d = new Date();
+  if (when === 'tomorrow') d.setDate(d.getDate() + 1);
+  const dateStr = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  const holidays = JSON.parse(localStorage.getItem('mamoru_holidays') || '[]');
+  if (!holidays.includes(dateStr)) holidays.push(dateStr);
+  localStorage.setItem('mamoru_holidays', JSON.stringify(holidays));
+  if (when === 'today') {
+    updateHolidayUI();
+    showSync(`✅ 今日（${d.getMonth()+1}/${d.getDate()}）を休日に設定しました`);
+  } else {
+    showSync(`✅ 明日（${d.getMonth()+1}/${d.getDate()}）を休日に設定しました`);
+  }
+}
+
+function confirmHoliday(isYes) {
+  if (isYes) {
+    const td = todayStr();
+    const holidays = JSON.parse(localStorage.getItem('mamoru_holidays') || '[]');
+    if (!holidays.includes(td)) holidays.push(td);
+    localStorage.setItem('mamoru_holidays', JSON.stringify(holidays));
+  }
+  updateHolidayUI();
+}
+
+function toggleCorrectWrap() {
+  const w = document.getElementById('correct-wrap');
+  if (w) w.style.display = w.style.display === 'none' ? 'block' : 'none';
+}
+
+function cancelHolidayDate(when) {
+  const d = new Date();
+  if (when === 'tomorrow') d.setDate(d.getDate() + 1);
+  const dateStr = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+  const holidays = JSON.parse(localStorage.getItem('mamoru_holidays') || '[]');
+  localStorage.setItem('mamoru_holidays', JSON.stringify(holidays.filter(h => h !== dateStr)));
+  if (when === 'today') {
+    updateHolidayUI();
+    showSync(`✅ 今日（${d.getMonth()+1}/${d.getDate()}）を出勤日に戻しました`);
+  } else {
+    showSync(`✅ 明日（${d.getMonth()+1}/${d.getDate()}）を出勤日に戻しました`);
+  }
+  const w = document.getElementById('correct-wrap');
+  if (w) w.style.display = 'none';
+}
+
+function cancelHoliday() {
+  cancelHolidayDate('today');
+}
+
+function showHolidayBanner(text) {
+  const banner = document.getElementById('holiday-banner');
+  const bannerText = document.getElementById('holiday-banner-text');
+  if (banner) banner.style.display = 'block';
+  if (bannerText) bannerText.textContent = text;
+}
+
+// updateHolidayUI（下に定義）
+function updateHolidayUI() {
+  const td = todayStr();
+  const weekend = isWeekend(td);
+  const holiday = isHoliday(td);
+
+  const banner       = document.getElementById('holiday-banner');
+  const weekdayWrap  = document.getElementById('holiday-btn-wrap-weekday');
+  const workdayOnly  = document.getElementById('workday-only-wrap');
+  const correctWrap  = document.getElementById('correct-wrap');
+
+  if (!banner) return;
+
+  if (weekend || holiday) {
+    // 休日：バナーを表示・平日ボタンを非表示
+    banner.style.display = 'block';
+    const bannerText = document.getElementById('holiday-banner-text');
+    if (bannerText) bannerText.textContent = weekend ? '🏖️ 今日は休日です（土日）' : '🏖️ 今日は休日です';
+    if (weekdayWrap) weekdayWrap.style.display = 'none';
+    if (workdayOnly) workdayOnly.style.display = 'none';
+    schoolOtMin = 0; updateTodayOtSummary();
+  } else {
+    // 平日：バナーを非表示・平日ボタンを表示
+    banner.style.display = 'none';
+    if (weekdayWrap) weekdayWrap.style.display = 'flex';
+    if (workdayOnly) workdayOnly.style.display = 'block';
+    if (correctWrap) correctWrap.style.display = 'none';
+  }
+
+  // 明日ボタンの点灯状態
+  const tomorrow = new Date(); tomorrow.setDate(tomorrow.getDate()+1);
+  const tomorrowStr = `${tomorrow.getFullYear()}-${pad(tomorrow.getMonth()+1)}-${pad(tomorrow.getDate())}`;
+  [document.getElementById('btn-holiday-tomorrow'), document.getElementById('btn-holiday-tomorrow-banner')].forEach(btn => {
+    if (!btn) return;
+    if (isHoliday(tomorrowStr)) {
+      btn.style.background = 'var(--blue-l)'; btn.style.color = 'var(--blue)'; btn.style.borderColor = '#93C5FD';
+      btn.textContent = '✅ 明日は休日設定済み';
+    } else {
+      btn.style.background = ''; btn.style.color = ''; btn.style.borderColor = '';
+      btn.textContent = btn.id === 'btn-holiday-tomorrow-banner' ? '🏖️ 明日も休日にする' : '🏖️ 明日は休日にする';
+    }
+  });
+}
+
+// =============================================
+// 翌日起動時の自動記録（昨日分）
+// =============================================
+function checkYesterdayAutoRecord() {
+  const yday = new Date(); yday.setDate(yday.getDate() - 1);
+  const ydayStr = `${yday.getFullYear()}-${pad(yday.getMonth()+1)}-${pad(yday.getDate())}`;
+
+  // 昨日が非出勤日ならスキップ
+  if (isNonWorkday(ydayStr)) return;
+
+  // 昨日の記録があるかチェック
+  const daily = JSON.parse(localStorage.getItem('mamoru_daily') || '[]');
+  const existing = daily.find(d => d.date === ydayStr);
+  if (existing && (existing.ot > 0 || existing.moodBody || existing.lunch)) return;
+
+  // デフォルト値で自動保存
+  const startDefault = localStorage.getItem('mamoru_work_start') || '08:00';
+  const endDefault   = localStorage.getItem('mamoru_work_end')   || '16:45';
+  const thDefault    = Number(localStorage.getItem('mamoru_takehome_default') || 0);
+  const lunchDefault = localStorage.getItem('mamoru_default_lunch') || 'ok';
+
+  const [sh, sm] = startDefault.split(':').map(Number);
+  const [eh, em] = endDefault.split(':').map(Number);
+  const workMin = (eh*60+em) - (sh*60+sm);
+  const autoSchoolOt = Math.max(0, workMin - FIXED_WORK_MIN);
+  const autoLunchOt  = lunchDefault==='ng'?45 : lunchDefault==='20'?30 : lunchDefault==='10'?15 : 0;
+  const autoTotal    = autoSchoolOt + thDefault + autoLunchOt;
+
+  const record = {
+    date: ydayStr,
+    moodBody: '', moodMind: '', mood: '',
+    lunch: lunchDefault,
+    schoolOt: autoSchoolOt,
+    takehome: thDefault,
+    ot: autoTotal,
+    memo: '（デフォルト設定から自動記録）',
+    autoRecorded: true,
+  };
+
+  const idx = daily.findIndex(d => d.date === ydayStr);
+  if (idx >= 0) daily[idx] = record; else daily.push(record);
+  localStorage.setItem('mamoru_daily', JSON.stringify(daily));
+
+  apiPost({ action: 'saveDaily', data: record }).catch(()=>{});
+
+  const days = ['日','月','火','水','木','金','土'];
+  showSync(`📋 ${yday.getMonth()+1}月${yday.getDate()}日（${days[yday.getDay()]}）の記録をデフォルト値で自動保存しました`);
+}
+
+// =============================================
+// デフォルト勤務時刻設定（終わり）
+// =============================================
+
+// =============================================
+// 時間外在校等時間・持ち帰り業務
+// =============================================
+let schoolOtMin = 0;    // 時間外在校等時間（分）
+let takehomeMin = 0;    // 持ち帰り業務（分）
+let startTotalMin = 8 * 60;      // 勤務開始（分換算）
+let endTotalMin   = 16 * 60 + 45; // 退勤時刻（分換算）
+
+const FIXED_WORK_MIN = 7 * 60 + 45; // 所定勤務時間 7時間45分（公立標準）
+
+function timeToDisp(totalMin) {
+  const h = Math.floor(totalMin / 60);
+  const m = totalMin % 60;
+  return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}`;
+}
+
+function initTodayOtUI() {
+  const startDefault = localStorage.getItem('mamoru_work_start') || '08:00';
+  const endDefault   = localStorage.getItem('mamoru_work_end')   || '16:45';
+  const thDefault    = Number(localStorage.getItem('mamoru_takehome_default') || 0);
+
+  const [sh, sm] = startDefault.split(':').map(Number);
+  const [eh, em] = endDefault.split(':').map(Number);
+  startTotalMin = sh * 60 + sm;
+  endTotalMin   = eh * 60 + em;
+
+  updateTimeDisp();
+
+  // 休日の場合はschoolOtMinを0にする
+  if (isNonWorkday(todayStr())) {
+    schoolOtMin = 0;
+    updateTodayOtSummary();
+  } else {
+    calcSchoolOt();
+  }
+
+  if (thDefault > 0) selTakehome(thDefault);
+  else selTakehome(0);
+}
+
+function adjTime(type, deltMin) {
+  if (type === 'start') {
+    startTotalMin = Math.max(0, Math.min(23*60+59, startTotalMin + deltMin));
+  } else {
+    endTotalMin = Math.max(0, Math.min(23*60+59, endTotalMin + deltMin));
+  }
+  updateTimeDisp();
+  calcSchoolOt();
+}
+
+function updateTimeDisp() {
+  const ds = document.getElementById('disp-start');
+  const de = document.getElementById('disp-end');
+  if (ds) ds.textContent = timeToDisp(startTotalMin);
+  if (de) de.textContent = timeToDisp(endTotalMin);
+}
+
+function calcSchoolOt() {
+  const workMin = endTotalMin - startTotalMin;
+  schoolOtMin = Math.max(0, workMin - FIXED_WORK_MIN);
+
+  const resultEl = document.getElementById('school-ot-result');
+  const manualEl = document.getElementById('school-ot-manual');
+  if (schoolOtMin > 0) {
+    const h = Math.floor(schoolOtMin/60), m = schoolOtMin%60;
+    const str = `${h>0?h+'時間':''}${m>0?m+'分':''}`;
+    if (resultEl) { resultEl.textContent = `所定勤務時間を ${str} 超過`; resultEl.style.color = 'var(--amber)'; }
+    if (manualEl) manualEl.textContent = str;
+  } else {
+    if (resultEl) { resultEl.textContent = '時間内退勤（0分）'; resultEl.style.color = 'var(--text-s)'; }
+    if (manualEl) manualEl.textContent = '0分';
+  }
+  updateTodayOtSummary();
+}
+
+function adjustSchoolOt(delta) {
+  schoolOtMin = Math.max(0, schoolOtMin + delta);
+  const manualEl = document.getElementById('school-ot-manual');
+  const h = Math.floor(schoolOtMin/60), m = schoolOtMin%60;
+  manualEl.textContent = schoolOtMin > 0 ? `${h>0?h+'時間':''}${m>0?m+'分':''}` : '0分';
+  updateTodayOtSummary();
+}
+
+function selTakehome(min) {
+  takehomeMin = min;
+  document.querySelectorAll('.th-btn').forEach(b => b.classList.remove('sel'));
+  document.getElementById('takehome-custom-wrap').style.display = 'none';
+  const btns = document.querySelectorAll('#takehome-btns .th-btn');
+  const vals = [0,15,30,45,60,75,90,105,120,150,180,210,240,300];
+  const idx = vals.indexOf(min);
+  if (idx >= 0) btns[idx].classList.add('sel');
+  const resultEl = document.getElementById('takehome-result');
+  if (min > 0) {
+    const h = Math.floor(min/60), m = min%60;
+    resultEl.textContent = `持ち帰り業務：${h>0?h+'時間':''}${m>0?m+'分':''}`;
+  } else {
+    resultEl.textContent = '';
+  }
+  updateTodayOtSummary();
+}
+
+function selTakehomeCustom() {
+  document.querySelectorAll('.th-btn').forEach(b => b.classList.remove('sel'));
+  document.getElementById('th-btn-custom').classList.add('sel');
+  document.getElementById('takehome-custom-wrap').style.display = 'block';
+  document.getElementById('takehome-custom-input').focus();
+}
+
+function onTakehomeCustomInput() {
+  const v = Number(document.getElementById('takehome-custom-input').value);
+  if (!isNaN(v) && v > 0) {
+    takehomeMin = Math.round(v * 60);
+    const resultEl = document.getElementById('takehome-result');
+    resultEl.textContent = `持ち帰り業務：${v}時間`;
+    updateTodayOtSummary();
+  }
+}
+
+function updateTodayOtSummary() {
+  const summaryEl = document.getElementById('today-ot-summary');
+  if (!summaryEl) return;
+  const total = schoolOtMin + takehomeMin;
+  if (total > 0 || schoolOtMin > 0 || takehomeMin > 0) {
+    summaryEl.style.display = 'block';
+    const fmt = m => m > 0 ? `${Math.floor(m/60)>0?Math.floor(m/60)+'時間':''}${m%60>0?m%60+'分':'0分'}` : '0分';
+    document.getElementById('summary-school').textContent    = fmt(schoolOtMin);
+    document.getElementById('summary-takehome').textContent  = fmt(takehomeMin);
+    document.getElementById('summary-total').textContent     = fmt(total);
+  } else {
+    summaryEl.style.display = 'none';
+  }
+}
+
+function fmtOtMin(m) {
+  if (!m || m <= 0) return '0分';
+  const h = Math.floor(m/60), min = m%60;
+  return `${h>0?h+'時間':''}${min>0?min+'分':''}`;
+}
+
+// =============================================
 // 昼休み未記録の自動補完
 // =============================================
 async function autoFillLunchMemo() {
@@ -3613,7 +4451,7 @@ async function autoFillLunchMemo() {
   let updated = false;
 
   daily.forEach(d => {
-    // 昨日以前の記録で「昼休み=取れなかった」かつ「メモが空」の場合
+    // 昨日以前の記録で「昼休み=した（ほぼ休めず）」かつ「メモが空」の場合
     if (d.date && d.date < today && d.lunch === 'ng' && !d.memo) {
       d.memo = '昼休みに児童の提出物チェックをした';
       updated = true;
@@ -3652,6 +4490,9 @@ history.pushState({ modal: true }, '');
 loadTasks();
 setTimeout(renderTodayAchieve, 500);
 setTimeout(updateHideFarUI, 100);
+setTimeout(initTodayOtUI, 200);
+setTimeout(updateHolidayUI, 100);
+setTimeout(checkYesterdayAutoRecord, 1000);
 setTimeout(autoFillLunchMemo, 500);
 </script>
 </body>
