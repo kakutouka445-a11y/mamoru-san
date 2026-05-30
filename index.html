@@ -926,7 +926,13 @@ textarea{resize:none;height:56px;line-height:1.5;}
     <div class="modal-title">📖 アプリの使い方</div>
 
     <div style="background:var(--green-l);border-left:4px solid var(--green);border-radius:0 var(--radius-s) var(--radius-s) 0;padding:12px 14px;margin-bottom:16px;font-size:13px;color:var(--green-d);line-height:1.8;">
-      🌿 <strong>私のタスク まもるさん</strong>は、日々の業務・体調を記録して、「自分を守る」ためのアプリです。あなたの働き方をあなた自身が把握できるようにします。また、万が一の時に、記録を5秒でまとめて提出することもできます。もちろん、日々のタスクをもれなく行い、「締切を守る」ためにも役立つ教職員専用アプリです。
+      🌿 <strong>私のタスク まもるさん</strong><br>
+      教職員のための<br>
+      ✅ タスク管理<br>
+      ✅ 業務記録<br>
+      ✅ 体調記録<br>
+      アプリです。<br>
+      日々の働き方を見える化し、自分を守ります。
     </div>
 
     <div class="howto-item">
@@ -1309,16 +1315,25 @@ function fmtDate(){const d=new Date(),days=['日','月','火','水','木','金',
 // =============================================
 async function loadTasks() {
   try {
-    showSync('タスクを読み込み中...');
-    const data = await apiGet('getTasks');
-    if (data.tasks) {
-      tasks = data.tasks;
-      renderTasks();
-      showSync('✅ 読み込み完了');
+    showSync('データを読み込み中...');
+    // タスクとdailyデータを並行して読み込む
+    const [taskData, dailyData] = await Promise.all([
+      apiGet('getTasks'),
+      apiGet('getDaily'),
+    ]);
+    if (taskData.tasks) {
+      tasks = taskData.tasks;
+      saveLocalTasks();
     }
+    if (dailyData.daily) {
+      localStorage.setItem('mamoru_daily', JSON.stringify(dailyData.daily));
+    }
+    renderTasks();
+    renderWeekContent();
+    renderMonthContent();
+    showSync('✅ 読み込み完了');
   } catch(e) {
     showSync('⚠ オフラインモード', true);
-    // オフライン時はローカルデータを使う
     loadLocalTasks();
   }
 }
