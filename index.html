@@ -345,7 +345,10 @@ textarea{resize:none;height:56px;line-height:1.5;}
 <div class="screen active" id="screen-home">
   <div class="header">
     <div class="header-row">
-      <div class="header-title">🌿 <span style="font-size:11px;font-weight:400;">私のタスク</span>　<strong>まもるさん</strong></div>
+      <div class="header-title" style="display:flex;align-items:center;gap:6px;">
+        <img src="https://kakutouka445-a11y.github.io/mamoru-san/mamorusanpng1.png" alt="まもるさん" style="width:28px;height:28px;object-fit:contain;">
+        <span><span style="font-size:11px;font-weight:400;">私のタスク</span>　<strong>まもるさん</strong></span>
+      </div>
       <div style="display:flex;align-items:center;gap:8px;">
         <button class="settings-btn" onclick="openM('modal-settings')" title="設定"><i class="ti ti-settings"></i></button>
         <div class="date-badge" id="today-badge"></div>
@@ -515,7 +518,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <button class="lunch-btn" id="lb-ok" onclick="selLunch('ok')">✅<br>なし</button>
       <button class="lunch-btn" id="lb-10" onclick="selLunch('10')">⚠️<br>15分</button>
       <button class="lunch-btn" id="lb-20" onclick="selLunch('20')">😓<br>30分</button>
-      <button class="lunch-btn" id="lb-ng" onclick="selLunch('ng')">🚨<br>40分</button>
+      <button class="lunch-btn" id="lb-ng" onclick="selLunch('ng')">🚨<br>45分</button>
     </div>
     <!-- 昼休み時間外：カテゴリ選択（した（ほぼ休めず）・少しの時のみ表示） -->
     <div id="lunch-cat-wrap" class="hidden" style="margin-bottom:8px;">
@@ -777,8 +780,8 @@ textarea{resize:none;height:56px;line-height:1.5;}
     <div id="task-section">
       <div class="field-label">締切日 <span style="font-weight:400;color:var(--text-s);">（任意）</span></div>
       <input type="date" id="dl-input">
-      <div class="field-label">やること</div>
-      <input type="text" id="sub-single" placeholder="例：水泳指導計画・備品発注" style="margin-bottom:8px;">
+      <div style="font-size:26px;font-weight:600;color:var(--text-s);margin-bottom:6px;">やること</div>
+      <textarea id="sub-single" placeholder="例：水泳指導計画・備品発注" style="width:100%;font-size:22px;border:1.5px solid var(--border);border-radius:var(--radius-s);padding:10px 12px;background:var(--gray-l);color:var(--text);outline:none;resize:none;height:80px;line-height:1.5;margin-bottom:8px;"></textarea>
       <button class="btn-primary" onclick="addTask()">追加する</button>
     </div>
     <!-- 過去のタスク -->
@@ -1006,24 +1009,34 @@ textarea{resize:none;height:56px;line-height:1.5;}
     <input type="time" id="default-end-input" style="width:100%;font-size:16px;border:1px solid var(--border);border-radius:var(--radius-s);padding:8px 12px;background:var(--gray-l);color:var(--text);outline:none;margin-bottom:14px;">
 
     <div class="field-label">持ち帰り業務のデフォルト</div>
-    <div id="default-th-btns" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;">
-      <button class="th-btn" onclick="selDefaultTh(0)">なし</button>
-      <button class="th-btn" onclick="selDefaultTh(15)">15分</button>
-      <button class="th-btn" onclick="selDefaultTh(30)">30分</button>
-      <button class="th-btn" onclick="selDefaultTh(45)">45分</button>
-      <button class="th-btn" onclick="selDefaultTh(60)">1時間</button>
-      <button class="th-btn" onclick="selDefaultTh(90)">1時間30分</button>
-      <button class="th-btn" onclick="selDefaultTh(120)">2時間</button>
-      <button class="th-btn" onclick="selDefaultTh(150)">2時間30分</button>
-      <button class="th-btn" onclick="selDefaultTh(180)">3時間</button>
+    <div class="stepper-box" style="margin-bottom:16px;">
+      <div class="stepper-row">
+        <div class="stepper-label">時間</div>
+        <div class="stepper-ctrl">
+          <button class="stepper-btn" onclick="chTime('dt','h',-1)">－</button>
+          <div class="stepper-val" id="dt-h">0</div>
+          <button class="stepper-btn" onclick="chTime('dt','h',1)">＋</button>
+          <div class="stepper-unit">時間</div>
+        </div>
+      </div>
+      <div class="stepper-row">
+        <div class="stepper-label">分</div>
+        <div class="stepper-ctrl">
+          <button class="stepper-btn" onclick="chTime('dt','m',-1)">－</button>
+          <div class="stepper-val" id="dt-m">0</div>
+          <button class="stepper-btn" onclick="chTime('dt','m',1)">＋</button>
+          <div class="stepper-unit">分（10分単位）</div>
+        </div>
+      </div>
+      <div class="total-box"><div class="total-label">合計</div><div class="total-val" id="dt-total">—</div></div>
     </div>
 
-    <div class="field-label">昼休みのデフォルト</div>
+    <div class="field-label">昼休み業務時間のデフォルト</div>
     <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;" id="default-lunch-btns">
       <button class="lunch-btn" id="dlb-ok" onclick="selDefaultLunch('ok')">✅<br>なし</button>
       <button class="lunch-btn" id="dlb-10" onclick="selDefaultLunch('10')">⚠️<br>15分</button>
       <button class="lunch-btn" id="dlb-20" onclick="selDefaultLunch('20')">😓<br>30分</button>
-      <button class="lunch-btn" id="dlb-ng" onclick="selDefaultLunch('ng')">🚨<br>40分</button>
+      <button class="lunch-btn" id="dlb-ng" onclick="selDefaultLunch('ng')">🚨<br>45分</button>
     </div>
 
     <button class="btn-primary" onclick="saveWorkDefault()">保存する</button>
@@ -1168,6 +1181,68 @@ textarea{resize:none;height:56px;line-height:1.5;}
           <b>デフォルト勤務時刻の設定</b>：勤務開始・退勤・持ち帰り業務のデフォルト値を設定できます。<br>
           <b>Excelに出力</b>：日次記録・月次まとめ・声を届けるを.xlsxで保存。管理職報告・相談資料に。<br>
           <b>スプレッドシートで確認</b>：データは自動同期中。将来の「職場のタスク みえるさん」連携の土台。
+        </div>
+      </div>
+    </div>
+
+    <div class="howto-item" style="border-bottom:none;padding-bottom:0;">
+      <div class="howto-icon">🧮</div>
+      <div style="flex:1;min-width:0;">
+        <div class="howto-title">時間外勤務の自動計算のしくみ</div>
+        <div class="howto-desc" style="margin-bottom:10px;">
+          「ふりかえり」画面で入力した内容をもとに、<strong>時間外勤務の合計</strong>を自動で計算します。
+        </div>
+
+        <!-- 図：計算の流れ -->
+        <div style="background:var(--gray-l);border-radius:var(--radius);padding:12px;margin-bottom:10px;">
+
+          <!-- ① 時間外在校等時間 -->
+          <div style="font-size:11px;font-weight:700;color:var(--text-s);margin-bottom:5px;">① 時間外在校等時間</div>
+          <div style="display:flex;align-items:center;gap:4px;margin-bottom:4px;flex-wrap:wrap;">
+            <div style="background:#DBEAFE;border:1px solid #93C5FD;border-radius:6px;padding:4px 8px;font-size:11px;font-weight:600;color:#1E3A8A;white-space:nowrap;">退勤時刻</div>
+            <div style="font-size:13px;color:var(--text-s);">－</div>
+            <div style="background:#DBEAFE;border:1px solid #93C5FD;border-radius:6px;padding:4px 8px;font-size:11px;font-weight:600;color:#1E3A8A;white-space:nowrap;">勤務開始時刻</div>
+            <div style="font-size:13px;color:var(--text-s);">－</div>
+            <div style="background:var(--green-l);border:1px solid var(--green-b);border-radius:6px;padding:4px 8px;font-size:11px;font-weight:600;color:var(--green-d);white-space:nowrap;">7時間45分</div>
+          </div>
+          <div style="font-size:10px;color:var(--text-s);margin-bottom:2px;">※ 7時間45分＝公立学校の所定勤務時間</div>
+          <div style="font-size:10px;color:var(--text-s);margin-bottom:8px;">例）8:00出勤 → 18:30退勤 なら　10時間30分 － 7時間45分 ＝ <strong style="color:var(--amber);">2時間45分</strong></div>
+
+          <!-- 区切り -->
+          <div style="border-top:1px dashed var(--border);margin-bottom:8px;"></div>
+
+          <!-- ② 持ち帰り業務 -->
+          <div style="font-size:11px;font-weight:700;color:var(--text-s);margin-bottom:4px;">② 持ち帰り業務</div>
+          <div style="display:flex;align-items:center;gap:4px;margin-bottom:8px;">
+            <div style="background:#F3E8FF;border:1px solid #D8B4FE;border-radius:6px;padding:4px 8px;font-size:11px;font-weight:600;color:#6D28D9;white-space:nowrap;">ステッパーで入力した時間</div>
+            <div style="font-size:10px;color:var(--text-s);">（自宅での仕事）</div>
+          </div>
+
+          <!-- 区切り -->
+          <div style="border-top:1px dashed var(--border);margin-bottom:8px;"></div>
+
+          <!-- ③ 昼休み -->
+          <div style="font-size:11px;font-weight:700;color:var(--text-s);margin-bottom:4px;">③ 昼休みの業務</div>
+          <div style="display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap;">
+            <div style="background:#EAF3DE;border:1px solid #97C459;border-radius:6px;padding:3px 7px;font-size:10px;font-weight:600;color:#3B6B0C;">✅ なし → ＋0分</div>
+            <div style="background:var(--amber-l);border:1px solid var(--amber-b);border-radius:6px;padding:3px 7px;font-size:10px;font-weight:600;color:#7A4B08;">⚠️ 15分 → ＋15分</div>
+            <div style="background:var(--amber-l);border:1px solid var(--amber-b);border-radius:6px;padding:3px 7px;font-size:10px;font-weight:600;color:#7A4B08;">😓 30分 → ＋30分</div>
+            <div style="background:var(--red-l);border:1px solid #FCA5A5;border-radius:6px;padding:3px 7px;font-size:10px;font-weight:600;color:var(--red);">🚨 45分 → ＋45分</div>
+          </div>
+
+          <!-- 区切り -->
+          <div style="border-top:2px solid var(--green-b);margin-bottom:8px;"></div>
+
+          <!-- 合計 -->
+          <div style="background:var(--green-l);border:1.5px solid var(--green-b);border-radius:var(--radius-s);padding:8px 12px;display:flex;justify-content:space-between;align-items:center;">
+            <div style="font-size:12px;font-weight:700;color:var(--green-d);">📊 今日の時間外勤務合計</div>
+            <div style="font-size:12px;color:var(--green-d);font-weight:700;">① ＋ ② ＋ ③</div>
+          </div>
+        </div>
+
+        <div class="howto-desc">
+          <b>自動セット</b>：「ふりかえり」タブを開くと、設定したデフォルト勤務時刻が自動で入ります。当日の記録が既にある場合は、保存済みの内容が復元されます。<br>
+          <b>手動微調整</b>：時刻のボタンで変えられない細かい分数は「手動微調整」の±10分で調整できます。
         </div>
       </div>
     </div>
@@ -1377,7 +1452,12 @@ textarea{resize:none;height:56px;line-height:1.5;}
 <div class="modal-bg" id="modal-yday" onclick="closeBg('modal-yday',event)">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
-    <div class="modal-title">（忘れていた）記録を保存する</div>
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:16px;">
+      <div class="modal-title" style="margin-bottom:0;">（忘れていた）記録を保存する</div>
+      <button onclick="openWorkDefaultModal()" style="display:flex;align-items:center;gap:4px;background:var(--gray-l);border:1px solid var(--border);border-radius:var(--radius-s);padding:5px 10px;font-size:11px;color:var(--text-s);white-space:nowrap;">
+        <i class="ti ti-settings" style="font-size:12px;"></i>デフォルトを設定
+      </button>
+    </div>
 
     <!-- 日付選択 -->
     <div class="field-label">📅 いつの記録ですか？</div>
@@ -1399,7 +1479,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <button class="lunch-btn" id="ylb-ok" onclick="selYLunch('ok')">✅<br>なし</button>
       <button class="lunch-btn" id="ylb-10" onclick="selYLunch('10')">⚠️<br>15分</button>
       <button class="lunch-btn" id="ylb-20" onclick="selYLunch('20')">😓<br>30分</button>
-      <button class="lunch-btn" id="ylb-ng" onclick="selYLunch('ng')">🚨<br>40分</button>
+      <button class="lunch-btn" id="ylb-ng" onclick="selYLunch('ng')">🚨<br>45分</button>
     </div>
     <!-- 昼休み時間外：カテゴリ選択 -->
     <div id="ylunch-cat-wrap" style="display:none;margin-bottom:12px;">
@@ -1502,7 +1582,7 @@ const CAT_INITIAL = {'分掌':'分','保護者対応':'保','生徒指導':'生'
 let tasks = [];
 let nextId = 1;
 let activeIdx = -1, selTaskId = null;
-const step = {s:{h:0,m:0}, e:{h:0,m:0}, t:{h:0,m:0}, p:{h:0,m:0}, q:{h:0,m:0}, y:{h:0,m:0}, qy:{h:0,m:0}};
+const step = {s:{h:0,m:0}, e:{h:0,m:0}, t:{h:0,m:0}, p:{h:0,m:0}, q:{h:0,m:0}, y:{h:0,m:0}, qy:{h:0,m:0}, dt:{h:0,m:0}};
 let selCatName = null, selCatColor = 'gray';
 let currentMood = {body: null, mind: null}, currentLunch = null;
 
@@ -1531,8 +1611,8 @@ async function loadTasks() {
       localStorage.setItem('mamoru_daily', JSON.stringify(dailyData.daily));
     }
     renderTasks();
-    renderWeekContent();
-    renderMonthContent();
+    renderMatomeWeek();
+    renderMatomeMonth();
     showSync('✅ 読み込み完了');
   } catch(e) {
     showSync('⚠ オフラインモード', true);
@@ -1622,8 +1702,8 @@ async function saveQuickYday() {
     showSync('✅ 記録しました'); showCelebration();
   } catch(e) { showSync('✅ ローカルに記録しました'); showCelebration(); }
 
-  renderWeekContent();
-  renderMonthContent();
+  renderMatomeWeek();
+  renderMatomeMonth();
   resetStep('qy');
   closeM('modal-quick-yday');
 }
@@ -1673,8 +1753,8 @@ async function saveQuick() {
   } catch(e) { showSync('✅ ローカルに記録しました'); showCelebration(); }
 
   renderQuickSaved();
-  renderMonthContent();
-  renderWeekContent();
+  renderMatomeMonth();
+  renderMatomeWeek();
   resetStep('q');
   closeM('modal-quick');
 }
@@ -1915,7 +1995,7 @@ function initDragAndDrop() {
       const rect    = el.getBoundingClientRect();
       const after   = e.clientY >= rect.top + rect.height / 2;
       const [moved] = tasks.splice(fromIdx, 1);
-      const insertAt = toIdx > fromIdx ? (after ? toIdx : toIdx) : (after ? toIdx + 1 : toIdx);
+      const insertAt = toIdx > fromIdx ? (after ? toIdx : toIdx - 1) : (after ? toIdx + 1 : toIdx);
       tasks.splice(insertAt > tasks.length ? tasks.length : insertAt, 0, moved);
       renderTasks();
       saveLocalTasks();
@@ -2027,7 +2107,7 @@ function openEndModal(){
   document.querySelectorAll('#e-when .chip').forEach(c=>c.classList.remove('sel'));
 }
 async function completeTask(){
-  if(!activeIdx) return;
+  if(activeIdx === -1 || activeIdx === null) return;
   const t = tasks.find(t => String(t.id) === String(activeIdx));
   if(!t) return;
   const ts = fmtTime('e');
@@ -2035,7 +2115,7 @@ async function completeTask(){
   t.done = true; t.doneDate = todayStr(); t.pinned = false;
   t.time = (ts||'') + (when ? ' · '+when : '');
   document.getElementById('active-bar').classList.add('hidden');
-  activeIdx = null; closeM('modal-end'); renderTasks(); saveLocalTasks();
+  activeIdx = -1; closeM('modal-end'); renderTasks(); saveLocalTasks();
   try {
     showSync('保存中...');
     await apiPost({ action:'updateTask', data:{id:t.id, done:true, doneDate:t.doneDate, time:t.time, pinned:false} });
@@ -2358,7 +2438,7 @@ function renderMatomeDay() {
   const from7Str = `${from7.getFullYear()}-${pad(from7.getMonth()+1)}-${pad(from7.getDate())}`;
   const day7Tasks = tasks.filter(t => t.doneDate >= from7Str && t.doneDate <= todayStr7);
   el('ms-day-task-done', day7Tasks.length);
-  el('ms-day-tokk', day7Tasks.filter(t=>t.tokk).length || '—');
+  el('ms-day-tokk', day7Tasks.filter(t=>t.tokk).length);
 
   buildCalTo('ms-cal-body-day', 'body');
   buildCalTo('ms-cal-mind-day', 'mind');
@@ -2415,7 +2495,7 @@ function renderMatomeWeek() {
 
   // カテゴリ棒グラフ（今週）
   const thisWeekStart = new Date(monday); thisWeekStart.setDate(monday.getDate());
-  const weekTasks = tasks.filter(t => t.doneDate >= `${thisWeekStart.getFullYear()}-${pad(thisWeekStart.getMonth()+1)}-${pad(thisWeekStart.getDate())}`);
+  const weekTasks = tasks.filter(t => t.doneDate >= `${thisWeekStart.getFullYear()}-${pad(thisWeekStart.getMonth()+1)}-${pad(thisWeekStart.getDate())}` && t.doneDate <= todayStr2);
   renderBar('ms-week-bar', getCatBarData(weekTasks));
 
   // しんどさカレンダー
@@ -2513,7 +2593,7 @@ function selLunch(t){
   currentLunch = t;
   ['ok','10','20','ng'].forEach(x=>{
     const b = document.getElementById('lb-'+x);
-    if(b) b.className='lunch-btn'+(x===t?' '+t:'');
+    const clsMap={'ok':'ok','10':'half','20':'half','ng':'ng'}; if(b) b.className='lunch-btn'+(x===t?' '+(clsMap[t]||t):'');
   });
   const wrap = document.getElementById('lunch-cat-wrap');
   if (wrap) wrap.style.display = (t === 'ok') ? 'none' : 'block';
@@ -2521,7 +2601,7 @@ function selLunch(t){
     currentLunchCat = '';
     document.querySelectorAll('#lunch-cat-grid .cat-btn').forEach(b => b.className='cat-btn');
   }
-  const addMin = t==='ng'?40 : t==='20'?20 : t==='10'?10 : 0;
+  const addMin = t==='ng'?45 : t==='20'?30 : t==='10'?15 : 0;
   const resultEl = document.getElementById('lunch-result');
   if (resultEl) {
     resultEl.textContent = addMin > 0 ? `昼休みに業務：${addMin}分を時間外勤務に加算` : '';
@@ -2543,7 +2623,7 @@ function selYLunch(t) {
   ydayLunch = t;
   ['ok','10','20','ng'].forEach(x => {
     const b = document.getElementById('ylb-'+x);
-    if(b) b.className = 'lunch-btn' + (x===t?' '+t:'');
+    const clsMapY={'ok':'ok','10':'half','20':'half','ng':'ng'}; if(b) b.className = 'lunch-btn' + (x===t?' '+(clsMapY[t]||t):'');
   });
   const wrap = document.getElementById('ylunch-cat-wrap');
   if (!wrap) return;
@@ -2599,7 +2679,7 @@ async function saveDaily(){
     showSync('✅ 今日の記録を保存しました');
     showCelebration();
   } catch(e) { showSync('⚠ オフライン保存', true); showCelebration(); }
-  renderMonthContent();
+  renderMatomeMonth();
 }
 
 // =============================================
@@ -2878,8 +2958,8 @@ function switchSubTab(sub){
     document.getElementById('sc-'+t).classList.toggle('active',t===sub);
   });
   if(sub==='today') { renderTodayAchieve(); initTodayOtUI(); }
-  if(sub==='week')  renderWeekContent();
-  if(sub==='month') renderMonthContent();
+  if(sub==='week')  renderMatomeWeek();
+  if(sub==='month') renderMatomeMonth();
   if(sub==='matome'){
     buildCal('body');
     buildCal('mind');
@@ -3121,7 +3201,7 @@ function doExport(allTasks, daily) {
 
   // 日次記録＋タスク完了をマージして日付でソート
   const moodLabel = {great:'😄 快調', ok:'🙂 まあまあ', hard:'😓 しんどい', limit:'🚨 限界'};
-  const lunchLabel = {ok:'✅ していない', '10':'⚠️ 15分した', '20':'😓 30分した', ng:'🚨 40分した'};
+  const lunchLabel = {ok:'✅ していない', '10':'⚠️ 15分した', '20':'😓 30分した', ng:'🚨 45分した'};
 
   // 日次記録をdate→オブジェクトのマップに
   const dailyMap = {};
@@ -3291,7 +3371,7 @@ function doExport(allTasks, daily) {
       {v:'🍱 昼休み\nしていない',bg:C.green},
       {v:'⚠️ 昼休み\n15分した',bg:C.amber},
       {v:'😓 昼休み\n30分した',bg:C.amber},
-      {v:'🚨 昼休み\n40分した',bg:C.red},
+      {v:'🚨 昼休み\n45分した',bg:C.red},
     ];
     gh.forEach((h,ci) => {
       const addr = XLSX.utils.encode_cell({r:r2,c:ci});
@@ -3521,7 +3601,7 @@ async function saveYday() {
   }
 
   // 昼休みの状況に応じて時間外勤務を自動加算、yステッパーの値も加算
-  const lunchOtY = ydayLunch==='ng'?40 : ydayLunch==='20'?20 : ydayLunch==='10'?10 : 0;
+  const lunchOtY = ydayLunch==='ng'?45 : ydayLunch==='20'?30 : ydayLunch==='10'?15 : 0;
   const stepOtY = step.y.h * 60 + step.y.m;
   const totalOtY = lunchOtY + stepOtY;
 
@@ -3540,9 +3620,9 @@ async function saveYday() {
   try {
     showSync('記録を保存中...');
     await apiPost({ action: 'saveDaily', data: record });
-    showSync('✅ 記録を保存しました');
-  } catch(e) { showSync('✅ ローカルに保存しました'); }
-  renderMonthContent();
+    showSync('✅ 記録を保存しました'); showCelebration();
+  } catch(e) { showSync('✅ ローカルに保存しました'); showCelebration(); }
+  renderMatomeMonth();
   // リセット
   ydayMood = null; ydayMindMood = null; ydayLunch = null;
   ['body','mind'].forEach(type =>
@@ -3873,8 +3953,8 @@ async function deleteSampleData() {
   localStorage.setItem('mamoru_daily', JSON.stringify(filtered));
   const deleted = (before - tasks.length) + (daily.length - filtered.length);
   showSync(`✅ サンプルデータを削除しました（${deleted}件）`);
-  renderMonthContent();
-  renderWeekContent();
+  renderMatomeMonth();
+  renderMatomeWeek();
 }
 
 // =============================================
@@ -3896,37 +3976,32 @@ function openWorkDefaultModal() {
   document.getElementById('default-start-input').value = start;
   document.getElementById('default-end-input').value   = end;
 
-  // 持ち帰りデフォルトボタン
-  document.querySelectorAll('#default-th-btns .th-btn').forEach(b => b.classList.remove('sel'));
-  const vals = [0,15,30,45,60,90,120,150,180];
-  const idx = vals.indexOf(th);
-  if (idx >= 0) document.querySelectorAll('#default-th-btns .th-btn')[idx].classList.add('sel');
+  // 持ち帰りデフォルトをステッパーに反映
+  step.dt.h = Math.floor(th / 60);
+  step.dt.m = th % 60;
+  document.getElementById('dt-h').textContent = step.dt.h;
+  document.getElementById('dt-m').textContent = step.dt.m;
+  document.getElementById('dt-total').textContent = th > 0
+    ? (step.dt.h > 0 ? step.dt.h + '時間' : '') + (step.dt.m > 0 ? step.dt.m + '分' : '')
+    : '—';
 
   // 昼休みデフォルト
   selDefaultLunch(lunch);
   openM('modal-work-default');
 }
 
-function selDefaultTh(min) {
-  document.querySelectorAll('#default-th-btns .th-btn').forEach(b => b.classList.remove('sel'));
-  const vals = [0,15,30,45,60,90,120,150,180];
-  const idx = vals.indexOf(min);
-  if (idx >= 0) document.querySelectorAll('#default-th-btns .th-btn')[idx].classList.add('sel');
-}
-
 function selDefaultLunch(t) {
   defaultLunch = t;
   ['ok','10','20','ng'].forEach(x => {
     const b = document.getElementById('dlb-'+x);
-    if (b) b.className = 'lunch-btn' + (x===t?' '+t:'');
+    const clsMapD={'ok':'ok','10':'half','20':'half','ng':'ng'}; if (b) b.className = 'lunch-btn' + (x===t?' '+(clsMapD[t]||t):'');
   });
 }
 
 function saveWorkDefault() {
   const start = document.getElementById('default-start-input').value;
   const end   = document.getElementById('default-end-input').value;
-  const selTh = document.querySelector('#default-th-btns .th-btn.sel');
-  const thVal = selTh ? [0,15,30,45,60,90,120,150,180][[...document.querySelectorAll('#default-th-btns .th-btn')].indexOf(selTh)] : 0;
+  const thVal = step.dt.h * 60 + step.dt.m;
 
   localStorage.setItem('mamoru_work_start', start);
   localStorage.setItem('mamoru_work_end', end);
@@ -4368,32 +4443,6 @@ function showCelebration() {
   }, 1800);
 }
 
-// =============================================
-// 昼休み未記録の自動補完
-// =============================================
-async function autoFillLunchMemo() {
-  const daily = JSON.parse(localStorage.getItem('mamoru_daily') || '[]');
-  const today = todayStr();
-  let updated = false;
-
-  daily.forEach(d => {
-    // 昨日以前の記録で「昼休み=した（ほぼ休めず）」かつ「メモが空」の場合
-    if (d.date && d.date < today && d.lunch === 'ng' && !d.memo) {
-      d.memo = '昼休みに児童の提出物チェックをした';
-      updated = true;
-    }
-  });
-
-  if (updated) {
-    localStorage.setItem('mamoru_daily', JSON.stringify(daily));
-    // スプレッドシートにも同期
-    const targets = daily.filter(d => d.date < today && d.lunch === 'ng' && d.memo === '昼休みに児童の提出物チェックをした');
-    for (const d of targets) {
-      try { await apiPost({ action: 'saveDaily', data: d }); } catch(e) {}
-    }
-    showSync('✅ 昼休み記録を自動補完しました');
-  }
-}
 
 // =============================================
 // 起動
@@ -4419,7 +4468,6 @@ setTimeout(updateHideFarUI, 100);
 setTimeout(initTodayOtUI, 200);
 setTimeout(updateHolidayUI, 100);
 setTimeout(checkYesterdayAutoRecord, 1000);
-setTimeout(autoFillLunchMemo, 500);
 </script>
 </body>
 </html>
