@@ -79,7 +79,7 @@ input,textarea{font-family:inherit;}
 
 /* インライン編集 */
 .edit-area{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;}
-.edit-name{font-size:13px;border:none;border-bottom:1.5px solid var(--green);background:transparent;outline:none;width:100%;padding:1px 0;font-weight:600;color:var(--text);}
+.edit-name{font-size:20px;border:none;border-bottom:2px solid var(--green);background:transparent;outline:none;width:100%;padding:4px 0;font-weight:600;color:var(--text);margin-bottom:6px;}
 .edit-sub{font-size:11px;border:none;border-bottom:1px solid var(--border);background:transparent;outline:none;width:100%;padding:1px 0;color:var(--text-s);}
 .edit-actions{display:flex;gap:12px;margin-top:10px;}
 .edit-save{font-size:14px;background:var(--green);color:#fff;border:none;border-radius:var(--radius-s);padding:12px 24px;font-weight:700;flex:1;}
@@ -1744,11 +1744,14 @@ function tapTask(id) {
       </div>
     </div>`;
 
-  el.querySelector('.edit-name').focus();
   el.querySelector('.edit-name').addEventListener('keydown', e => {
     if(e.key==='Enter') saveEdit(id);
     if(e.key==='Escape') cancelEdit(id);
   });
+  setTimeout(() => {
+    const nameEl = el.querySelector('.edit-name');
+    if (nameEl) { nameEl.focus(); nameEl.select(); }
+  }, 50);
 }
 
 function clearDeadline(id) {
