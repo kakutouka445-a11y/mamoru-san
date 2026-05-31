@@ -1902,7 +1902,10 @@ function initDragAndDrop() {
 // =============================================
 function openStart(id) {
   selTaskId = id;
-  const t = tasks.find(t => String(t.id) === String(id));
+  // 重複IDがある場合はdone:falseを優先
+  const t = tasks.find(t => String(t.id) === String(id) && !t.done)
+           || tasks.find(t => String(t.id) === String(id));
+  if (!t) { console.warn('タスクが見つかりません:', id); return; }
   const msTitleEl = document.getElementById('ms-title'); if(msTitleEl) msTitleEl.textContent = t.name;
   const msSubEl = document.getElementById('ms-sub'); if(msSubEl) msSubEl.textContent = (t.subs||[]).join('・');
   resetStep('s');
