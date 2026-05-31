@@ -426,9 +426,9 @@ textarea{resize:none;height:56px;line-height:1.5;}
 
     <!-- 週コーナー：週次間 -->
     <div id="ms-week" class="matome-section" style="display:none;">
-      <div style="font-size:12px;color:var(--text-s);margin-bottom:4px;">過去5週間の1日平均時間外勤務（縦軸：0〜4時間）</div>
+      <div style="font-size:12px;color:var(--text-s);margin-bottom:4px;">直近5週間の1日平均時間外勤務（縦軸：0〜4時間）</div>
       <canvas id="chart-week-ot" style="width:100%;height:160px;display:block;margin-bottom:12px;"></canvas>
-      <div class="avg-box"><div class="avg-label">時間外勤務（今週合計）</div><div class="avg-val" id="ms-week-ot-total">—</div></div>
+      <div class="avg-box"><div class="avg-label">時間外勤務（直近5週合計）</div><div class="avg-val" id="ms-week-ot-total">—</div></div>
       <div class="avg-box"><div class="avg-label">1日平均 時間外勤務</div><div class="avg-val" id="ms-week-ot-avg">—</div></div>
       <div class="mini-stat-row">
         <div class="mini-stat-box"><div class="mini-stat-num" id="ms-week-task-done">—</div><div class="mini-stat-label">完了タスク</div></div>
@@ -443,9 +443,9 @@ textarea{resize:none;height:56px;line-height:1.5;}
 
     <!-- 月コーナー：月次 -->
     <div id="ms-month" class="matome-section" style="display:none;">
-      <div style="font-size:12px;color:var(--text-s);margin-bottom:4px;">過去5か月の1日平均時間外勤務（縦軸：0〜4時間）</div>
+      <div style="font-size:12px;color:var(--text-s);margin-bottom:4px;">直近5か月の1日平均時間外勤務（縦軸：0〜4時間）</div>
       <canvas id="chart-month-ot" style="width:100%;height:160px;display:block;margin-bottom:12px;"></canvas>
-      <div class="avg-box"><div class="avg-label">時間外勤務（今月合計）</div><div class="avg-val" id="ms-month-ot-total">—</div></div>
+      <div class="avg-box"><div class="avg-label">時間外勤務（直近5か月合計）</div><div class="avg-val" id="ms-month-ot-total">—</div></div>
       <div class="avg-box"><div class="avg-label">1日平均 時間外勤務</div><div class="avg-val" id="ms-month-ot-avg">—</div></div>
       <div class="mini-stat-row">
         <div class="mini-stat-box"><div class="mini-stat-num" id="ms-month-task-done">—</div><div class="mini-stat-label">完了タスク</div></div>
@@ -543,32 +543,30 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <div style="flex:1;background:var(--gray-l);border-radius:var(--radius-s);padding:8px 10px;">
         <div style="font-size:11px;color:var(--text-s);margin-bottom:5px;text-align:center;">勤務開始</div>
         <div style="font-size:22px;font-weight:700;color:var(--text);text-align:center;margin-bottom:6px;" id="disp-start">08:00</div>
-        <div style="display:flex;gap:4px;justify-content:center;">
-          <button onclick="adjTime('start',-60)" style="flex:1;background:#DBEAFE;border:1px solid #93C5FD;border-radius:4px;font-size:11px;padding:4px 0;color:#1E3A8A;font-weight:600;">－1h</button>
-          <button onclick="adjTime('start',60)" style="flex:1;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:4px;font-size:11px;padding:4px 0;color:#991B1B;font-weight:600;">＋1h</button>
-          <button onclick="adjTime('start',-15)" style="flex:1;background:#DBEAFE;border:1px solid #93C5FD;border-radius:4px;font-size:11px;padding:4px 0;color:#1E3A8A;font-weight:600;">－15分</button>
-          <button onclick="adjTime('start',15)" style="flex:1;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:4px;font-size:11px;padding:4px 0;color:#991B1B;font-weight:600;">＋15分</button>
+        <div style="display:flex;gap:6px;justify-content:center;">
+          <button onclick="adjTime('start',-60)" style="flex:1;background:#DBEAFE;border:1px solid #93C5FD;border-radius:20px;font-size:12px;padding:8px 0;color:#1E3A8A;font-weight:700;">－1h</button>
+          <button onclick="adjTime('start',60)" style="flex:1;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:20px;font-size:12px;padding:8px 0;color:#991B1B;font-weight:700;">＋1h</button>
+          <button onclick="adjTime('start',-10)" style="flex:1;background:#DBEAFE;border:1px solid #93C5FD;border-radius:20px;font-size:12px;padding:8px 0;color:#1E3A8A;font-weight:700;">－10分</button>
+          <button onclick="adjTime('start',10)" style="flex:1;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:20px;font-size:12px;padding:8px 0;color:#991B1B;font-weight:700;">＋10分</button>
         </div>
       </div>
       <!-- 退勤時刻 -->
       <div style="flex:1;background:var(--gray-l);border-radius:var(--radius-s);padding:8px 10px;">
         <div style="font-size:11px;color:var(--text-s);margin-bottom:5px;text-align:center;">退勤時刻（実際）</div>
         <div style="font-size:22px;font-weight:700;color:var(--amber);text-align:center;margin-bottom:6px;" id="disp-end">16:45</div>
-        <div style="display:flex;gap:4px;justify-content:center;">
-          <button onclick="adjTime('end',-60)" style="flex:1;background:#DBEAFE;border:1px solid #93C5FD;border-radius:4px;font-size:11px;padding:4px 0;color:#1E3A8A;font-weight:600;">－1h</button>
-          <button onclick="adjTime('end',60)" style="flex:1;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:4px;font-size:11px;padding:4px 0;color:#991B1B;font-weight:600;">＋1h</button>
-          <button onclick="adjTime('end',-15)" style="flex:1;background:#DBEAFE;border:1px solid #93C5FD;border-radius:4px;font-size:11px;padding:4px 0;color:#1E3A8A;font-weight:600;">－15分</button>
-          <button onclick="adjTime('end',15)" style="flex:1;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:4px;font-size:11px;padding:4px 0;color:#991B1B;font-weight:600;">＋15分</button>
+        <div style="display:flex;gap:6px;justify-content:center;">
+          <button onclick="adjTime('end',-60)" style="flex:1;background:#DBEAFE;border:1px solid #93C5FD;border-radius:20px;font-size:12px;padding:8px 0;color:#1E3A8A;font-weight:700;">－1h</button>
+          <button onclick="adjTime('end',60)" style="flex:1;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:20px;font-size:12px;padding:8px 0;color:#991B1B;font-weight:700;">＋1h</button>
+          <button onclick="adjTime('end',-10)" style="flex:1;background:#DBEAFE;border:1px solid #93C5FD;border-radius:20px;font-size:12px;padding:8px 0;color:#1E3A8A;font-weight:700;">－10分</button>
+          <button onclick="adjTime('end',10)" style="flex:1;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:20px;font-size:12px;padding:8px 0;color:#991B1B;font-weight:700;">＋10分</button>
         </div>
       </div>
     </div>
     <div id="school-ot-result" style="font-size:12px;color:var(--text-s);margin-bottom:4px;min-height:18px;text-align:center;"></div>
-    <div style="font-size:11px;color:var(--text-s);margin-bottom:6px;display:flex;align-items:center;gap:6px;">
-      手動微調整：
-      <button onclick="adjustSchoolOt(-10)" style="border:1px solid var(--border);border-radius:4px;background:var(--gray-l);padding:2px 8px;font-size:12px;">－10分</button>
-      <span id="school-ot-manual" style="font-weight:600;color:var(--green-d);">—</span>
-      <button onclick="adjustSchoolOt(10)" style="border:1px solid var(--border);border-radius:4px;background:var(--gray-l);padding:2px 8px;font-size:12px;">＋10分</button>
-    </div>
+
+    <button onclick="setCurrentTimeAsDefault()" style="display:flex;align-items:center;gap:6px;background:#E0F2FE;border:1px solid #7DD3FC;border-radius:var(--radius-s);padding:7px 12px;font-size:12px;color:#0369A1;margin-bottom:12px;width:100%;">
+      <i class="ti ti-device-floppy" style="font-size:13px;"></i>この時刻をデフォルトに設定する
+    </button>
     <button onclick="openWorkDefaultModal()" style="display:flex;align-items:center;gap:6px;background:var(--gray-l);border:1px solid var(--border);border-radius:var(--radius-s);padding:7px 12px;font-size:12px;color:var(--text-s);margin-bottom:12px;">
       <i class="ti ti-settings" style="font-size:13px;"></i>デフォルトの勤務時刻を設定する
     </button>
@@ -576,12 +574,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
     </div><!-- /workday-only-wrap -->
 
     <!-- ── 持ち帰り業務 ── -->
-    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
-      <div style="font-size:13px;font-weight:700;color:var(--text);">🏠 持ち帰り業務</div>
-      <button onclick="openM('modal-work-default')" style="display:flex;align-items:center;gap:4px;background:var(--gray-l);border:1px solid var(--border);border-radius:var(--radius-s);padding:4px 10px;font-size:11px;color:var(--text-s);">
-        <i class="ti ti-settings" style="font-size:12px;"></i>デフォルトを設定
-      </button>
-    </div>
+    <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:6px;">🏠 持ち帰り業務</div>
     <div style="font-size:11px;color:var(--text-s);margin-bottom:8px;">自宅等で行った仕事の時間</div>
     <div class="stepper-box" style="margin-bottom:8px;">
       <div class="stepper-row">
@@ -609,7 +602,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
     <div id="today-ot-summary" style="background:var(--green-l);border-left:4px solid var(--green);border-radius:0 var(--radius-s) var(--radius-s) 0;padding:10px 14px;margin-bottom:12px;display:none;">
       <div style="font-size:11px;color:var(--green-d);margin-bottom:2px;">📊 今日の合計</div>
       <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--green-d);">
-        <span>時間外在校等時間</span><span id="summary-school" style="font-weight:700;">—</span>
+        <span>時間外在校等時間<span style="font-size:10px;font-weight:400;color:var(--text-s);">（昼休み業務＋早朝・夕方）</span></span><span id="summary-school" style="font-weight:700;">—</span>
       </div>
       <div style="display:flex;justify-content:space-between;font-size:13px;color:var(--blue);">
         <span>持ち帰り業務</span><span id="summary-takehome" style="font-weight:700;">—</span>
@@ -702,13 +695,22 @@ textarea{resize:none;height:56px;line-height:1.5;}
       </div>
       <div class="total-box"><div class="total-label">合計</div><div class="total-val" id="s-total">—</div></div>
     </div>
-    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;">いつ実行しましたか？</div>
+    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;">🕑 いつ実行？</div>
     <div class="hint">複数選択できます</div>
     <div class="chips" id="s-when">
       <div class="chip" onclick="togChip(this)">空きコマ（勤務内）</div>
       <div class="chip" onclick="togChip(this)">放課後（勤務内）</div>
       <div class="chip" onclick="togChip(this)">昼休み（勤務外）</div>
       <div class="chip" onclick="togChip(this)">勤務時間外</div>
+    </div>
+    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;margin-top:12px;">
+      🐤 負担感（任意）
+    </div>
+    <div class="mood-row" id="s-mood-row" style="margin-bottom:12px;">
+      <button class="mood-btn" id="smb-great" onclick="selTaskMoodS('great')">😄<br>軽い</button>
+      <button class="mood-btn" id="smb-ok"    onclick="selTaskMoodS('ok')">🙂<br>普通</button>
+      <button class="mood-btn" id="smb-hard"  onclick="selTaskMoodS('hard')">😓<br>重い</button>
+      <button class="mood-btn" id="smb-limit" onclick="selTaskMoodS('limit')">🚨<br>かなり重い</button>
     </div>
     <button class="btn-primary" onclick="saveTaskDone()">完了として保存</button>
     <button class="btn-cancel" onclick="closeM('modal-start')">あとで</button>
@@ -744,13 +746,22 @@ textarea{resize:none;height:56px;line-height:1.5;}
       </div>
       <div class="total-box"><div class="total-label">合計</div><div class="total-val" id="e-total">—</div></div>
     </div>
-    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;margin-top:12px;">いつ実行しましたか？</div>
+    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;margin-top:12px;">🕑 いつ実行？</div>
     <div class="hint">複数選択できます</div>
     <div class="chips" id="e-when">
       <div class="chip" onclick="togChip(this)">空きコマ（勤務内）</div>
       <div class="chip" onclick="togChip(this)">放課後（勤務内）</div>
       <div class="chip" onclick="togChip(this)">昼休み（勤務外）</div>
       <div class="chip" onclick="togChip(this)">勤務時間外</div>
+    </div>
+    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;margin-top:12px;">
+      🐤 負担感（任意）
+    </div>
+    <div class="mood-row" id="e-mood-row" style="margin-bottom:12px;">
+      <button class="mood-btn" id="emb-great" onclick="selTaskMood('great')">😄<br>軽い</button>
+      <button class="mood-btn" id="emb-ok"    onclick="selTaskMood('ok')">🙂<br>普通</button>
+      <button class="mood-btn" id="emb-hard"  onclick="selTaskMood('hard')">😓<br>重い</button>
+      <button class="mood-btn" id="emb-limit" onclick="selTaskMood('limit')">🚨<br>かなり重い</button>
     </div>
     <button class="btn-primary" onclick="completeTask()">完了として保存</button>
     <button class="btn-cancel" onclick="closeM('modal-end')">キャンセル</button>
@@ -813,7 +824,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
         </div>
         <div class="total-box"><div class="total-label">合計</div><div class="total-val" id="p-total">—</div></div>
       </div>
-      <div class="field-label">いつ実行しましたか？</div>
+      <div class="field-label">🕑 いつ実行？</div>
       <div class="chips" id="past-when">
         <div class="chip" onclick="togChip(this)">空きコマ（勤務内）</div>
         <div class="chip" onclick="togChip(this)">放課後（勤務内）</div>
@@ -1141,7 +1152,11 @@ textarea{resize:none;height:56px;line-height:1.5;}
         <div class="howto-title">ふりかえり（今日）</div>
         <div class="howto-desc">
           昼休み・時間外在校等時間・持ち帰り業務・しんどさ（体💪・心❤️）・体調メモを記録します。<br>
-          「昨日までの記録」で過去分の入力も可能。「声を届ける」で要望・困りごとを記録・送信できます。
+          「過去の記録を修正する」で過去分の修正も可能。「声を届ける」で要望・困りごとを記録・送信できます。<br><br>
+          <b>🤖 自動記録のしくみ</b><br>
+          手動で保存しなかった日は、<b>翌日アプリを起動した時点</b>でデフォルト値（設定した勤務時刻・持ち帰り業務時間）をもとに自動で記録されます。メモ欄に「（デフォルト設定から自動記録）」と入ります。「過去の記録を修正する」から正しい値に修正できます。<br><br>
+          <b>📌 タスクと時間外勤務の関係</b><br>
+          各タスクとその業務時間は、上記の「時間外在校等時間」や「持ち帰り業務」とは分けて記録しています。タスクはカテゴリ別の業務量の把握に、時間外勤務は勤務実態の記録にそれぞれ使います。
         </div>
       </div>
     </div>
@@ -1150,7 +1165,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <div class="howto-icon">📊</div>
       <div>
         <div class="howto-title">まとめ</div>
-        <div class="howto-desc">日次・週次・月次で時間外勤務・しんどさを見える化。Excel出力もここから。</div>
+        <div class="howto-desc">日次・週次・月次で時間外勤務・しんどさを見える化。Excel出力もここから。<br>「1日平均」は土日・祝日を除いた勤務日数をもとに計算（文科省基準）。</div>
       </div>
     </div>
 
@@ -1196,9 +1211,12 @@ textarea{resize:none;height:56px;line-height:1.5;}
             <div style="background:#DBEAFE;border:1px solid #93C5FD;border-radius:6px;padding:4px 8px;font-size:11px;font-weight:600;color:#1E3A8A;white-space:nowrap;">勤務開始時刻</div>
             <div style="font-size:13px;color:var(--text-s);">－</div>
             <div style="background:var(--green-l);border:1px solid var(--green-b);border-radius:6px;padding:4px 8px;font-size:11px;font-weight:600;color:var(--green-d);white-space:nowrap;">7時間45分</div>
+            <div style="font-size:13px;color:var(--text-s);">＋</div>
+            <div style="background:var(--amber-l);border:1px solid var(--amber-b);border-radius:6px;padding:4px 8px;font-size:11px;font-weight:600;color:#7A4B08;white-space:nowrap;">昼休み業務時間</div>
           </div>
-          <div style="font-size:10px;color:var(--text-s);margin-bottom:2px;">※ 7時間45分＝公立学校の所定勤務時間</div>
-          <div style="font-size:10px;color:var(--text-s);margin-bottom:8px;">例）8:00出勤 → 18:30退勤 なら　10時間30分 － 7時間45分 ＝ <strong style="color:var(--amber);">2時間45分</strong></div>
+          <div style="font-size:10px;color:var(--text-s);margin-bottom:2px;">※ 7時間45分＝公立学校の所定勤務時間（実労働7h＋休憩45分）</div>
+          <div style="font-size:10px;color:var(--text-s);margin-bottom:2px;">※ 昼休みに業務した分は時間外在校等時間に加算されます</div>
+          <div style="font-size:10px;color:var(--text-s);margin-bottom:8px;">例）8:00出勤 → 18:30退勤・昼休み業務なし　→　10時間30分 － 7時間45分 ＝ <strong style="color:var(--amber);">2時間45分</strong></div>
 
           <!-- 区切り -->
           <div style="border-top:1px dashed var(--border);margin-bottom:8px;"></div>
@@ -1211,30 +1229,18 @@ textarea{resize:none;height:56px;line-height:1.5;}
           </div>
 
           <!-- 区切り -->
-          <div style="border-top:1px dashed var(--border);margin-bottom:8px;"></div>
-
-          <!-- ③ 昼休み -->
-          <div style="font-size:11px;font-weight:700;color:var(--text-s);margin-bottom:4px;">③ 昼休みの業務</div>
-          <div style="display:flex;gap:5px;margin-bottom:8px;flex-wrap:wrap;">
-            <div style="background:#EAF3DE;border:1px solid #97C459;border-radius:6px;padding:3px 7px;font-size:10px;font-weight:600;color:#3B6B0C;">✅ なし → ＋0分</div>
-            <div style="background:var(--amber-l);border:1px solid var(--amber-b);border-radius:6px;padding:3px 7px;font-size:10px;font-weight:600;color:#7A4B08;">⚠️ 15分 → ＋15分</div>
-            <div style="background:var(--amber-l);border:1px solid var(--amber-b);border-radius:6px;padding:3px 7px;font-size:10px;font-weight:600;color:#7A4B08;">😓 30分 → ＋30分</div>
-            <div style="background:var(--red-l);border:1px solid #FCA5A5;border-radius:6px;padding:3px 7px;font-size:10px;font-weight:600;color:var(--red);">🚨 45分 → ＋45分</div>
-          </div>
-
-          <!-- 区切り -->
           <div style="border-top:2px solid var(--green-b);margin-bottom:8px;"></div>
 
           <!-- 合計 -->
           <div style="background:var(--green-l);border:1.5px solid var(--green-b);border-radius:var(--radius-s);padding:8px 12px;display:flex;justify-content:space-between;align-items:center;">
             <div style="font-size:12px;font-weight:700;color:var(--green-d);">📊 今日の時間外勤務合計</div>
-            <div style="font-size:12px;color:var(--green-d);font-weight:700;">① ＋ ② ＋ ③</div>
+            <div style="font-size:12px;color:var(--green-d);font-weight:700;">① ＋ ②</div>
           </div>
         </div>
 
         <div class="howto-desc">
           <b>自動セット</b>：「ふりかえり」タブを開くと、設定したデフォルト勤務時刻が自動で入ります。当日の記録が既にある場合は、保存済みの内容が復元されます。<br>
-          <b>手動微調整</b>：時刻のボタンで変えられない細かい分数は「手動微調整」の±10分で調整できます。
+          <b>時刻変更</b>：－1h・＋1h・－10分・＋10分ボタンで調整できます。
         </div>
       </div>
     </div>
@@ -1385,36 +1391,31 @@ textarea{resize:none;height:56px;line-height:1.5;}
         <button class="cat-btn" data-n="その他" onclick="togYLunchCat(this)" style="grid-column:span 2;">その他</button>
       </div>
     </div>
-    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;">⏱ 時間外在校等時間</div>
+    <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:8px;">⏱ 時間外在校等時間</div>
     <div style="display:flex;gap:8px;margin-bottom:6px;">
       <div style="flex:1;background:var(--gray-l);border-radius:var(--radius-s);padding:8px 10px;">
         <div style="font-size:11px;color:var(--text-s);margin-bottom:5px;text-align:center;">勤務開始</div>
-        <div style="font-size:20px;font-weight:700;color:var(--text);text-align:center;margin-bottom:6px;" id="yday-disp-start">08:00</div>
-        <div style="display:flex;gap:4px;justify-content:center;">
-          <button onclick="adjYdayTime('start',-60)" style="flex:1;background:#DBEAFE;border:1px solid #93C5FD;border-radius:4px;font-size:11px;padding:4px 0;color:#1E3A8A;font-weight:600;">－1h</button>
-          <button onclick="adjYdayTime('start',60)" style="flex:1;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:4px;font-size:11px;padding:4px 0;color:#991B1B;font-weight:600;">＋1h</button>
-          <button onclick="adjYdayTime('start',-15)" style="flex:1;background:#DBEAFE;border:1px solid #93C5FD;border-radius:4px;font-size:11px;padding:4px 0;color:#1E3A8A;font-weight:600;">－15分</button>
-          <button onclick="adjYdayTime('start',15)" style="flex:1;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:4px;font-size:11px;padding:4px 0;color:#991B1B;font-weight:600;">＋15分</button>
+        <div style="font-size:22px;font-weight:700;color:var(--text);text-align:center;margin-bottom:6px;" id="yday-disp-start">08:00</div>
+        <div style="display:flex;gap:6px;justify-content:center;">
+          <button onclick="adjYdayTime('start',-60)" style="flex:1;background:#DBEAFE;border:1px solid #93C5FD;border-radius:20px;font-size:12px;padding:8px 0;color:#1E3A8A;font-weight:700;">－1h</button>
+          <button onclick="adjYdayTime('start',60)" style="flex:1;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:20px;font-size:12px;padding:8px 0;color:#991B1B;font-weight:700;">＋1h</button>
+          <button onclick="adjYdayTime('start',-10)" style="flex:1;background:#DBEAFE;border:1px solid #93C5FD;border-radius:20px;font-size:12px;padding:8px 0;color:#1E3A8A;font-weight:700;">－10分</button>
+          <button onclick="adjYdayTime('start',10)" style="flex:1;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:20px;font-size:12px;padding:8px 0;color:#991B1B;font-weight:700;">＋10分</button>
         </div>
       </div>
       <div style="flex:1;background:var(--gray-l);border-radius:var(--radius-s);padding:8px 10px;">
         <div style="font-size:11px;color:var(--text-s);margin-bottom:5px;text-align:center;">退勤時刻（実際）</div>
-        <div style="font-size:20px;font-weight:700;color:var(--amber);text-align:center;margin-bottom:6px;" id="yday-disp-end">16:45</div>
-        <div style="display:flex;gap:4px;justify-content:center;">
-          <button onclick="adjYdayTime('end',-60)" style="flex:1;background:#DBEAFE;border:1px solid #93C5FD;border-radius:4px;font-size:11px;padding:4px 0;color:#1E3A8A;font-weight:600;">－1h</button>
-          <button onclick="adjYdayTime('end',60)" style="flex:1;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:4px;font-size:11px;padding:4px 0;color:#991B1B;font-weight:600;">＋1h</button>
-          <button onclick="adjYdayTime('end',-15)" style="flex:1;background:#DBEAFE;border:1px solid #93C5FD;border-radius:4px;font-size:11px;padding:4px 0;color:#1E3A8A;font-weight:600;">－15分</button>
-          <button onclick="adjYdayTime('end',15)" style="flex:1;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:4px;font-size:11px;padding:4px 0;color:#991B1B;font-weight:600;">＋15分</button>
+        <div style="font-size:22px;font-weight:700;color:var(--amber);text-align:center;margin-bottom:6px;" id="yday-disp-end">16:45</div>
+        <div style="display:flex;gap:6px;justify-content:center;">
+          <button onclick="adjYdayTime('end',-60)" style="flex:1;background:#DBEAFE;border:1px solid #93C5FD;border-radius:20px;font-size:12px;padding:8px 0;color:#1E3A8A;font-weight:700;">－1h</button>
+          <button onclick="adjYdayTime('end',60)" style="flex:1;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:20px;font-size:12px;padding:8px 0;color:#991B1B;font-weight:700;">＋1h</button>
+          <button onclick="adjYdayTime('end',-10)" style="flex:1;background:#DBEAFE;border:1px solid #93C5FD;border-radius:20px;font-size:12px;padding:8px 0;color:#1E3A8A;font-weight:700;">－10分</button>
+          <button onclick="adjYdayTime('end',10)" style="flex:1;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:20px;font-size:12px;padding:8px 0;color:#991B1B;font-weight:700;">＋10分</button>
         </div>
       </div>
     </div>
-    <div id="yday-school-ot-result" style="font-size:12px;color:var(--text-s);margin-bottom:4px;text-align:center;"></div>
-    <div style="font-size:11px;color:var(--text-s);margin-bottom:10px;display:flex;align-items:center;gap:6px;">
-      微調整：
-      <button onclick="adjYdaySchoolOt(-10)" style="border:1px solid var(--border);border-radius:4px;background:var(--gray-l);padding:2px 8px;font-size:12px;">－10分</button>
-      <span id="yday-school-ot-manual" style="font-weight:600;color:var(--green-d);">—</span>
-      <button onclick="adjYdaySchoolOt(10)" style="border:1px solid var(--border);border-radius:4px;background:var(--gray-l);padding:2px 8px;font-size:12px;">＋10分</button>
-    </div>
+    <div id="yday-school-ot-result" style="font-size:12px;color:var(--text-s);margin-bottom:4px;min-height:18px;text-align:center;"></div>
+
 
     <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
       <div style="font-size:13px;font-weight:700;color:var(--text);">🏠 持ち帰り業務</div>
@@ -1445,7 +1446,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
     <div id="yday-ot-summary" style="background:var(--green-l);border-left:4px solid var(--green);border-radius:0 var(--radius-s) var(--radius-s) 0;padding:10px 14px;margin-bottom:12px;">
       <div style="font-size:11px;color:var(--green-d);margin-bottom:2px;">📊 合計</div>
       <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--green-d);">
-        <span>時間外在校等時間</span><span id="yday-summary-school" style="font-weight:700;">—</span>
+        <span>時間外在校等時間<span style="font-size:10px;font-weight:400;color:var(--text-s);">（昼休み業務＋早朝・夕方）</span></span><span id="yday-summary-school" style="font-weight:700;">—</span>
       </div>
       <div style="display:flex;justify-content:space-between;font-size:12px;color:var(--blue);">
         <span>持ち帰り業務</span><span id="yday-summary-takehome" style="font-weight:700;">—</span>
@@ -1454,6 +1455,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
         <span>合　計</span><span id="yday-summary-total">—</span>
       </div>
     </div>
+    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;">しんどさ（体）💪</div>
     <div class="mood-row" style="margin-bottom:12px;">
       <button class="mood-btn" id="ymb-body-great" onclick="selYMood('body','great')">😄<br>快調</button>
       <button class="mood-btn" id="ymb-body-ok" onclick="selYMood('body','ok')">🙂<br>まあまあ</button>
@@ -1491,7 +1493,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
 // =============================================
 // API設定
 // =============================================
-const API_URL = 'https://script.google.com/macros/s/AKfycbxXYR3NkdWlsi0UrCTlBj31CJFrkhDJXv0OtcPh5N9FYoUAV3H3Fz4FWKsC5uP6vqw/exec';
+const API_URL = 'https://script.google.com/macros/s/AKfycbxaz3k4NC-LuDRAvFQ9ggdDoP6-2gC6jNB5xPojaT72XTIsGvlohZ1029ck50PhIGXq/exec';
 
 // ── API通信 ──
 async function apiGet(action) {
@@ -1516,6 +1518,16 @@ function showSync(msg, isError=false) {
 // データ
 // =============================================
 const CAT_INITIAL = {'分掌':'分','保護者対応':'保','生徒指導':'生','学年':'学','学級':'学','会議':'会','授業準備・宿題等':'授'};
+const CATEGORIES = [
+  {name:'分掌',      color:'#DC2626'},
+  {name:'保護者対応', color:'#EA580C'},
+  {name:'生徒指導',  color:'#F59E0B'},
+  {name:'学年',      color:'#2563EB'},
+  {name:'学級',      color:'#7C3AED'},
+  {name:'会議',      color:'#5DCAA5'},
+  {name:'授業準備・宿題等', color:'#1D9E75'},
+  {name:'その他',    color:'#6B7280'},
+];
 let tasks = [];
 let nextId = 1;
 let activeIdx = -1, selTaskId = null;
@@ -1686,9 +1698,15 @@ function tapTask(id) {
   el.classList.add('editing');
   const subsText = (t.subs || []).join('・');
 
+  const catGrid = CATEGORIES.map(c =>
+    `<button class="cat-btn edit-cat-btn${t.cat===c.name?' sel':''}" style="${t.cat===c.name?'border-color:'+c.color+';color:'+c.color+';':''}" data-cat="${c.name}" data-color="${c.color}" onclick="selEditCat(this,'${id}')">${c.name}</button>`
+  ).join('');
+
   el.querySelector('.task-body').outerHTML = `
     <div class="edit-area">
-      <input class="edit-name" type="text" value="${t.name}" placeholder="カテゴリ名">
+      <div style="font-size:11px;color:var(--text-s);margin-bottom:4px;">カテゴリ</div>
+      <div class="cat-grid" style="margin-bottom:8px;" id="edit-cat-grid-${id}">${catGrid}</div>
+      <input class="edit-name" type="text" value="${t.name}" placeholder="タスク名">
       <input class="edit-sub" type="text" value="${subsText}" placeholder="やること（・区切り）">
       <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
         <span style="font-size:11px;color:var(--text-s);flex-shrink:0;">締切</span>
@@ -1716,26 +1734,36 @@ function clearDeadline(id) {
   if (dlEl) dlEl.value = '';
 }
 
+function selEditCat(btn, id) {
+  const grid = btn.closest('.cat-grid');
+  if (!grid) return;
+  grid.querySelectorAll('.edit-cat-btn').forEach(b => {
+    b.classList.remove('sel');
+    b.style.borderColor = ''; b.style.color = '';
+  });
+  btn.classList.add('sel');
+  btn.style.borderColor = btn.dataset.color;
+  btn.style.color = btn.dataset.color;
+}
+
 async function saveEdit(id) {
   const el = document.querySelector(`.task-item[data-id="${id}"]`);
   if (!el) return;
   const nameEl = el.querySelector('.edit-name');
   const subEl  = el.querySelector('.edit-sub');
   const dlEl   = el.querySelector('.edit-deadline');
+  const catBtn = el.querySelector('.edit-cat-btn.sel');
   if (!nameEl) return;
-
   const t = tasks.find(t => String(t.id) === String(id));
   if (!t) return;
-
   t.name     = nameEl.value.trim() || t.name;
-  t.subs     = subEl.value.split('・').map(s=>s.trim()).filter(Boolean);
+  t.subs     = subEl ? subEl.value.split('・').map(s=>s.trim()).filter(Boolean) : t.subs;
   t.deadline = dlEl ? dlEl.value : t.deadline;
-
-  renderTasks();
-  saveLocalTasks();
+  if (catBtn) { t.cat = catBtn.dataset.cat; t.catColor = catBtn.dataset.color; }
+  renderTasks(); saveLocalTasks();
   try {
     showSync('保存中...');
-    await apiPost({ action: 'updateTask', data: { id: t.id, name: t.name, subs: t.subs, deadline: t.deadline } });
+    await apiPost({ action: 'updateTask', data: { id: t.id, name: t.name, subs: t.subs, deadline: t.deadline, cat: t.cat, catColor: t.catColor } });
     showSync('✅ 保存しました');
   } catch(e) { showSync('⚠ オフライン保存', true); }
 }
@@ -1875,10 +1903,14 @@ function initDragAndDrop() {
 function openStart(id) {
   selTaskId = id;
   const t = tasks.find(t => String(t.id) === String(id));
-  document.getElementById('ms-title').textContent = t.name;
-  document.getElementById('ms-sub').textContent = (t.subs||[]).join('・');
+  const msTitleEl = document.getElementById('ms-title'); if(msTitleEl) msTitleEl.textContent = t.name;
+  const msSubEl = document.getElementById('ms-sub'); if(msSubEl) msSubEl.textContent = (t.subs||[]).join('・');
   resetStep('s');
   document.querySelectorAll('#s-when .chip').forEach(c => c.classList.remove('sel'));
+  currentTaskMoodS = '';
+  ['great','ok','hard','limit'].forEach(x => {
+    const b = document.getElementById(`smb-${x}`); if(b) b.className='mood-btn';
+  });
   openM('modal-start');
 }
 
@@ -1893,7 +1925,7 @@ function startTask(){
   const t = tasks.find(t => String(t.id) === String(selTaskId));
   if(!t) return;
   activeIdx = selTaskId;
-  document.getElementById('active-name').textContent = t.name;
+  const activeNameEl = document.getElementById('active-name'); if(activeNameEl) activeNameEl.textContent = t.name;
   document.getElementById('active-bar').classList.remove('hidden');
   closeM('modal-start');
 }
@@ -1905,17 +1937,42 @@ async function saveTaskDone(){
   const when = [...document.querySelectorAll('#s-when .chip.sel')].map(c=>c.textContent).join('・');
   t.done = true; t.doneDate = todayStr(); t.pinned = false;
   t.time = (ts||'') + (when ? ' · '+when : '');
+  if (currentTaskMoodS) t.taskMood = currentTaskMoodS;
   closeM('modal-start'); selTaskId = null; renderTasks(); saveLocalTasks();
   try {
     showSync('保存中...');
-    await apiPost({ action:'updateTask', data:{id:t.id, done:true, doneDate:t.doneDate, time:t.time, pinned:false} });
+    await apiPost({ action:'updateTask', data:{id:t.id, done:true, doneDate:t.doneDate, time:t.time, pinned:false, taskMood: t.taskMood||''} });
     showSync('✅ 完了を保存しました');
   } catch(e) { showSync('⚠ オフライン保存', true); }
 }
 function openEndModal(){
   openM('modal-end'); resetStep('e');
+  currentTaskMood = '';
+  ['great','ok','hard','limit'].forEach(x => {
+    const b = document.getElementById(`emb-${x}`); if(b) b.className='mood-btn';
+  });
   document.querySelectorAll('#e-when .chip').forEach(c=>c.classList.remove('sel'));
 }
+let currentTaskMoodS = '';
+
+function selTaskMoodS(val) {
+  currentTaskMoodS = val;
+  ['great','ok','hard','limit'].forEach(x => {
+    const b = document.getElementById(`smb-${x}`);
+    if(b) b.className = 'mood-btn' + (x===val?' '+(x==='ok'?'ok2':x):'');
+  });
+}
+
+let currentTaskMood = '';
+
+function selTaskMood(val) {
+  currentTaskMood = val;
+  ['great','ok','hard','limit'].forEach(x => {
+    const b = document.getElementById(`emb-${x}`);
+    if(b) b.className = 'mood-btn' + (x===val?' '+(x==='ok'?'ok2':x):'');
+  });
+}
+
 async function completeTask(){
   if(activeIdx === -1 || activeIdx === null) return;
   const t = tasks.find(t => String(t.id) === String(activeIdx));
@@ -1924,11 +1981,12 @@ async function completeTask(){
   const when = [...document.querySelectorAll('#e-when .chip.sel')].map(c=>c.textContent).join('・');
   t.done = true; t.doneDate = todayStr(); t.pinned = false;
   t.time = (ts||'') + (when ? ' · '+when : '');
+  if (currentTaskMood) t.taskMood = currentTaskMood;
   document.getElementById('active-bar').classList.add('hidden');
   activeIdx = -1; closeM('modal-end'); renderTasks(); saveLocalTasks();
   try {
     showSync('保存中...');
-    await apiPost({ action:'updateTask', data:{id:t.id, done:true, doneDate:t.doneDate, time:t.time, pinned:false} });
+    await apiPost({ action:'updateTask', data:{id:t.id, done:true, doneDate:t.doneDate, time:t.time, pinned:false, taskMood: t.taskMood||''} });
     showSync('✅ 完了を保存しました');
   } catch(e) { showSync('⚠ オフライン保存', true); }
 }
@@ -2239,10 +2297,11 @@ function renderMatomeDay() {
 
   // 集計
   const totalOt7 = days7.reduce((s,d)=>s+d.ot,0);
-  const recDays7 = days7.filter(d=>d.ot>0).length;
+  const from7d = new Date(); from7d.setDate(from7d.getDate()-6);
+  const workdays7 = countWorkdays(from7d, new Date());
   const el = (id,v) => { const e=document.getElementById(id); if(e) e.textContent=v; };
   el('ms-day-ot-total', fmtMinShort(totalOt7));
-  el('ms-day-ot-avg', recDays7>0 ? fmtMinShort(Math.round(totalOt7/recDays7)) : '—');
+  el('ms-day-ot-avg', workdays7>0 ? fmtMinShort(Math.round(totalOt7/workdays7)) : '—');
 
   // 完了タスク・突発対応（過去7日）
   const today7 = new Date(); const todayStr7 = `${today7.getFullYear()}-${pad(today7.getMonth()+1)}-${pad(today7.getDate())}`;
@@ -2281,21 +2340,25 @@ function renderMatomeWeek() {
     weeks5.push({ label, ot, bodyArr, mindArr, recDays });
   }
   // グラフは週合計（分）を時間換算して表示
-  // グラフは1日平均（記録日数で割る）
-  const weekAvgs = weeks5.map(w => w.recDays > 0 ? Math.round(w.ot / w.recDays) : 0);
+  // グラフは各週の1日平均（勤務日数ベース）
+  const weekAvgs = weeks5.map(w => {
+    const wStart = new Date(monday); wStart.setDate(monday.getDate() - (4 - weeks5.indexOf(w))*7);
+    const wEnd = new Date(wStart); wEnd.setDate(wStart.getDate()+6);
+    const wWorkdays = countWorkdays(wStart, wEnd);
+    return wWorkdays > 0 ? Math.round(w.ot / wWorkdays) : 0;
+  });
   drawBarChart('chart-week-ot', weeks5.map(w=>w.label), weekAvgs, '#2563EB', 4*60);
 
-  // 今週の集計（weeks5[4]がw=0のループ→今週）
-  const thisWeek = weeks5[4];
+  // 直近5週の合計
+  const total5w = weeks5.reduce((s, w) => s + w.ot, 0);
+  const total5wDays = weeks5.reduce((s, w) => s + w.recDays, 0);
   const el = (id, v) => { const e=document.getElementById(id); if(e) e.textContent=v; };
 
-  // 合計は週全体のot合計
-  el('ms-week-ot-total', fmtMinShort(thisWeek.ot));
-  // 1日平均：記録した日数で割る
-  const weekAvgMin = thisWeek.recDays > 0 ? Math.round(thisWeek.ot / thisWeek.recDays) : 0;
+  // 直近5週の勤務日数（土日＋祝日除く）
+  const from5w = new Date(monday); from5w.setDate(monday.getDate() - 4*7);
+  const workdays5w = countWorkdays(from5w, new Date());
+  const weekAvgMin = workdays5w > 0 ? Math.round(total5w / workdays5w) : 0;
   el('ms-week-ot-avg', fmtMinShort(weekAvgMin));
-  // デバッグ確認用（本番では削除）
-  console.log('今週合計:', thisWeek.ot, '分 / 記録日数:', thisWeek.recDays, '日 / 1日平均:', weekAvgMin, '分');
 
   // 完了タスク・突発対応・しんどさで共通利用する変数を先に定義
   const weekStartStr = `${monday.getFullYear()}-${pad(monday.getMonth()+1)}-${pad(monday.getDate())}`;
@@ -2335,18 +2398,27 @@ function renderMatomeMonth() {
       return rd.getFullYear()===yr && rd.getMonth()===mo;
     });
     const ot = recs.reduce((s,r)=>s+(r.ot||0), 0);
-    months5.push({ label, ot, recs });
+    months5.push({ label, ot, recs, year: yr, month: mo });
   }
-  // グラフは1日平均（記録日数で割る）
-  const monthAvgs = months5.map(m => m.recs.length > 0 ? Math.round(m.recs.reduce((s,r)=>s+(r.ot||0),0) / m.recs.length) : 0);
+  // グラフは各月の1日平均（勤務日数ベース）
+  const monthAvgs = months5.map(m => {
+    const mStart = new Date(m.year, m.month, 1);
+    const mEnd = new Date(m.year, m.month+1, 0);
+    const mWorkdays = countWorkdays(mStart, mEnd);
+    const mOt = m.recs.reduce((s,r)=>s+(r.ot||0),0);
+    return mWorkdays > 0 ? Math.round(mOt / mWorkdays) : 0;
+  });
   drawBarChart('chart-month-ot', months5.map(m=>m.label), monthAvgs, '#7C3AED', 4*60);
 
-  // 今月の集計
-  const thisMonth = months5[4].recs;
+  // 直近5か月の合計
+  const allRecs5m = months5.flatMap(m => m.recs);
   const el = (id,v) => { const e=document.getElementById(id); if(e) e.textContent=v; };
-  const totalOt = thisMonth.reduce((s,d)=>s+(d.ot||0),0);
+  const totalOt = allRecs5m.reduce((s,d)=>s+(d.ot||0),0);
+  // 直近5か月の勤務日数（土日＋祝日除く）
+  const from5m = new Date(today.getFullYear(), today.getMonth()-4, 1);
+  const workdays5m = countWorkdays(from5m, today);
   el('ms-month-ot-total', fmtMinShort(totalOt));
-  el('ms-month-ot-avg', thisMonth.length>0 ? fmtMinShort(Math.round(totalOt/thisMonth.length)) : '—');
+  el('ms-month-ot-avg', workdays5m>0 ? fmtMinShort(Math.round(totalOt/workdays5m)) : '—');
 
   // 完了タスク・突発対応
   const d0month = new Date(today.getFullYear(), today.getMonth(), 1);
@@ -2356,9 +2428,9 @@ function renderMatomeMonth() {
 
   const bodyEl = document.getElementById('ms-month-mood-body');
   const mindEl = document.getElementById('ms-month-mood-mind');
-  if(bodyEl) bodyEl.innerHTML = moodMiniGrid(thisMonth,'body');
-  if(mindEl) mindEl.innerHTML = moodMiniGrid(thisMonth,'mind');
-
+  const thisMonth = months5[4].recs; // 当月のみ（しんどさ・カテゴリ用）
+  if(bodyEl) bodyEl.innerHTML = moodMiniGrid(allRecs5m,'body');
+  if(mindEl) mindEl.innerHTML = moodMiniGrid(allRecs5m,'mind');
   // カテゴリ棒グラフ
   const d0 = new Date(today.getFullYear(), today.getMonth(), 1);
   const monthTasks = tasks.filter(t => t.doneDate >= `${d0.getFullYear()}-${pad(d0.getMonth()+1)}-01`);
@@ -2425,6 +2497,8 @@ function selLunch(t){
     resultEl.textContent = addMin > 0 ? `昼休みに業務：${addMin}分を時間外勤務に加算` : '';
     resultEl.style.color = addMin > 0 ? 'var(--amber)' : '';
   }
+  // 昼休み業務分をschoolOtMinに反映
+  calcSchoolOt();
 }
 
 function togLunchCat(el) {
@@ -2452,6 +2526,8 @@ function selYLunch(t) {
   } else {
     wrap.style.display = 'block';
   }
+  // 昼休み業務分をydaySchoolOtMinに反映
+  calcYdaySchoolOt();
 }
 
 function selMood(type, val){
@@ -2473,9 +2549,8 @@ async function saveDaily(){
     if (hasData && !confirm('今日の記録が既にあります。上書きしますか？')) return;
   }
 
-  // 昼休みの状況に応じて時間外勤務を自動加算
-  const lunchOt = currentLunch==='ng'?45 : currentLunch==='20'?30 : currentLunch==='10'?15 : 0;
-  const totalOt = schoolOtMin + takehomeMin + lunchOt;
+  // 昼休み業務分はcalcSchoolOtでschoolOtMinに含まれている
+  const totalOt = schoolOtMin + takehomeMin;
 
   const record = {
     date: td,
@@ -2729,9 +2804,12 @@ function fmtTime(mode){
 }
 function resetStep(mode){
   step[mode]={h:0,m:0};
-  document.getElementById(`${mode}-h`).textContent=0;
-  document.getElementById(`${mode}-m`).textContent=0;
-  document.getElementById(`${mode}-total`).textContent='—';
+  const h=document.getElementById(`${mode}-h`);
+  const m=document.getElementById(`${mode}-m`);
+  const t=document.getElementById(`${mode}-total`);
+  if(h) h.textContent=0;
+  if(m) m.textContent=0;
+  if(t) t.textContent='—';
 }
 
 // =============================================
@@ -3231,7 +3309,7 @@ function doExport(allTasks, daily) {
         else if (mm==='hard') wStats.mhard++;
         else if (mm==='limit') wStats.mlimit++;
         if (rec.lunch==='ok') wStats.lok++;
-        else if (rec.lunch==='half') wStats.lhalf++;
+        else if (rec.lunch==='10' || rec.lunch==='20') wStats.lhalf++;
         else if (rec.lunch==='ng') wStats.lng++;
       });
       const wTaskDone = allTasks.filter(t => t.doneDate >= startDate && t.doneDate <= endDate).length;
@@ -3341,8 +3419,12 @@ function exportCSVFallback(allTasks, daily) {
 // =============================================
 // 昨日モーダル用 時間外在校等時間・持ち帰り業務
 // =============================================
-let ydayStartMin = 8 * 60;
-let ydayEndMin   = 16 * 60 + 45;
+const _ydayStartDef = localStorage.getItem('mamoru_work_start') || '08:00';
+const _ydayEndDef   = localStorage.getItem('mamoru_work_end')   || '16:45';
+const _ydayStartParts = _ydayStartDef.split(':').map(Number);
+const _ydayEndParts   = _ydayEndDef.split(':').map(Number);
+let ydayStartMin = _ydayStartParts[0] * 60 + _ydayStartParts[1];
+let ydayEndMin   = _ydayEndParts[0]   * 60 + _ydayEndParts[1];
 let ydaySchoolOtMin = 0;
 let ydayTakehomeMin = 0;
 
@@ -3352,8 +3434,8 @@ function initYdayOtUI() {
   const thDefault    = Number(localStorage.getItem('mamoru_takehome_default') || 0);
   const [sh, sm] = startDefault.split(':').map(Number);
   const [eh, em] = endDefault.split(':').map(Number);
-  ydayStartMin = sh * 60 + sm;
-  ydayEndMin   = eh * 60 + em;
+  ydayStartMin    = sh * 60 + sm;
+  ydayEndMin      = eh * 60 + em;
   ydayTakehomeMin = thDefault;
   ydaySchoolOtMin = 0;
   updateYdayTimeDisp();
@@ -3379,21 +3461,30 @@ function updateYdayTimeDisp() {
 
 function calcYdaySchoolOt() {
   const workMin = ydayEndMin - ydayStartMin;
-  ydaySchoolOtMin = Math.max(0, workMin - FIXED_WORK_MIN);
+  const lunchOt = ydayLunch==='ng'?45 : ydayLunch==='20'?30 : ydayLunch==='10'?15 : 0;
+  ydaySchoolOtMin = Math.max(0, workMin - FIXED_WORK_MIN + lunchOt);
   const resultEl = document.getElementById('yday-school-ot-result');
   const manualEl = document.getElementById('yday-school-ot-manual');
   const h = Math.floor(ydaySchoolOtMin/60), m = ydaySchoolOtMin%60;
   const str = ydaySchoolOtMin > 0 ? `${h>0?h+'時間':''}${m>0?m+'分':''}` : '0分';
-  if (resultEl) { resultEl.textContent = ydaySchoolOtMin > 0 ? `所定勤務時間を ${str} 超過` : '時間内退勤（0分）'; resultEl.style.color = ydaySchoolOtMin > 0 ? 'var(--amber)' : 'var(--text-s)'; }
+  if (resultEl) {
+    resultEl.textContent = ydaySchoolOtMin > 0 ? `所定勤務時間を ${str} 超過` : '時間内退勤（0分）';
+    resultEl.style.color = ydaySchoolOtMin > 0 ? 'var(--amber)' : 'var(--text-s)';
+  }
   if (manualEl) manualEl.textContent = str;
   updateYdaySummary();
 }
 
 function adjYdaySchoolOt(delta) {
   ydaySchoolOtMin = Math.max(0, ydaySchoolOtMin + delta);
-  const manualEl = document.getElementById('yday-school-ot-manual');
   const h = Math.floor(ydaySchoolOtMin/60), m = ydaySchoolOtMin%60;
+  const manualEl = document.getElementById('yday-school-ot-manual');
   if (manualEl) manualEl.textContent = ydaySchoolOtMin > 0 ? `${h>0?h+'時間':''}${m>0?m+'分':''}` : '0分';
+  const resultEl = document.getElementById('yday-school-ot-result');
+  if (resultEl) {
+    const str = ydaySchoolOtMin > 0 ? `${h>0?h+'時間':''}${m>0?m+'分':''}` : '0分';
+    resultEl.textContent = ydaySchoolOtMin > 0 ? `所定勤務時間を ${str} 超過` : '時間内退勤（0分）';
+  }
   updateYdaySummary();
 }
 
@@ -3414,8 +3505,8 @@ function updateYdayTakehomeDisp() {
 }
 
 function updateYdaySummary() {
-  const lunchOt = ydayLunch==='ng'?45 : ydayLunch==='20'?30 : ydayLunch==='10'?15 : 0;
-  const total = ydaySchoolOtMin + ydayTakehomeMin + lunchOt;
+  // 昼休み業務分はydaySchoolOtMinに含まれている
+  const total = ydaySchoolOtMin + ydayTakehomeMin;
   const fmt = m => m > 0 ? `${Math.floor(m/60)>0?Math.floor(m/60)+'時間':''}${m%60>0?m%60+'分':'0分'}` : '0分';
   const el = (id, v) => { const e = document.getElementById(id); if(e) e.textContent = v; };
   el('yday-summary-school',   fmt(ydaySchoolOtMin));
@@ -3451,8 +3542,8 @@ function openYdayModal() {
     })
   );
   initYdayOtUI();
-  updateYdaySelectedLabel();
   selectYdayDate('yday');
+  updateYdaySelectedLabel();
   const days=['日','月','火','水','木','金','土'];
   const labelEl = document.getElementById('yday-date-label');
   if (labelEl) labelEl.textContent = `${yday.getMonth()+1}月${yday.getDate()}日（${days[yday.getDay()]}）`;
@@ -3460,20 +3551,24 @@ function openYdayModal() {
 }
 
 function selectYdayDate(mode) {
-  document.getElementById('ydatebtn-yday').classList.toggle('active', mode==='yday');
-  document.getElementById('ydatebtn-pick').classList.toggle('active', mode==='pick');
-  document.getElementById('yday-date-picker-wrap').classList.toggle('hidden', mode!=='pick');
+  const btnYday = document.getElementById('ydatebtn-yday');
+  const btnPick = document.getElementById('ydatebtn-pick');
+  const pickerWrap = document.getElementById('yday-date-picker-wrap');
+  if (btnYday) btnYday.classList.toggle('active', mode==='yday');
+  if (btnPick) btnPick.classList.toggle('active', mode==='pick');
+  if (pickerWrap) pickerWrap.classList.toggle('hidden', mode!=='pick');
   if (mode === 'yday') {
     const yday = new Date(); yday.setDate(yday.getDate()-1);
     ydaySelectedDate = `${yday.getFullYear()}-${pad(yday.getMonth()+1)}-${pad(yday.getDate())}`;
     updateYdaySelectedLabel();
   } else {
-    // カレンダーの最大値を昨日に設定
     const pickerEl = document.getElementById('yday-date-input');
     const yday = new Date(); yday.setDate(yday.getDate()-1);
-    pickerEl.max = `${yday.getFullYear()}-${pad(yday.getMonth()+1)}-${pad(yday.getDate())}`;
-    pickerEl.value = ydaySelectedDate || '';
-    pickerEl.focus();
+    if (pickerEl) {
+      pickerEl.max = `${yday.getFullYear()}-${pad(yday.getMonth()+1)}-${pad(yday.getDate())}`;
+      pickerEl.value = ydaySelectedDate || '';
+      pickerEl.focus();
+    }
   }
 }
 
@@ -3510,9 +3605,8 @@ async function saveYday() {
     : `${ydaySelectedDate} の記録はデフォルト数値で自動記録されていますが、それを上書きしますか？`;
   if (!confirm(msg)) return;
 
-  // 昼休み加算・時間外在校等時間・持ち帰り業務
-  const lunchOtY = ydayLunch==='ng'?45 : ydayLunch==='20'?30 : ydayLunch==='10'?15 : 0;
-  const totalOtY = ydaySchoolOtMin + ydayTakehomeMin + lunchOtY;
+  // 昼休み業務分はydaySchoolOtMinに含まれている
+  const totalOtY = ydaySchoolOtMin + ydayTakehomeMin;
 
   const record = {
     date: ydaySelectedDate,
@@ -3986,12 +4080,26 @@ function isWeekend(dateStr) {
   return dow === 0 || dow === 6;
 }
 
+// 期間内の勤務日数（土日＋祝日除く）をカウント
+function countWorkdays(fromDate, toDate) {
+  let count = 0;
+  const d = new Date(fromDate);
+  while (d <= toDate) {
+    const ds = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
+    if (!isNonWorkday(ds)) count++;
+    d.setDate(d.getDate() + 1);
+  }
+  return count;
+}
+
 function isHoliday(dateStr) {
   const holidays = JSON.parse(localStorage.getItem('mamoru_holidays') || '[]');
   return holidays.includes(dateStr);
 }
 
 function isNonWorkday(dateStr) {
+  const workdays = JSON.parse(localStorage.getItem('mamoru_workdays') || '[]');
+  if (workdays.includes(dateStr)) return false; // 出勤日に戻したフラグがあれば出勤日
   return isWeekend(dateStr) || isHoliday(dateStr);
 }
 
@@ -4031,6 +4139,10 @@ function cancelHolidayDate(when) {
   const dateStr = `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
   const holidays = JSON.parse(localStorage.getItem('mamoru_holidays') || '[]');
   localStorage.setItem('mamoru_holidays', JSON.stringify(holidays.filter(h => h !== dateStr)));
+  // 土日でも出勤日扱いにするフラグを追加
+  const workdays = JSON.parse(localStorage.getItem('mamoru_workdays') || '[]');
+  if (!workdays.includes(dateStr)) workdays.push(dateStr);
+  localStorage.setItem('mamoru_workdays', JSON.stringify(workdays));
   if (when === 'today') {
     updateHolidayUI();
     showSync(`✅ 今日（${d.getMonth()+1}/${d.getDate()}）を出勤日に戻しました`);
@@ -4057,6 +4169,8 @@ function updateHolidayUI() {
   const td = todayStr();
   const weekend = isWeekend(td);
   const holiday = isHoliday(td);
+  const workdays = JSON.parse(localStorage.getItem('mamoru_workdays') || '[]');
+  const forcedWorkday = workdays.includes(td); // 土日でも出勤日扱い
 
   const banner       = document.getElementById('holiday-banner');
   const weekdayWrap  = document.getElementById('holiday-btn-wrap-weekday');
@@ -4065,7 +4179,7 @@ function updateHolidayUI() {
 
   if (!banner) return;
 
-  if (weekend || holiday) {
+  if ((weekend || holiday) && !forcedWorkday) {
     // 休日：バナーを表示・平日ボタンを非表示
     banner.style.display = 'block';
     const bannerText = document.getElementById('holiday-banner-text');
@@ -4074,7 +4188,7 @@ function updateHolidayUI() {
     if (workdayOnly) workdayOnly.style.display = 'none';
     schoolOtMin = 0; updateTodayOtSummary();
   } else {
-    // 平日：バナーを非表示・平日ボタンを表示
+    // 平日（または出勤日に戻した土日）：バナーを非表示・平日ボタンを表示
     banner.style.display = 'none';
     if (weekdayWrap) weekdayWrap.style.display = 'flex';
     if (workdayOnly) workdayOnly.style.display = 'block';
@@ -4153,9 +4267,13 @@ function checkYesterdayAutoRecord() {
 // 時間外在校等時間・持ち帰り業務
 // =============================================
 let schoolOtMin = 0;    // 時間外在校等時間（分）
-let takehomeMin = 0;    // 持ち帰り業務（分）
-let startTotalMin = 8 * 60;      // 勤務開始（分換算）
-let endTotalMin   = 16 * 60 + 45; // 退勤時刻（分換算）
+let takehomeMin = Number(localStorage.getItem('mamoru_takehome_default') || 0); // 持ち帰り業務（分）
+const _startDef = localStorage.getItem('mamoru_work_start') || '08:00';
+const _endDef   = localStorage.getItem('mamoru_work_end')   || '16:45';
+const _startParts = _startDef.split(':').map(Number);
+const _endParts   = _endDef.split(':').map(Number);
+let startTotalMin = _startParts[0] * 60 + _startParts[1];
+let endTotalMin   = _endParts[0]   * 60 + _endParts[1];
 
 const FIXED_WORK_MIN = 7 * 60 + 45; // 所定勤務時間 7時間45分（公立標準）
 
@@ -4176,17 +4294,15 @@ function initTodayOtUI() {
   const existing = daily.find(d => d.date === td);
 
   if (existing && (existing.ot > 0 || existing.schoolOt > 0 || existing.takehome > 0)) {
-    // 既存記録を反映
     const savedSchoolOt = existing.schoolOt || 0;
     const savedTakehome = existing.takehome || 0;
-
-    // 勤務時刻の逆算（schoolOt + 所定時間 = 勤務時間）
     const [sh, sm] = startDefault.split(':').map(Number);
+    const [eh, em] = endDefault.split(':').map(Number);
     startTotalMin = sh * 60 + sm;
-    endTotalMin = startTotalMin + (7*60+45) + savedSchoolOt;
+    // 退勤時刻 = デフォルト退勤時刻 + 時間外在校等時間
+    endTotalMin = (eh * 60 + em) + savedSchoolOt;
     schoolOtMin = savedSchoolOt;
-
-    takehomeMin = savedTakehome;
+    takehomeMin = savedTakehome > 0 ? savedTakehome : thDefault;
 
     // しんどさを反映
     if (existing.moodBody) {
@@ -4235,6 +4351,13 @@ function initTodayOtUI() {
   updateTodayOtSummary();
 }
 
+function setCurrentTimeAsDefault() {
+  const fmt = m => `${String(Math.floor(m/60)).padStart(2,'0')}:${String(m%60).padStart(2,'0')}`;
+  localStorage.setItem('mamoru_work_start', fmt(startTotalMin));
+  localStorage.setItem('mamoru_work_end',   fmt(endTotalMin));
+  showSync(`✅ デフォルトを ${fmt(startTotalMin)}〜${fmt(endTotalMin)} に設定しました`);
+}
+
 function adjTime(type, deltMin) {
   if (type === 'start') {
     startTotalMin = Math.max(0, Math.min(23*60+59, startTotalMin + deltMin));
@@ -4254,7 +4377,8 @@ function updateTimeDisp() {
 
 function calcSchoolOt() {
   const workMin = endTotalMin - startTotalMin;
-  schoolOtMin = Math.max(0, workMin - FIXED_WORK_MIN);
+  const lunchOt = currentLunch==='ng'?45 : currentLunch==='20'?30 : currentLunch==='10'?15 : 0;
+  schoolOtMin = Math.max(0, workMin - FIXED_WORK_MIN + lunchOt);
 
   const resultEl = document.getElementById('school-ot-result');
   const manualEl = document.getElementById('school-ot-manual');
