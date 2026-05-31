@@ -672,7 +672,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
     <div class="modal-handle"></div>
     <div class="modal-title" id="ms-title"></div>
     <div class="modal-sub" id="ms-sub"></div>
-    <button class="btn-start" onclick="startTask()"><i class="ti ti-player-play" style="font-size:18px;"></i>はじめる</button>
+    <button class="btn-start" style="display:none;" onclick="startTask()"></button>
     <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:10px;">✅ 終わった — 何分かかりましたか？</div>
     <div class="stepper-box">
       <div class="stepper-row">
@@ -1676,7 +1676,7 @@ function renderTasks(){
         ${!t.done ? dlBadge(t.deadline) : ''}
         ${t.time ? `<span class="time-badge">${t.time}</span>` : ''}
         <button class="pin-btn ${t.pinned?'on':''}" onclick="togglePin('${t.id}')">📌</button>
-        ${!t.done ? `<button class="play-btn" onclick="openStart('${t.id}')"><i class="ti ti-player-play"></i></button>` : ''}
+        ${!t.done ? `<button class="play-btn" onclick="openStartDirect('${t.id}')"><i class="ti ti-player-play"></i></button>` : ''}
       </div>`;
     list.appendChild(el);
   });
@@ -1946,7 +1946,8 @@ async function saveTaskDone(){
     showSync('保存中...');
     await apiPost({ action:'updateTask', data:{id:t.id, done:true, doneDate:t.doneDate, time:t.time, pinned:false, taskMood: t.taskMood||''} });
     showSync('✅ 完了を保存しました');
-  } catch(e) { showSync('⚠ オフライン保存', true); }
+    showCelebration();
+  } catch(e) { showSync('⚠ オフライン保存', true); showCelebration(); }
 }
 function openEndModal(){
   openM('modal-end'); resetStep('e');
@@ -2130,7 +2131,7 @@ function renderDeadlines(){
           <div style="font-size:12px;font-weight:600;color:${col};">${dd.getMonth()+1}月${dd.getDate()}日</div>
           <div style="font-size:11px;color:${col};">${diff<0?Math.abs(diff)+'日超過':diff===0?'今日':diff===1?'明日':'あと'+diff+'日'}</div>
         </div>
-        <button onclick="openStart('${t.id}')" style="background:var(--green-l);color:var(--green-d);border:none;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:6px;">
+        <button onclick="openStartDirect('${t.id}')" style="background:var(--green-l);color:var(--green-d);border:none;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:6px;">
           <i class="ti ti-player-play" style="font-size:13px;"></i>
         </button>`;
       c.appendChild(card);
