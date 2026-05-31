@@ -441,7 +441,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
         <div class="card" style="flex:1;padding:10px;"><div class="card-title">体しんどさ💪</div><div id="ms-week-mood-body"></div></div>
         <div class="card" style="flex:1;padding:10px;"><div class="card-title">心しんどさ❤️</div><div id="ms-week-mood-mind"></div></div>
       </div>
-      <div class="card" style="margin-top:8px;"><div class="card-title">カテゴリ別時間（今週）</div><div class="bar-chart" id="ms-week-bar"></div></div>
+      <div class="card" style="margin-top:8px;"><div class="card-title">カテゴリ別時間（直近5週）</div><div class="bar-chart" id="ms-week-bar"></div></div>
     </div>
 
     <!-- 月コーナー：月次 -->
@@ -458,7 +458,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
         <div class="card" style="flex:1;padding:10px;"><div class="card-title">体しんどさ💪</div><div id="ms-month-mood-body"></div></div>
         <div class="card" style="flex:1;padding:10px;"><div class="card-title">心しんどさ❤️</div><div id="ms-month-mood-mind"></div></div>
       </div>
-      <div class="card" style="margin-top:8px;"><div class="card-title">カテゴリ別時間（今月）</div><div class="bar-chart" id="ms-month-bar"></div></div>
+      <div class="card" style="margin-top:8px;"><div class="card-title">カテゴリ別時間（直近5か月）</div><div class="bar-chart" id="ms-month-bar"></div></div>
     </div>
 
   </div>
@@ -2540,10 +2540,9 @@ function renderMatomeWeek() {
   const weekDoneTasks = tasks.filter(t => t.doneDate >= weekStartStr && t.doneDate <= todayStr2);
   el('ms-week-task-done', weekDoneTasks.length);
 
-  // カテゴリ棒グラフ（今週）
-  const thisWeekStart = new Date(monday); thisWeekStart.setDate(monday.getDate());
-  const weekTasks = tasks.filter(t => t.doneDate >= `${thisWeekStart.getFullYear()}-${pad(thisWeekStart.getMonth()+1)}-${pad(thisWeekStart.getDate())}` && t.doneDate <= todayStr2);
-  console.log('weekTasks:', weekTasks.length, weekTasks.map(t=>({name:t.name,time:t.time,done:t.done})));
+  // カテゴリ棒グラフ（直近5週）
+  const from5wStr = `${from5w.getFullYear()}-${pad(from5w.getMonth()+1)}-${pad(from5w.getDate())}`;
+  const weekTasks = tasks.filter(t => t.doneDate >= from5wStr && t.doneDate <= todayStr2);
   renderBar('ms-week-bar', getCatBarData(weekTasks));
 
   // しんどさカレンダー
@@ -2598,9 +2597,11 @@ function renderMatomeMonth() {
   const thisMonth = months5[4].recs; // 当月のみ（しんどさ・カテゴリ用）
   if(bodyEl) bodyEl.innerHTML = moodMiniGrid(allRecs5m,'body');
   if(mindEl) mindEl.innerHTML = moodMiniGrid(allRecs5m,'mind');
-  // カテゴリ棒グラフ
-  const d0 = new Date(today.getFullYear(), today.getMonth(), 1);
-  const monthTasks = tasks.filter(t => t.doneDate >= `${d0.getFullYear()}-${pad(d0.getMonth()+1)}-01`);
+  // カテゴリ棒グラフ（直近5か月）
+  const d0 = new Date(today.getFullYear(), today.getMonth()-4, 1);
+  const d0Str = `${d0.getFullYear()}-${pad(d0.getMonth()+1)}-01`;
+  const todayStr3 = `${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(today.getDate())}`;
+  const monthTasks = tasks.filter(t => t.doneDate >= d0Str && t.doneDate <= todayStr3);
   renderBar('ms-month-bar', getCatBarData(monthTasks));
 
   // しんどさカレンダー
