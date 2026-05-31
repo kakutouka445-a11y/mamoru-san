@@ -1666,20 +1666,17 @@ function renderTasks(){
   list.innerHTML = '';
 
   // テスト用ボタン
-  const testBtn = document.createElement('button');
-  testBtn.textContent = '🔴 タップテスト';
-  testBtn.style.cssText = 'width:100%;padding:20px;font-size:18px;background:red;color:white;border:none;border-radius:8px;margin-bottom:8px;';
-  testBtn.addEventListener('click', () => alert('テストボタンが押された'));
-  list.appendChild(testBtn);
   sortedTasks().forEach(t => {
     const wrapper = document.createElement('div');
-    wrapper.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:6px;';
+    wrapper.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:6px;width:100%;min-width:0;';
 
     const el = document.createElement('div');
     const isDoneFlag = t.done === true || t.done === 'TRUE' || t.done === 'true';
     el.className = 'task-item' + (t.pinned&&!isDoneFlag?' pinned':'') + (isDoneFlag?' done':'');
     el.dataset.id = t.id;
     el.style.flex = '1';
+    el.style.minWidth = '0';
+    el.style.overflow = 'hidden';
 
     const catCls = 'cat-' + (t.color==='red'?'red':t.color==='blue'?'blue':'gray');
     const hasSubs = t.subs && t.subs.length > 0;
