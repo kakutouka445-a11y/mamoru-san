@@ -2045,6 +2045,7 @@ function openAddTask(){
   document.getElementById('other-input').value = '';
   document.querySelectorAll('#cat-grid .cat-btn').forEach(b=>b.className='cat-btn');
   document.querySelectorAll('#past-when .chip').forEach(c=>c.classList.remove('sel'));
+  document.getElementById('past-date').value = todayStr();
   resetStep('t'); resetStep('p'); selCatName = null; selCatColor = 'gray';
 }
 function selCat(el){
