@@ -1173,9 +1173,9 @@ textarea{resize:none;height:56px;line-height:1.5;}
         <div class="howto-title">ホーム画面</div>
         <div class="howto-desc">
           タスクの一覧が表示されます。<br>
-          <b>▶ボタン</b>：タスクを開始・完了します。<br>
+          <b>タップ</b>：タスクをタップすると完了モーダルが開きます。完了日・かかった時間・いつ実行したか・負担感を記録して保存できます。<br>
+          <b>✏️ 編集</b>：完了モーダルの右上「✏️編集」ボタンでタスク名・締切日の編集・削除ができます。<br>
           <b>📌ボタン</b>：ピン固定してリスト先頭に表示。<br>
-          <b>タップ</b>：タスク名をタップするとその場で編集・削除できます。<br>
           <b>並び順</b>：ピン固定→締切7日以内→その他→完了済み。
         </div>
       </div>
@@ -1232,8 +1232,8 @@ textarea{resize:none;height:56px;line-height:1.5;}
         <div class="howto-title">設定（右上⚙️ボタン）</div>
         <div class="howto-desc">
           <b>デフォルト勤務時刻の設定</b>：勤務開始・退勤・持ち帰り業務のデフォルト値を設定できます。<br>
-          <b>Excelに出力</b>：日次記録・月次まとめ・声を届けるを.xlsxで保存。管理職報告・相談資料に。<br>
-          <b>スプレッドシートで確認</b>：データは自動同期中。将来の「職場のタスク みえるさん」連携の土台。
+          <b>Excelに出力</b>：日次記録・月次まとめを.xlsxで保存。管理職報告・相談資料に。<br>
+          <b>スプレッドシートで確認</b>：データは自動同期中。記録はGoogleスプレッドシートにも保存されます。
         </div>
       </div>
     </div>
@@ -2425,6 +2425,23 @@ function drawBarChart(canvasId, labels, data, color='#1D9E75', maxOverride=null)
     ctx.fillStyle='#9CA3AF'; ctx.font='10px Arial'; ctx.textAlign='right';
     const h=Math.floor(v/60), m=v%60;
     ctx.fillText(m>0?`${h}h${m}m`:`${h}h`, padC.left-3, y+4);
+  });
+
+  // 基準線（国・県・市の目標）
+  const refLines = [
+    { min: 90,  color: '#16A34A', label: '🟢' }, // 目標：月30h
+    { min: 135, color: '#CA8A04', label: '🟡' }, // 上限：月45h
+    { min: 180, color: '#EA580C', label: '🟠' }, // 要注意：月60h
+  ];
+  refLines.forEach(ref => {
+    if (ref.min >= MAX_MIN) return;
+    const y = padC.top + (H-padC.top-padC.bottom)*(1-ref.min/MAX_MIN);
+    ctx.save();
+    ctx.setLineDash([4, 3]);
+    ctx.strokeStyle = ref.color;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath(); ctx.moveTo(padC.left, y); ctx.lineTo(W-padC.right, y); ctx.stroke();
+    ctx.restore();
   });
 
   // バー
