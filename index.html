@@ -3954,6 +3954,10 @@ async function insertSampleData() {
 
   renderTasks();
   showSync(`✅ サンプルデータを投入しました（タスク${newTasks.length}件・日次記録${newDaily.length}件）`);
+  // GASにもサンプルデータを投入（スマホでも表示されるように）
+  try {
+    await apiPost({ action: 'insertSampleData' });
+  } catch(e) { /* オフライン時は無視 */ }
 }
 
 // =============================================
