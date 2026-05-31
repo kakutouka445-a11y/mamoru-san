@@ -3432,8 +3432,12 @@ function openYdayModal() {
   try {
   const yday = new Date(); yday.setDate(yday.getDate() - 1);
   ydaySelectedDate = `${yday.getFullYear()}-${pad(yday.getMonth()+1)}-${pad(yday.getDate())}`;
-  selectYdayDate('yday');
   ydayMood = null; ydayMindMood = null; ydayLunch = null; ydayLunchCat = '';
+
+  // 先にモーダルを開いてDOMを有効化
+  openM('modal-yday');
+
+  // モーダルが開いてからUI初期化
   resetStep('y');
   const ydayMemoEl = document.getElementById('yday-memo');
   if (ydayMemoEl) ydayMemoEl.value = '';
@@ -3448,10 +3452,10 @@ function openYdayModal() {
   );
   initYdayOtUI();
   updateYdaySelectedLabel();
+  selectYdayDate('yday');
   const days=['日','月','火','水','木','金','土'];
-  document.getElementById('yday-date-label').textContent =
-    `${yday.getMonth()+1}月${yday.getDate()}日（${days[yday.getDay()]}）`;
-  openM('modal-yday');
+  const labelEl = document.getElementById('yday-date-label');
+  if (labelEl) labelEl.textContent = `${yday.getMonth()+1}月${yday.getDate()}日（${days[yday.getDay()]}）`;
   } catch(e) { alert('エラー：' + e.message); }
 }
 
