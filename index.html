@@ -946,7 +946,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <i class="ti ti-database-import settings-item-icon" style="color:var(--green);"></i>
       <div class="settings-item-text">
         <div class="settings-item-title">サンプルデータを投入</div>
-        <div class="settings-item-sub">前月・前々月分のサンプルを追加</div>
+        <div class="settings-item-sub">前月以前の４か月分のサンプルを追加</div>
       </div>
       <i class="ti ti-chevron-right settings-item-arrow"></i>
     </button>
@@ -1521,7 +1521,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
   <div class="modal-center" onclick="event.stopPropagation()">
     <div class="modal-icon">📦</div>
     <div class="modal-center-title">サンプルデータを投入</div>
-    <div class="modal-center-body">前月・前々月分のタスクと日次記録のサンプルデータを追加します。<br><strong style="color:var(--amber);">既存のデータには上書きしません。</strong></div>
+    <div class="modal-center-body">前月以前の４か月分のサンプルデータを追加します。<br>投入後は【まとめ】タブで視覚化されたものを見てみてください。<br><strong style="color:var(--amber);">既存のデータには上書きしません。</strong></div>
     <div class="btn-row">
       <button class="btn-gray" onclick="closeM('modal-sample')">キャンセル</button>
       <button class="btn-primary" style="flex:1;margin-top:0;" onclick="insertSampleData()">投入する</button>
@@ -2500,6 +2500,7 @@ function renderMatomeWeek() {
   const total5w = weeks5.reduce((s, w) => s + w.ot, 0);
   const total5wDays = weeks5.reduce((s, w) => s + w.recDays, 0);
   const el = (id, v) => { const e=document.getElementById(id); if(e) e.textContent=v; };
+  el('ms-week-ot-total', fmtMinShort(total5w));
 
   // 直近5週の勤務日数（土日＋祝日除く）
   const from5w = new Date(monday); from5w.setDate(monday.getDate() - 4*7);
