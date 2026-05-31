@@ -1607,7 +1607,13 @@ async function loadTasks() {
       saveLocalTasks();
     }
     if (dailyData.daily) {
-      localStorage.setItem('mamoru_daily', JSON.stringify(dailyData.daily));
+      // スプレッドシートのデータとlocalStorageのデータをマージ
+      // スプレッドシートにある日付はスプレッドシートを優先、ない日付はlocalStorageを保持
+      const localDaily = JSON.parse(localStorage.getItem('mamoru_daily') || '[]');
+      const serverDates = new Set(dailyData.daily.map(d => d.date));
+      const localOnly = localDaily.filter(d => !serverDates.has(d.date));
+      const merged = [...dailyData.daily, ...localOnly];
+      localStorage.setItem('mamoru_daily', JSON.stringify(merged));
     }
     renderTasks();
     renderMatomeWeek();
