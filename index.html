@@ -416,7 +416,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <div style="font-size:12px;color:var(--text-s);margin-bottom:4px;">1日あたり平均時間外勤務（縦軸：0〜4時間）</div>
       <canvas id="chart-day-ot" style="width:100%;height:160px;display:block;margin-bottom:12px;"></canvas>
       <div class="avg-box"><div class="avg-label">時間外勤務（7日合計）</div><div class="avg-val" id="ms-day-ot-total">—</div></div>
-      <div class="avg-box"><div class="avg-label">1日平均 時間外勤務</div><div class="avg-val" id="ms-day-ot-avg">—</div></div>
+      <div class="avg-box"><div class="avg-label">1日平均 時間外勤務<span style="font-size:10px;font-weight:400;color:var(--text-s);">（÷平日）</span></div><div class="avg-val" id="ms-day-ot-avg">—</div></div>
       <div class="mini-stat-row">
         <div class="mini-stat-box"><div class="mini-stat-num" id="ms-day-task-done">—</div><div class="mini-stat-label">完了タスク</div></div>
         <div class="mini-stat-box"><div class="mini-stat-num" id="ms-day-tokk">—</div><div class="mini-stat-label">突発対応</div></div>
@@ -432,7 +432,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <div style="font-size:12px;color:var(--text-s);margin-bottom:4px;">直近5週間の1日平均時間外勤務（縦軸：0〜4時間）</div>
       <canvas id="chart-week-ot" style="width:100%;height:160px;display:block;margin-bottom:12px;"></canvas>
       <div class="avg-box"><div class="avg-label">時間外勤務（直近5週合計）</div><div class="avg-val" id="ms-week-ot-total">—</div></div>
-      <div class="avg-box"><div class="avg-label">1日平均 時間外勤務</div><div class="avg-val" id="ms-week-ot-avg">—</div></div>
+      <div class="avg-box"><div class="avg-label">1日平均 時間外勤務<span style="font-size:10px;font-weight:400;color:var(--text-s);">（÷平日）</span></div><div class="avg-val" id="ms-week-ot-avg">—</div></div>
       <div class="mini-stat-row">
         <div class="mini-stat-box"><div class="mini-stat-num" id="ms-week-task-done">—</div><div class="mini-stat-label">完了タスク</div></div>
         <div class="mini-stat-box"><div class="mini-stat-num" id="ms-week-tokk">—</div><div class="mini-stat-label">突発対応</div></div>
@@ -449,7 +449,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <div style="font-size:12px;color:var(--text-s);margin-bottom:4px;">直近5か月の1日平均時間外勤務（縦軸：0〜4時間）</div>
       <canvas id="chart-month-ot" style="width:100%;height:160px;display:block;margin-bottom:12px;"></canvas>
       <div class="avg-box"><div class="avg-label">時間外勤務（直近5か月合計）</div><div class="avg-val" id="ms-month-ot-total">—</div></div>
-      <div class="avg-box"><div class="avg-label">1日平均 時間外勤務</div><div class="avg-val" id="ms-month-ot-avg">—</div></div>
+      <div class="avg-box"><div class="avg-label">1日平均 時間外勤務<span style="font-size:10px;font-weight:400;color:var(--text-s);">（÷平日）</span></div><div class="avg-val" id="ms-month-ot-avg">—</div></div>
       <div class="mini-stat-row">
         <div class="mini-stat-box"><div class="mini-stat-num" id="ms-month-task-done">—</div><div class="mini-stat-label">完了タスク</div></div>
         <div class="mini-stat-box"><div class="mini-stat-num" id="ms-month-tokk">—</div><div class="mini-stat-label">突発対応</div></div>
@@ -3888,6 +3888,12 @@ async function insertSampleData() {
     {date:'2026-05-27',mood:'hard',moodBody:'hard',moodMind:'hard',lunch:'ng',ot:90},
     {date:'2026-05-28',mood:'ok',moodBody:'ok',moodMind:'ok',lunch:'ok',ot:60},
     {date:'2026-05-29',mood:'hard',moodBody:'hard',moodMind:'hard',lunch:'ng',ot:120},
+    // 6月分
+    {date:'2026-06-02',mood:'ok',moodBody:'ok',moodMind:'ok',lunch:'ok',ot:30,schoolOt:30,takehome:0},
+    {date:'2026-06-03',mood:'hard',moodBody:'hard',moodMind:'hard',lunch:'ng',ot:105,schoolOt:60,takehome:0},
+    {date:'2026-06-04',mood:'ok',moodBody:'ok',moodMind:'ok',lunch:'10',ot:15,schoolOt:0,takehome:0},
+    {date:'2026-06-05',mood:'great',moodBody:'great',moodMind:'great',lunch:'ok',ot:0,schoolOt:0,takehome:0},
+    {date:'2026-06-06',mood:'ok',moodBody:'ok',moodMind:'hard',lunch:'20',ot:90,schoolOt:60,takehome:0},
   ];
 
   // タスクをマージ（同じIDは上書きしない）
