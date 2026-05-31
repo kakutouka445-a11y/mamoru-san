@@ -2543,6 +2543,7 @@ function renderMatomeWeek() {
   // カテゴリ棒グラフ（今週）
   const thisWeekStart = new Date(monday); thisWeekStart.setDate(monday.getDate());
   const weekTasks = tasks.filter(t => t.doneDate >= `${thisWeekStart.getFullYear()}-${pad(thisWeekStart.getMonth()+1)}-${pad(thisWeekStart.getDate())}` && t.doneDate <= todayStr2);
+  console.log('weekTasks:', weekTasks.length, weekTasks.map(t=>({name:t.name,time:t.time,done:t.done})));
   renderBar('ms-week-bar', getCatBarData(weekTasks));
 
   // しんどさカレンダー
