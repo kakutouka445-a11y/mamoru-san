@@ -837,6 +837,13 @@ textarea{resize:none;height:56px;line-height:1.5;}
         <div class="chip chip-warn" onclick="togChip(this)">放課後（勤務内）</div>
         <div class="chip chip-warn" onclick="togChip(this)">勤務時間外</div>
       </div>
+      <div style="font-size:16px;font-weight:600;color:var(--text-s);margin-bottom:6px;margin-top:12px;">🐤 負担感（任意）</div>
+      <div class="mood-row" id="past-mood-row" style="margin-bottom:12px;">
+        <button class="mood-btn" id="pmb-great" onclick="selPastMood('great')">😄<br>軽い</button>
+        <button class="mood-btn" id="pmb-ok"    onclick="selPastMood('ok')">🙂<br>普通</button>
+        <button class="mood-btn" id="pmb-hard"  onclick="selPastMood('hard')">😓<br>重い</button>
+        <button class="mood-btn" id="pmb-limit" onclick="selPastMood('limit')">🚨<br>かなり重い</button>
+      </div>
       <div style="display:flex;gap:8px;margin-top:10px;">
         <button class="btn-primary" style="flex:1;" onclick="addPastTask(false)">完了済みとして登録</button>
         <button class="btn-coral" style="flex:1;margin-top:0;" onclick="addPastTask(true)">⚡ 突発として登録</button>
@@ -2053,6 +2060,16 @@ function switchType(t){
   document.getElementById('past-section').classList.toggle('hidden', t!=='past');
 }
 
+let currentPastMood = '';
+
+function selPastMood(val) {
+  currentPastMood = val;
+  ['great','ok','hard','limit'].forEach(x => {
+    const b = document.getElementById(`pmb-${x}`);
+    if(b) b.className = 'mood-btn' + (x===val?' '+(x==='ok'?'ok2':x):'');
+  });
+}
+
 async function addPastTask(isTokk = false){
   let name = null, color = 'gray';
   if(selCatName==='__other__'){ name = document.getElementById('other-input').value.trim(); }
@@ -2077,8 +2094,11 @@ async function addPastTask(isTokk = false){
     doneDate,
     time,
     tokk: isTokk,
+    taskMood: currentPastMood || '',
   };
   tasks.push(newTask); renderTasks(); saveLocalTasks(); closeM('modal-add');
+  currentPastMood = '';
+  ['great','ok','hard','limit'].forEach(x => { const b=document.getElementById(`pmb-${x}`); if(b) b.className='mood-btn'; });
   try {
     showSync('保存中...');
     const res = await apiPost({ action:'saveTask', data: newTask });
