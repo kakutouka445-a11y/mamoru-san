@@ -49,7 +49,7 @@ input,textarea{font-family:inherit;}
 .task-list{display:flex;flex-direction:column;gap:2px;}
 
 /* タスクアイテム */
-.task-item{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-s);padding:10px 8px 10px 2px;display:flex;align-items:center;gap:3px;min-height:56px;user-select:none;touch-action:pan-y;}
+.task-item{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-s);padding:10px 8px 10px 2px;display:flex;align-items:center;gap:3px;min-height:56px;user-select:none;touch-action:auto;}
 .task-item.pinned{border-left:3px solid var(--green);background:#F7FDFB;}
 .task-item.done{opacity:.38;}
 .task-item.done .task-name{text-decoration:line-through;color:var(--text-s);}
@@ -65,7 +65,7 @@ input,textarea{font-family:inherit;}
 .cat-red{color:var(--red);}
 .cat-blue{color:var(--blue);}
 .cat-gray{color:var(--text-s);}
-.task-name{font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.task-name{font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .task-right{display:flex;align-items:center;gap:10px;flex-shrink:0;}
 .dl-badge{font-size:9px;padding:1px 5px;border-radius:6px;white-space:nowrap;}
 .dl-normal{background:var(--blue-l);color:var(--blue);}
@@ -74,8 +74,8 @@ input,textarea{font-family:inherit;}
 .time-badge{font-size:9px;color:var(--text-s);background:var(--gray-l);padding:1px 5px;border-radius:6px;}
 .pin-btn{width:26px;height:26px;border:none;background:transparent;font-size:13px;opacity:.3;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
 .pin-btn.on{opacity:1;}
-.play-btn{width:26px;height:26px;border:none;background:var(--green-l);color:var(--green-d);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.play-btn i{font-size:13px;}
+.play-btn{width:44px;height:44px;border:none;background:var(--green-l);color:var(--green-d);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;}
+.play-btn i{font-size:18px;}
 
 /* インライン編集 */
 .edit-area{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;}
@@ -666,13 +666,14 @@ textarea{resize:none;height:56px;line-height:1.5;}
   <button class="tab-add" onclick="openAddTask()"><i class="ti ti-plus"></i><span>タスクを追加</span></button>
 </div>
 
-<!-- modal: はじめる／終わった -->
+<!-- modal: タスク完了 -->
 <div class="modal-bg" id="modal-start" onclick="closeBg('modal-start',event)">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
     <div class="modal-title" id="ms-title"></div>
     <div class="modal-sub" id="ms-sub"></div>
-    <button class="btn-start" style="display:none;" onclick="startTask()"></button>
+    <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;">📅 完了日</div>
+    <input type="date" id="s-done-date" style="width:100%;font-size:14px;border:1.5px solid var(--border);border-radius:var(--radius-s);padding:8px 12px;background:var(--gray-l);color:var(--text);outline:none;margin-bottom:12px;">
     <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:10px;">✅ 終わった — 何分かかりましたか？</div>
     <div class="stepper-box">
       <div class="stepper-row">
@@ -1812,16 +1813,20 @@ let dragId = null, dragEl = null, touchStartY = 0, touchItem = null;
 function initDragAndDrop() {
   const list = document.getElementById('task-list');
 
-  // PC: drag events
+  // PC: drag events - drag-handleのみdraggable
   list.querySelectorAll('.task-item').forEach(el => {
-    el.draggable = true;
-    el.addEventListener('dragstart', e => {
+    el.draggable = false; // task-item全体はdraggableにしない
+    const handle = el.querySelector('.drag-handle');
+    if (handle) handle.draggable = true;
+    if (handle) handle.draggable = true;
+    const dragTarget = handle || el;
+    dragTarget.addEventListener('dragstart', e => {
       dragId = el.dataset.id;
       dragEl = el;
       setTimeout(() => el.classList.add('dragging'), 0);
       e.dataTransfer.effectAllowed = 'move';
     });
-    el.addEventListener('dragend', () => {
+    dragTarget.addEventListener('dragend', () => {
       el.classList.remove('dragging');
       list.querySelectorAll('.task-item').forEach(x => x.classList.remove('drag-over-top','drag-over-bottom'));
       dragId = null; dragEl = null;
@@ -1924,6 +1929,14 @@ function openStart(id) {
     const b = document.getElementById(`smb-${x}`); if(b) b.className='mood-btn';
   });
   openM('modal-start');
+  // 完了日に今日をセット
+  const doneDateEl = document.getElementById('s-done-date');
+  if (doneDateEl) doneDateEl.value = todayStr();
+}
+
+function openStartDirect(id) {
+  alert('openStartDirect呼ばれた: ' + id);
+  openStart(id);
 }
 
 function confirmDeleteTask() {
@@ -1947,7 +1960,9 @@ async function saveTaskDone(){
   if(!t) return;
   const ts = fmtTime('s');
   const when = [...document.querySelectorAll('#s-when .chip.sel')].map(c=>c.textContent).join('・');
-  t.done = true; t.doneDate = todayStr(); t.pinned = false;
+  const doneDateEl = document.getElementById('s-done-date');
+  const doneDate = (doneDateEl && doneDateEl.value) ? doneDateEl.value : todayStr();
+  t.done = true; t.doneDate = doneDate; t.pinned = false;
   t.time = (ts||'') + (when ? ' · '+when : '');
   if (currentTaskMoodS) t.taskMood = currentTaskMoodS;
   closeM('modal-start'); selTaskId = null; renderTasks(); saveLocalTasks();
