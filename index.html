@@ -1261,6 +1261,24 @@ textarea{resize:none;height:56px;line-height:1.5;}
       </div>
     </div>
 
+    <!-- アーカイブセクション -->
+    <div style="background:var(--amber-l);border:1.5px solid var(--amber-b);border-radius:var(--radius-s);padding:14px;margin-bottom:12px;">
+      <div style="font-size:15px;font-weight:700;color:#7A4B08;margin-bottom:6px;">🗄️ データのアーカイブ（推奨）</div>
+      <div style="font-size:12px;color:#7A4B08;margin-bottom:10px;">
+        このアプリはスプレッドシートのデータを毎回全件読み込むため、行が増えると起動が遅くなります。定期的にアーカイブすることをおすすめします。
+      </div>
+      <div style="margin-bottom:10px;">
+        <div style="font-size:13px;font-weight:700;color:#7A4B08;margin-bottom:4px;">📋 完了済みタスクをアーカイブ <span style="font-size:11px;font-weight:400;">（半年に1回推奨：7月・3月）</span></div>
+        <div style="font-size:11px;color:#7A4B08;margin-bottom:6px;">完了済みタスクを「タスク_アーカイブ」シートに移動します。タスクの記録は消えません。</div>
+        <button onclick="archiveTasks()" style="background:var(--amber);color:#fff;border:none;border-radius:var(--radius-s);padding:8px 16px;font-size:13px;font-weight:600;width:100%;">📋 完了済みタスクをアーカイブする</button>
+      </div>
+      <div>
+        <div style="font-size:13px;font-weight:700;color:#7A4B08;margin-bottom:4px;">📅 日次記録をアーカイブ <span style="font-size:11px;font-weight:400;">（年1回推奨：3月）</span></div>
+        <div style="font-size:11px;color:#7A4B08;margin-bottom:6px;">日次記録を「日次記録_アーカイブ_年度」シートに移動します。まとめグラフには影響しません。</div>
+        <button onclick="archiveDaily()" style="background:var(--amber);color:#fff;border:none;border-radius:var(--radius-s);padding:8px 16px;font-size:13px;font-weight:600;width:100%;">📅 日次記録をアーカイブする</button>
+      </div>
+    </div>
+
     <button class="btn-cancel" onclick="closeM('modal-howto')">キャンセル</button>
   </div>
 </div>
@@ -1980,6 +1998,49 @@ function startTask(){
   document.getElementById('active-bar').classList.remove('hidden');
   closeM('modal-start');
 }
+// =============================================
+// アーカイブ
+// =============================================
+async function archiveTasks() {
+  if (!confirm('完了済みタスクを「タスク_アーカイブ」シートに移動します。よろしいですか？')) return;
+  try {
+    showSync('アーカイブ中...');
+    const res = await apiPost({ action: 'archiveTasks' });
+    showSync(`✅ ${res.count || 0}件のタスクをアーカイブしました`);
+    await loadData();
+  } catch(e) { showSync('⚠ エラーが発生しました', true); }
+}
+
+async function archiveDaily() {
+  if (!confirm('日次記録を「日次記録_アーカイブ」シートに移動します。よろしいですか？')) return;
+  try {
+    showSync('アーカイブ中...');
+    const res = await apiPost({ action: 'archiveDaily' });
+    showSync(`✅ ${res.count || 0}件の日次記録をアーカイブしました`);
+    await loadData();
+  } catch(e) { showSync('⚠ エラーが発生しました', true); }
+}
+
+function checkArchiveNotice() {
+  const today = new Date();
+  const m = today.getMonth() + 1;
+  const d = today.getDate();
+  const key = `mamoru_archive_notice_${today.getFullYear()}_${m}`;
+  if (localStorage.getItem(key)) return;
+  if ((m === 7 && d === 31) || (m === 3 && d === 22)) {
+    localStorage.setItem(key, '1');
+    setTimeout(() => {
+      const isJuly = m === 7;
+      const msg = isJuly
+        ? '📋 7月のアーカイブの時期です！\n\n完了済みタスクが増えてきたら、「アプリの使い方」からアーカイブすることをおすすめします。\n（起動が速くなります）'
+        : '🗄️ 年度末のアーカイブの時期です！\n\n完了済みタスクと日次記録のアーカイブをおすすめします。\n「アプリの使い方」から実行できます。';
+      if (confirm(msg + '\n\n今すぐ「アプリの使い方」を開きますか？')) {
+        openM('modal-howto');
+      }
+    }, 1500);
+  }
+}
+
 async function saveTaskDone(){
   if(!selTaskId) return;
   const t = tasks.find(t => String(t.id) === String(selTaskId));
@@ -4584,6 +4645,7 @@ setTimeout(updateHideFarUI, 100);
 setTimeout(initTodayOtUI, 200);
 setTimeout(updateHolidayUI, 100);
 setTimeout(checkYesterdayAutoRecord, 1000);
+setTimeout(checkArchiveNotice, 2000);
 </script>
 </body>
 </html>
