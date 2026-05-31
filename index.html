@@ -670,7 +670,10 @@ textarea{resize:none;height:56px;line-height:1.5;}
 <div class="modal-bg" id="modal-start" onclick="closeBg('modal-start',event)">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
-    <div class="modal-title" id="ms-title"></div>
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
+      <div class="modal-title" id="ms-title" style="margin-bottom:0;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></div>
+      <button onclick="openEditFromModal()" style="flex-shrink:0;background:var(--gray-l);border:1px solid var(--border);border-radius:var(--radius-s);padding:5px 10px;font-size:12px;color:var(--text-s);margin-left:8px;">✏️ 編集</button>
+    </div>
     <div class="modal-sub" id="ms-sub"></div>
     <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;">📅 完了日</div>
     <input type="date" id="s-done-date" style="width:100%;font-size:14px;border:1.5px solid var(--border);border-radius:var(--radius-s);padding:8px 12px;background:var(--gray-l);color:var(--text);outline:none;margin-bottom:12px;">
@@ -1667,8 +1670,6 @@ function renderTasks(){
 
   // テスト用ボタン
   sortedTasks().forEach(t => {
-    const wrapper = document.createElement('div');
-    wrapper.style.cssText = 'display:flex;align-items:center;gap:8px;margin-bottom:6px;width:100%;min-width:0;';
 
     const el = document.createElement('div');
     const isDoneFlag = t.done === true || t.done === 'TRUE' || t.done === 'true';
@@ -1685,11 +1686,11 @@ function renderTasks(){
       const init = CAT_INITIAL[t.name] || t.name.charAt(0);
       const nameText = t.subs.join('・');
       const nameFontSize = nameText.length > 15 ? '13px' : nameText.length > 10 ? '15px' : '17px';
-      body = `<div class="task-body" onclick="tapTask('${t.id}')"><span class="cat-initial ${catCls}">${init}</span><span class="task-name" style="font-size:${nameFontSize};">${nameText}</span></div>`;
+      body = `<div class="task-body" onclick="openStartDirect('${t.id}')"><span class="cat-initial ${catCls}">${init}</span><span class="task-name" style="font-size:${nameFontSize};">${nameText}</span></div>`;
     } else {
       const nameFontSize = t.name.length > 15 ? '13px' : t.name.length > 10 ? '15px' : '17px';
-      body = `<div class="task-body" onclick="tapTask('${t.id}')"><span class="cat-full ${catCls}">${t.name}</span></div>`;
-      body = `<div class="task-body" onclick="tapTask('${t.id}')"><span class="cat-full ${catCls}" style="font-size:${nameFontSize};">${t.name}</span></div>`;
+      body = `<div class="task-body" onclick="openStartDirect('${t.id}')"><span class="cat-full ${catCls}">${t.name}</span></div>`;
+      body = `<div class="task-body" onclick="openStartDirect('${t.id}')"><span class="cat-full ${catCls}" style="font-size:${nameFontSize};">${t.name}</span></div>`;
     }
 
     el.innerHTML = `
@@ -1698,24 +1699,10 @@ function renderTasks(){
       <div class="task-right">
         ${!isDoneFlag ? dlBadge(t.deadline) : ''}
         ${t.time ? `<span class="time-badge">${t.time}</span>` : ''}
-        <button class="pin-btn ${t.pinned?'on':''}" onclick="togglePin('${t.id}')">📌</button>
+        <button class="pin-btn ${t.pinned?'on':''}" onclick="event.stopPropagation();togglePin('${t.id}')">📌</button>
       </div>`;
 
-    wrapper.appendChild(el);
-
-    // done:falseのタスクのみ▶ボタンを追加
-    const isDone = t.done === true || t.done === 'TRUE' || t.done === 'true';
-    if (!isDone) {
-      const playBtn = document.createElement('button');
-      playBtn.style.cssText = 'width:56px;height:56px;min-width:56px;border:2px solid var(--green-b);background:var(--green-l);color:var(--green-d);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;font-size:22px;cursor:pointer;touch-action:manipulation;-webkit-tap-highlight-color:rgba(0,0,0,0.1);pointer-events:auto;';
-      playBtn.innerHTML = '<i class="ti ti-player-play"></i>';
-      playBtn.addEventListener('touchstart', function(e) { e.stopPropagation(); }, { passive: true });
-      playBtn.addEventListener('click', function(e) { e.stopPropagation(); openStartDirect(t.id); });
-      playBtn.addEventListener('touchend', function(e) { e.stopPropagation(); openStartDirect(t.id); });
-      wrapper.appendChild(playBtn);
-    }
-
-    list.appendChild(wrapper);
+    list.appendChild(el);
   });
   initDragAndDrop();
 }
@@ -1963,6 +1950,12 @@ function openStart(id) {
 
 function openStartDirect(id) {
   openStart(id);
+}
+
+function openEditFromModal() {
+  const id = selTaskId;
+  closeM('modal-start');
+  setTimeout(() => tapTask(id), 100);
 }
 
 function confirmDeleteTask() {
