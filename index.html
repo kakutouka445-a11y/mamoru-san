@@ -79,8 +79,8 @@ input,textarea{font-family:inherit;}
 
 /* インライン編集 */
 .edit-area{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;}
-.edit-name{font-size:20px;border:none;border-bottom:2px solid var(--green);background:transparent;outline:none;width:100%;padding:4px 0;font-weight:600;color:var(--text);margin-bottom:6px;}
-.edit-sub{font-size:11px;border:none;border-bottom:1px solid var(--border);background:transparent;outline:none;width:100%;padding:1px 0;color:var(--text-s);}
+.edit-name{font-size:13px;border:none;border-bottom:1.5px solid var(--green);background:transparent;outline:none;width:100%;padding:2px 0;font-weight:600;color:var(--text);margin-bottom:6px;}
+.edit-sub{font-size:24px;border:none;border-bottom:2px solid var(--green);background:transparent;outline:none;width:100%;padding:4px 0;color:var(--text);font-weight:600;}
 .edit-actions{display:flex;gap:12px;margin-top:10px;}
 .edit-save{font-size:14px;background:var(--green);color:#fff;border:none;border-radius:var(--radius-s);padding:12px 24px;font-weight:700;flex:1;}
 .edit-cancel{font-size:14px;background:var(--gray-l);color:var(--text-s);border:none;border-radius:var(--radius-s);padding:12px 20px;flex:1;}
@@ -1728,10 +1728,10 @@ function tapTask(id) {
 
   el.querySelector('.task-body').outerHTML = `
     <div class="edit-area">
-      <div style="font-size:11px;color:var(--text-s);margin-bottom:4px;">カテゴリ</div>
-      <div class="cat-grid" style="margin-bottom:8px;" id="edit-cat-grid-${id}">${catGrid}</div>
-      <input class="edit-name" type="text" value="${t.name}" placeholder="タスク名">
-      <input class="edit-sub" type="text" value="${subsText}" placeholder="やること（・区切り）">
+      <div style="font-size:10px;color:var(--text-s);margin-bottom:2px;">カテゴリ名</div>
+      <input class="edit-name" type="text" value="${t.name}" placeholder="カテゴリ名">
+      <div style="font-size:10px;color:var(--text-s);margin-bottom:2px;">タスク内容</div>
+      <input class="edit-sub" type="text" value="${subsText}" placeholder="タスク内容（・区切り）">
       <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
         <span style="font-size:11px;color:var(--text-s);flex-shrink:0;">締切</span>
         <input class="edit-deadline" type="date" value="${t.deadline||''}" style="flex:1;font-size:12px;border:1px solid var(--border);border-radius:var(--radius-s);padding:4px 8px;background:var(--gray-l);color:var(--text);outline:none;">
@@ -1749,8 +1749,8 @@ function tapTask(id) {
     if(e.key==='Escape') cancelEdit(id);
   });
   setTimeout(() => {
-    const nameEl = el.querySelector('.edit-name');
-    if (nameEl) { nameEl.focus(); nameEl.select(); }
+    const subEl = el.querySelector('.edit-sub');
+    if (subEl) { subEl.focus(); subEl.select(); }
   }, 50);
 }
 
