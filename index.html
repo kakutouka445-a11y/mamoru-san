@@ -3277,7 +3277,7 @@ function doExport(allTasks, daily) {
       const row = [
         date,
         daysArr[new Date(date).getDay()],
-        t ? t.name : '',
+        t ? (t.subs && t.subs.length > 0 ? t.subs.join('・') : t.name) : '',
         t ? t.name : '',
         timeStr,
         whenStr,
