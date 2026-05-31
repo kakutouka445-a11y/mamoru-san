@@ -184,6 +184,8 @@ input,textarea{font-family:inherit;}
 /* チップ */
 .chips{display:flex;gap:5px;flex-wrap:wrap;margin-bottom:8px;}
 .chip{padding:10px 16px;border-radius:20px;border:1px solid var(--border);background:var(--gray-l);font-size:14px;color:var(--text);}
+.chip.chip-warn{border-color:var(--amber-b);background:var(--amber-l);color:var(--amber);}
+.chip.chip-warn.sel{background:var(--amber);border-color:var(--amber);color:#fff;font-weight:600;}
 .chip.sel{background:var(--green-l);border-color:var(--green);color:var(--green-d);font-weight:600;}
 .chip.coral{border-color:var(--coral-b);}
 .chip.coral.sel{background:var(--coral-l);border-color:var(--coral);color:#4A1B0C;}
@@ -703,9 +705,9 @@ textarea{resize:none;height:56px;line-height:1.5;}
     <div class="hint">複数選択できます</div>
     <div class="chips" id="s-when">
       <div class="chip" onclick="togChip(this)">空きコマ（勤務内）</div>
-      <div class="chip" onclick="togChip(this)">放課後（勤務内）</div>
       <div class="chip" onclick="togChip(this)">昼休み（勤務外）</div>
-      <div class="chip" onclick="togChip(this)">勤務時間外</div>
+      <div class="chip chip-warn" onclick="togChip(this)">放課後（勤務内）</div>
+      <div class="chip chip-warn" onclick="togChip(this)">勤務時間外</div>
     </div>
     <div style="font-size:18px;font-weight:600;color:var(--text-s);margin-bottom:6px;margin-top:12px;">
       🐤 負担感（任意）
@@ -754,9 +756,9 @@ textarea{resize:none;height:56px;line-height:1.5;}
     <div class="hint">複数選択できます</div>
     <div class="chips" id="e-when">
       <div class="chip" onclick="togChip(this)">空きコマ（勤務内）</div>
-      <div class="chip" onclick="togChip(this)">放課後（勤務内）</div>
       <div class="chip" onclick="togChip(this)">昼休み（勤務外）</div>
-      <div class="chip" onclick="togChip(this)">勤務時間外</div>
+      <div class="chip chip-warn" onclick="togChip(this)">放課後（勤務内）</div>
+      <div class="chip chip-warn" onclick="togChip(this)">勤務時間外</div>
     </div>
     <div style="font-size:18px;font-weight:600;color:var(--text-s);margin-bottom:6px;margin-top:12px;">
       🐤 負担感（任意）
@@ -831,9 +833,9 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <div class="field-label">🕑 いつ実行？</div>
       <div class="chips" id="past-when">
         <div class="chip" onclick="togChip(this)">空きコマ（勤務内）</div>
-        <div class="chip" onclick="togChip(this)">放課後（勤務内）</div>
         <div class="chip" onclick="togChip(this)">昼休み（勤務外）</div>
-        <div class="chip" onclick="togChip(this)">勤務時間外</div>
+        <div class="chip chip-warn" onclick="togChip(this)">放課後（勤務内）</div>
+        <div class="chip chip-warn" onclick="togChip(this)">勤務時間外</div>
       </div>
       <div style="display:flex;gap:8px;margin-top:10px;">
         <button class="btn-primary" style="flex:1;" onclick="addPastTask(false)">完了済みとして登録</button>
