@@ -2574,8 +2574,9 @@ function renderMatomeWeek() {
   if(bodyEl) bodyEl.innerHTML = moodMiniGrid(thisWeekRecs,'body');
   if(mindEl) mindEl.innerHTML = moodMiniGrid(thisWeekRecs,'mind');
 
-  // 完了タスク・突発対応
-  const weekDoneTasks = tasks.filter(t => t.doneDate >= weekStartStr && t.doneDate <= todayStr2);
+  // 完了タスク・突発対応（直近5週）
+  const from5wStr2 = `${from5w.getFullYear()}-${pad(from5w.getMonth()+1)}-${pad(from5w.getDate())}`;
+  const weekDoneTasks = tasks.filter(t => t.doneDate >= from5wStr2 && t.doneDate <= todayStr2);
   el('ms-week-task-done', weekDoneTasks.length);
   const weekTokkTasks = weekDoneTasks.filter(t => t.tokk === true || t.tokk === 'TRUE');
   el('ms-week-tokk', weekTokkTasks.length > 0 ? weekTokkTasks.length : '—');
@@ -2626,10 +2627,11 @@ function renderMatomeMonth() {
   el('ms-month-ot-total', fmtMinShort(totalOt));
   el('ms-month-ot-avg', workdays5m>0 ? fmtMinShort(Math.round(totalOt/workdays5m)) : '—');
 
-  // 完了タスク・突発対応
-  const d0month = new Date(today.getFullYear(), today.getMonth(), 1);
+  // 完了タスク・突発対応（直近5か月）
+  const d0month = new Date(today.getFullYear(), today.getMonth()-4, 1);
   const d0monthStr = `${d0month.getFullYear()}-${pad(d0month.getMonth()+1)}-01`;
-  const monthDoneTasks = tasks.filter(t => t.doneDate >= d0monthStr);
+  const todayStr3m = `${today.getFullYear()}-${pad(today.getMonth()+1)}-${pad(today.getDate())}`;
+  const monthDoneTasks = tasks.filter(t => t.doneDate >= d0monthStr && t.doneDate <= todayStr3m);
   el('ms-month-task-done', monthDoneTasks.length);
   const monthTokkTasks = monthDoneTasks.filter(t => t.tokk === true || t.tokk === 'TRUE');
   el('ms-month-tokk', monthTokkTasks.length > 0 ? monthTokkTasks.length : '—');
