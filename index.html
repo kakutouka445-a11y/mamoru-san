@@ -2071,10 +2071,10 @@ function selPastMood(val) {
 }
 
 async function addPastTask(isTokk = false){
-  let name = null, color = 'gray';
-  if(selCatName==='__other__'){ name = document.getElementById('other-input').value.trim(); }
+  let name = 'その他', color = 'gray';
+  if(selCatName==='__other__'){ name = document.getElementById('other-input').value.trim() || 'その他'; }
   else if(selCatName){ name = selCatName; color = selCatColor; }
-  if(!name){ alert('カテゴリを選んでください'); return; }
+
 
   const sub      = document.getElementById('past-sub').value.trim();
   const doneDate = document.getElementById('past-date').value;
