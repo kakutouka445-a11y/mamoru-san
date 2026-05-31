@@ -65,7 +65,7 @@ input,textarea{font-family:inherit;}
 .cat-red{color:var(--red);}
 .cat-blue{color:var(--blue);}
 .cat-gray{color:var(--text-s);}
-.task-name{font-size:17px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.task-name{font-size:51px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:700;}
 .task-right{display:flex;align-items:center;gap:10px;flex-shrink:0;}
 .dl-badge{font-size:9px;padding:1px 5px;border-radius:6px;white-space:nowrap;}
 .dl-normal{background:var(--blue-l);color:var(--blue);}
@@ -80,7 +80,7 @@ input,textarea{font-family:inherit;}
 /* インライン編集 */
 .edit-area{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;}
 .edit-name{font-size:13px;border:none;border-bottom:1.5px solid var(--green);background:transparent;outline:none;width:100%;padding:2px 0;font-weight:600;color:var(--text);margin-bottom:6px;}
-.edit-sub{font-size:72px;border:none;border-bottom:2px solid var(--green);background:transparent;outline:none;width:100%;padding:8px 0;color:var(--text);font-weight:600;min-height:96px;}
+.edit-sub{font-size:30px;border:none;border-bottom:2px solid var(--green);background:transparent;outline:none;width:100%;padding:8px 0;color:var(--text);font-weight:600;min-height:96px;}
 .edit-actions{display:flex;gap:12px;margin-top:10px;}
 .edit-save{font-size:14px;background:var(--green);color:#fff;border:none;border-radius:var(--radius-s);padding:12px 24px;font-weight:700;flex:1;}
 .edit-cancel{font-size:14px;background:var(--gray-l);color:var(--text-s);border:none;border-radius:var(--radius-s);padding:12px 20px;flex:1;}
@@ -1687,10 +1687,10 @@ function renderTasks(){
     if(hasSubs){
       const init = CAT_INITIAL[t.name] || t.name.charAt(0);
       const nameText = t.subs.join('・');
-      const nameFontSize = nameText.length > 15 ? '13px' : nameText.length > 10 ? '15px' : '17px';
+      const nameFontSize = nameText.length > 15 ? '39px' : nameText.length > 10 ? '45px' : '51px';
       body = `<div class="task-body" onclick="openStartDirect('${t.id}')"><span class="cat-initial ${catCls}">${init}</span><span class="task-name" style="font-size:${nameFontSize};">${nameText}</span></div>`;
     } else {
-      const nameFontSize = t.name.length > 15 ? '13px' : t.name.length > 10 ? '15px' : '17px';
+      const nameFontSize = t.name.length > 15 ? '39px' : t.name.length > 10 ? '45px' : '51px';
       body = `<div class="task-body" onclick="openStartDirect('${t.id}')"><span class="cat-full ${catCls}">${t.name}</span></div>`;
       body = `<div class="task-body" onclick="openStartDirect('${t.id}')"><span class="cat-full ${catCls}" style="font-size:${nameFontSize};">${t.name}</span></div>`;
     }
@@ -1733,7 +1733,7 @@ function tapTask(id) {
       <div style="font-size:10px;color:var(--text-s);margin-bottom:2px;">カテゴリ名</div>
       <input class="edit-name" type="text" value="${t.name}" placeholder="カテゴリ名">
       <div style="font-size:10px;color:var(--text-s);margin-bottom:2px;">タスク内容</div>
-      <input class="edit-sub" type="text" value="${subsText}" placeholder="タスク内容（・区切り）">
+      <textarea class="edit-sub" placeholder="タスク内容（・区切り）" rows="3">${subsText}</textarea>
       <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
         <span style="font-size:11px;color:var(--text-s);flex-shrink:0;">締切</span>
         <input class="edit-deadline" type="date" value="${t.deadline||''}" style="flex:1;font-size:12px;border:1px solid var(--border);border-radius:var(--radius-s);padding:4px 8px;background:var(--gray-l);color:var(--text);outline:none;">
@@ -1786,7 +1786,7 @@ async function saveEdit(id) {
   const t = tasks.find(t => String(t.id) === String(id));
   if (!t) return;
   t.name     = nameEl.value.trim() || t.name;
-  t.subs     = subEl ? subEl.value.split('・').map(s=>s.trim()).filter(Boolean) : t.subs;
+  t.subs = subEl ? subEl.value.split('・').map(s=>s.trim()).filter(Boolean) : t.subs;
   t.deadline = dlEl ? dlEl.value : t.deadline;
   if (catBtn) { t.cat = catBtn.dataset.cat; t.catColor = catBtn.dataset.color; }
   renderTasks(); saveLocalTasks();
