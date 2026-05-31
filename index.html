@@ -92,7 +92,7 @@ input,textarea{font-family:inherit;}
 .tab-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--bg-card);border-top:1px solid var(--border);display:flex;align-items:stretch;height:64px;z-index:50;}
 .tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:none;background:transparent;padding:6px 0 10px;border-top:3px solid transparent;transition:background .15s;}
 .tab i{font-size:22px;color:var(--text-s);}
-.tab span{font-size:10px;color:var(--text-s);}
+.tab span{font-size:13px;color:var(--text-s);}
 .tab.active{background:#F0FDF4;border-top:3px solid var(--green);}
 .tab.active i{color:var(--green-d);font-size:24px;}
 .tab.active span{color:var(--green-d);font-weight:700;}
@@ -113,7 +113,7 @@ input,textarea{font-family:inherit;}
 #tab-matome.active span { color: #5B21B6; font-weight: 700; }
 .tab-add{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:none;background:var(--green);padding:6px 0 10px;cursor:pointer;}
 .tab-add i{font-size:24px;color:#fff;}
-.tab-add span{font-size:10px;color:rgba(255,255,255,.9);font-weight:600;}
+.tab-add span{font-size:13px;color:rgba(255,255,255,.9);font-weight:600;}
 
 /* ふりかえりサブタブ */
 .subtab-row{display:flex;gap:6px;padding:10px 14px 0;flex-shrink:0;}
@@ -665,7 +665,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
   <button class="tab" id="tab-deadline" onclick="switchTab('deadline')"><i class="ti ti-calendar-due"></i><span>締切</span></button>
   <button class="tab today-tab" id="tab-review" onclick="switchTab('review')"><i class="ti ti-moon"></i><span>ふりかえり</span></button>
   <button class="tab" id="tab-matome" onclick="switchTab('matome')"><i class="ti ti-chart-bar"></i><span>まとめ</span></button>
-  <button class="tab-add" onclick="openAddTask()"><i class="ti ti-plus"></i><span>タスクを追加</span></button>
+  <button class="tab-add" onclick="openAddTask()"><i class="ti ti-plus"></i><span>追加</span></button>
 </div>
 
 <!-- modal: タスク完了 -->
