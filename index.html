@@ -2032,7 +2032,8 @@ async function addPastTask(isTokk = false){
     const res = await apiPost({ action:'saveTask', data: newTask });
     if(res.id){ newTask.id = res.id; saveLocalTasks(); }
     showSync(isTokk ? '⚡ 突発対応として登録しました' : '✅ 完了済みタスクを登録しました');
-  } catch(e){ showSync('⚠ オフライン保存', true); }
+    showCelebration();
+  } catch(e){ showSync('⚠ オフライン保存', true); showCelebration(); }
 }
 
 function openAddTask(){
