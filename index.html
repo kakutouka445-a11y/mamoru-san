@@ -3918,11 +3918,16 @@ async function insertSampleData() {
   localStorage.setItem('mamoru_tasks', JSON.stringify(mergedTasks));
   tasks = mergedTasks;
 
-  // 日次記録をマージ（同じ日付は上書きしない）
+  // 日次記録をマージ（同じ日付でもot=0の既存記録はサンプルで上書き）
   const existingDaily = JSON.parse(localStorage.getItem('mamoru_daily') || '[]');
-  const existingDates = new Set(existingDaily.map(d => d.date));
+  const existingDates = new Set(
+    existingDaily.filter(d => (d.ot || 0) > 0).map(d => d.date)
+  );
   const newDaily = sampleDaily.filter(d => !existingDates.has(d.date));
-  const mergedDaily = [...existingDaily, ...newDaily];
+  const mergedDaily = [
+    ...existingDaily.filter(d => existingDates.has(d.date)),
+    ...newDaily,
+  ];
   localStorage.setItem('mamoru_daily', JSON.stringify(mergedDaily));
 
   renderTasks();
