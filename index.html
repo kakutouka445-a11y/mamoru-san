@@ -792,6 +792,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <button class="cat-btn" data-n="学級" data-c="gray" onclick="selCat(this)">学級</button>
       <button class="cat-btn" data-n="会議" data-c="gray" onclick="selCat(this)">会議</button>
       <button class="cat-btn" data-n="研修" data-c="gray" onclick="selCat(this)">研修</button>
+      <button class="cat-btn" data-n="服務・当番" data-c="gray" onclick="selCat(this)">服務・当番</button>
       <button class="cat-btn" data-n="授業準備・宿題等" data-c="gray" onclick="selCat(this)">授業準備・宿題等</button>
       <button class="cat-btn" data-n="その他" data-c="gray" onclick="selCat(this)">その他</button>
       <button class="cat-btn" data-n="__other__" data-c="gray" onclick="selCat(this)">自由入力</button>
@@ -1541,7 +1542,7 @@ function showSync(msg, isError=false) {
 // =============================================
 // データ
 // =============================================
-const CAT_INITIAL = {'研修':'研','分掌':'分','保護者対応':'保','生徒指導':'生','学年':'学','学級':'学','会議':'会','授業準備・宿題等':'授'};
+const CAT_INITIAL = {'研修':'研','服務・当番':'服','分掌':'分','保護者対応':'保','生徒指導':'生','学年':'学','学級':'学','会議':'会','授業準備・宿題等':'授'};
 const CATEGORIES = [
   {name:'分掌',      color:'#DC2626'},
   {name:'保護者対応', color:'#EA580C'},
@@ -1550,6 +1551,7 @@ const CATEGORIES = [
   {name:'学級',      color:'#7C3AED'},
   {name:'会議',      color:'#5DCAA5'},
   {name:'研修',      color:'#6B7280'},
+  {name:'服務・当番', color:'#6B7280'},
   {name:'授業準備・宿題等', color:'#1D9E75'},
   {name:'その他',    color:'#6B7280'},
 ];
@@ -2719,7 +2721,7 @@ function renderBar(id,data){
 
 // カテゴリ別時間をタスクデータから集計
 const CAT_COLORS = {'分掌':'#DC2626','保護者対応':'#EA580C','生徒指導':'#F59E0B','学年':'#2563EB','学級':'#7C3AED','会議':'#5DCAA5','授業準備・宿題等':'#1D9E75'};
-const CAT_CLASS = {'分掌':'red','学年':'blue','保護者対応':'gray','生徒指導':'gray','学級':'gray','会議':'gray','研修':'gray','授業準備・宿題等':'gray','その他':'gray'};
+const CAT_CLASS = {'分掌':'red','学年':'blue','保護者対応':'gray','生徒指導':'gray','学級':'gray','会議':'gray','研修':'gray','服務・当番':'gray','授業準備・宿題等':'gray','その他':'gray'};
 function getCatBarData(targetTasks) {
   const catMap = {};
   targetTasks.forEach(t => {
