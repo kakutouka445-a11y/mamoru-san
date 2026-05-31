@@ -1683,9 +1683,13 @@ function renderTasks(){
     let body = '';
     if(hasSubs){
       const init = CAT_INITIAL[t.name] || t.name.charAt(0);
-      body = `<div class="task-body" onclick="tapTask('${t.id}')"><span class="cat-initial ${catCls}">${init}</span><span class="task-name">${t.subs.join('・')}</span></div>`;
+      const nameText = t.subs.join('・');
+      const nameFontSize = nameText.length > 15 ? '13px' : nameText.length > 10 ? '15px' : '17px';
+      body = `<div class="task-body" onclick="tapTask('${t.id}')"><span class="cat-initial ${catCls}">${init}</span><span class="task-name" style="font-size:${nameFontSize};">${nameText}</span></div>`;
     } else {
+      const nameFontSize = t.name.length > 15 ? '13px' : t.name.length > 10 ? '15px' : '17px';
       body = `<div class="task-body" onclick="tapTask('${t.id}')"><span class="cat-full ${catCls}">${t.name}</span></div>`;
+      body = `<div class="task-body" onclick="tapTask('${t.id}')"><span class="cat-full ${catCls}" style="font-size:${nameFontSize};">${t.name}</span></div>`;
     }
 
     el.innerHTML = `
