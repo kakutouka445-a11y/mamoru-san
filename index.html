@@ -942,6 +942,15 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <i class="ti ti-chevron-right settings-item-arrow"></i>
     </button>
 
+    <button class="settings-item-btn" onclick="closeM('modal-settings');deduplicateTasksNow()">
+      <i class="ti ti-database-check settings-item-icon" style="color:var(--green-d);"></i>
+      <div class="settings-item-text">
+        <div class="settings-item-title">タスクID重複を解消する</div>
+        <div class="settings-item-sub">スプレッドシートの重複行を削除</div>
+      </div>
+      <i class="ti ti-chevron-right settings-item-arrow"></i>
+    </button>
+
     <div class="settings-section-label">表示</div>
     <button class="settings-item-btn" onclick="toggleHideFar()">
       <i class="ti ti-calendar-off settings-item-icon" style="color:var(--blue);"></i>
@@ -2038,6 +2047,17 @@ async function addPastTask(isTokk = false){
     showSync(isTokk ? '⚡ 突発対応として登録しました' : '✅ 完了済みタスクを登録しました');
     showCelebration();
   } catch(e){ showSync('⚠ オフライン保存', true); showCelebration(); }
+}
+
+async function deduplicateTasksNow() {
+  if (!confirm('スプレッドシートのタスクシートにある重複ID行を削除しますか？')) return;
+  try {
+    showSync('重複解消中...');
+    const res = await apiPost({ action: 'deduplicate' });
+    showSync(`✅ 完了：${res.deleted || 0}行の重複を削除しました`);
+  } catch(e) {
+    showSync('⚠ エラーが発生しました', true);
+  }
 }
 
 function openAddTask(){
