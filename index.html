@@ -546,7 +546,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
     </div>
     <!-- 昼休み時間外：カテゴリ選択（した（ほぼ休めず）・少しの時のみ表示） -->
     <div id="lunch-cat-wrap" class="hidden" style="margin-bottom:8px;">
-      <div style="font-size:11px;color:var(--text-s);margin-bottom:5px;">昼休みに何をしていましたか？</div>
+      <div style="font-size:11px;color:var(--text-s);margin-bottom:5px;">昼休みに何をしていましたか？<span style="font-weight:400;color:var(--text-s);">（複数選択可）</span></div>
       <div class="cat-grid" id="lunch-cat-grid" style="margin-bottom:0;">
         <button class="cat-btn" data-n="分掌" onclick="togLunchCat(this)">分掌</button>
         <button class="cat-btn" data-n="保護者対応" onclick="togLunchCat(this)">保護者対応</button>
@@ -588,12 +588,14 @@ textarea{resize:none;height:56px;line-height:1.5;}
     </div>
     <div id="school-ot-result" style="font-size:12px;color:var(--text-s);margin-bottom:4px;min-height:18px;text-align:center;"></div>
 
-    <button onclick="setCurrentTimeAsDefault()" style="display:flex;align-items:center;gap:6px;background:#E0F2FE;border:1px solid #7DD3FC;border-radius:var(--radius-s);padding:7px 12px;font-size:12px;color:#0369A1;margin-bottom:12px;width:100%;">
-      <i class="ti ti-device-floppy" style="font-size:13px;"></i>この時刻をデフォルトに設定する
-    </button>
-    <button onclick="openWorkDefaultModal()" style="display:flex;align-items:center;gap:6px;background:var(--gray-l);border:1px solid var(--border);border-radius:var(--radius-s);padding:7px 12px;font-size:12px;color:var(--text-s);margin-bottom:12px;">
-      <i class="ti ti-settings" style="font-size:13px;"></i>デフォルトの勤務時刻を設定する
-    </button>
+    <div style="display:flex;gap:8px;margin-bottom:12px;">
+      <button onclick="setCurrentTimeAsDefault()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:#E0F2FE;border:1px solid #7DD3FC;border-radius:var(--radius-s);padding:10px 8px;font-size:13px;color:#0369A1;">
+        <i class="ti ti-device-floppy" style="font-size:13px;"></i>この時刻をデフォルトに
+      </button>
+      <button onclick="openWorkDefaultModal()" style="flex:1;display:flex;align-items:center;justify-content:center;gap:6px;background:var(--gray-l);border:1px solid var(--border);border-radius:var(--radius-s);padding:10px 8px;font-size:13px;color:var(--text-s);">
+        <i class="ti ti-settings" style="font-size:13px;"></i>デフォルト時間を設定
+      </button>
+    </div>
 
     </div><!-- /workday-only-wrap -->
 
@@ -699,19 +701,24 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <button onclick="openEditFromModal()" style="flex-shrink:0;background:var(--gray-l);border:1.5px solid var(--border);border-radius:var(--radius-s);padding:10px 16px;font-size:16px;color:var(--text-s);margin-left:8px;font-weight:600;">✏️ 編集</button>
     </div>
     <div class="modal-sub" id="ms-sub"></div>
-    <div style="font-size:18px;font-weight:600;color:var(--text-s);margin-bottom:6px;">📅 完了日</div>
-    <input type="date" id="s-done-date" style="width:100%;font-size:14px;border:1.5px solid var(--border);border-radius:var(--radius-s);padding:8px 12px;background:var(--gray-l);color:var(--text);outline:none;margin-bottom:12px;">
-    <!-- タスク内タイマー -->
-    <div id="s-timer-box" style="background:var(--green-l);border:1.5px solid var(--green-b);border-radius:var(--radius-s);padding:10px 12px;margin-bottom:12px;">
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
-        <div style="font-size:13px;font-weight:600;color:var(--green-d);">⏱ タイマーで計測</div>
-        <div id="s-timer-display" style="font-size:20px;font-weight:700;color:var(--green-d);font-family:monospace;">00:00:00</div>
+    <div style="display:flex;gap:10px;margin-bottom:12px;align-items:stretch;">
+      <!-- 完了日（左） -->
+      <div style="flex:1;min-width:0;">
+        <div style="font-size:15px;font-weight:600;color:var(--text-s);margin-bottom:6px;">📅 完了日</div>
+        <input type="date" id="s-done-date" style="width:100%;font-size:13px;border:1.5px solid var(--border);border-radius:var(--radius-s);padding:8px 8px;background:var(--gray-l);color:var(--text);outline:none;">
       </div>
-      <div style="display:flex;gap:8px;">
-        <button id="s-timer-start" onclick="sTimerStart()" style="flex:1;padding:8px;background:var(--green);color:#fff;border:none;border-radius:var(--radius-s);font-size:14px;font-weight:700;">▶ 開始</button>
-        <button id="s-timer-pause" onclick="sTimerPause()" style="flex:1;padding:8px;background:var(--amber);color:#fff;border:none;border-radius:var(--radius-s);font-size:14px;font-weight:700;display:none;">⏸ 一時停止</button>
-        <button id="s-timer-resume" onclick="sTimerResume()" style="flex:1;padding:8px;background:var(--green);color:#fff;border:none;border-radius:var(--radius-s);font-size:14px;font-weight:700;display:none;">▶ 再開</button>
-        <button id="s-timer-stop" onclick="sTimerStop()" style="flex:1;padding:8px;background:var(--red);color:#fff;border:none;border-radius:var(--radius-s);font-size:14px;font-weight:700;display:none;">⏹ 終了</button>
+      <!-- タイマー（右） -->
+      <div id="s-timer-box" style="flex:1;background:var(--green-l);border:1.5px solid var(--green-b);border-radius:var(--radius-s);padding:8px 10px;">
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+          <div style="font-size:12px;font-weight:600;color:var(--green-d);">⏱ タイマー</div>
+          <div id="s-timer-display" style="font-size:18px;font-weight:700;color:var(--green-d);font-family:monospace;">00:00:00</div>
+        </div>
+        <div style="display:flex;gap:6px;">
+          <button id="s-timer-start" onclick="sTimerStart()" style="flex:1;padding:7px 4px;background:var(--green);color:#fff;border:none;border-radius:var(--radius-s);font-size:13px;font-weight:700;">▶</button>
+          <button id="s-timer-pause" onclick="sTimerPause()" style="flex:1;padding:7px 4px;background:var(--amber);color:#fff;border:none;border-radius:var(--radius-s);font-size:13px;font-weight:700;display:none;">⏸</button>
+          <button id="s-timer-resume" onclick="sTimerResume()" style="flex:1;padding:7px 4px;background:var(--green);color:#fff;border:none;border-radius:var(--radius-s);font-size:13px;font-weight:700;display:none;">▶</button>
+          <button id="s-timer-stop" onclick="sTimerStop()" style="flex:1;padding:7px 4px;background:var(--red);color:#fff;border:none;border-radius:var(--radius-s);font-size:13px;font-weight:700;display:none;">⏹</button>
+        </div>
       </div>
     </div>
     <div style="font-size:18px;font-weight:600;color:var(--text-s);margin-bottom:10px;">✅ 終わった — 何分かかりましたか？</div>
@@ -749,9 +756,9 @@ textarea{resize:none;height:56px;line-height:1.5;}
     </div>
     <div class="mood-row" id="s-mood-row" style="margin-bottom:12px;">
       <button class="mood-btn" id="smb-great" onclick="selTaskMoodS('great')">😄<br>楽しい</button>
-      <button class="mood-btn" id="smb-ok"    onclick="selTaskMoodS('ok')">🙂<br>やりがい◎</button>
+      <button class="mood-btn" id="smb-ok"    onclick="selTaskMoodS('ok')">🙂<br>やりがい</button>
       <button class="mood-btn" id="smb-hard"  onclick="selTaskMoodS('hard')">😩<br>面倒</button>
-      <button class="mood-btn" id="smb-limit" onclick="selTaskMoodS('limit')">😵<br>かなり重い</button>
+      <button class="mood-btn" id="smb-limit" onclick="selTaskMoodS('limit')">😵<br>重い</button>
     </div>
     <button class="btn-primary" onclick="saveTaskDone()">完了として保存</button>
     <button class="btn-cancel" onclick="closeM('modal-start')">あとで</button>
@@ -800,9 +807,9 @@ textarea{resize:none;height:56px;line-height:1.5;}
     </div>
     <div class="mood-row" id="e-mood-row" style="margin-bottom:12px;">
       <button class="mood-btn" id="emb-great" onclick="selTaskMood('great')">😄<br>楽しい</button>
-      <button class="mood-btn" id="emb-ok"    onclick="selTaskMood('ok')">🙂<br>やりがい◎</button>
+      <button class="mood-btn" id="emb-ok"    onclick="selTaskMood('ok')">🙂<br>やりがい</button>
       <button class="mood-btn" id="emb-hard"  onclick="selTaskMood('hard')">😩<br>面倒</button>
-      <button class="mood-btn" id="emb-limit" onclick="selTaskMood('limit')">😵<br>かなり重い</button>
+      <button class="mood-btn" id="emb-limit" onclick="selTaskMood('limit')">😵<br>重い</button>
     </div>
     <button class="btn-primary" onclick="completeTask()">完了として保存</button>
     <button class="btn-cancel" onclick="closeM('modal-end')">キャンセル</button>
@@ -817,7 +824,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
     <div class="type-toggle">
       <button class="type-btn task" id="tt-task" onclick="switchType('task')">📋 通常タスク</button>
       <button class="type-btn" id="tt-past" onclick="switchType('past')">🕐 完了済みタスクを記録</button>
-      <button class="type-btn" id="tt-timer" onclick="switchType('timer')">⏱ 業務タイマー</button>
+      <button class="type-btn task" id="tt-timer" onclick="switchType('timer')" style="background:var(--green);color:#fff;border-color:var(--green);">▶️ タイマー開始</button>
     </div>
     <div class="field-label" style="margin-top:0;">カテゴリ <span style="font-weight:400;color:var(--text-s);">（任意）</span></div>
     <div class="cat-grid" id="cat-grid">
@@ -879,9 +886,9 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <div style="font-size:16px;font-weight:600;color:var(--text-s);margin-bottom:6px;margin-top:12px;">🐤 負担感（任意）</div>
       <div class="mood-row" id="past-mood-row" style="margin-bottom:12px;">
         <button class="mood-btn" id="pmb-great" onclick="selPastMood('great')">😄<br>楽しい</button>
-        <button class="mood-btn" id="pmb-ok"    onclick="selPastMood('ok')">🙂<br>やりがい◎</button>
+        <button class="mood-btn" id="pmb-ok"    onclick="selPastMood('ok')">🙂<br>やりがい</button>
         <button class="mood-btn" id="pmb-hard"  onclick="selPastMood('hard')">😩<br>面倒</button>
-        <button class="mood-btn" id="pmb-limit" onclick="selPastMood('limit')">😵<br>かなり重い</button>
+        <button class="mood-btn" id="pmb-limit" onclick="selPastMood('limit')">😵<br>重い</button>
       </div>
       <div style="display:flex;gap:8px;margin-top:10px;">
         <button class="btn-primary" style="flex:1;" onclick="addPastTask(false)">完了済みとして登録</button>
@@ -922,9 +929,9 @@ textarea{resize:none;height:56px;line-height:1.5;}
         <div style="font-size:14px;font-weight:600;color:var(--text-s);margin-bottom:6px;margin-top:12px;">🐤 負担感（任意）</div>
         <div class="mood-row" style="margin-bottom:16px;">
           <button class="mood-btn" id="tmb-great" onclick="selTimerMood('great')">😄<br>楽しい</button>
-          <button class="mood-btn" id="tmb-ok"    onclick="selTimerMood('ok')">🙂<br>やりがい◎</button>
+          <button class="mood-btn" id="tmb-ok"    onclick="selTimerMood('ok')">🙂<br>やりがい</button>
           <button class="mood-btn" id="tmb-hard"  onclick="selTimerMood('hard')">😩<br>面倒</button>
-          <button class="mood-btn" id="tmb-limit" onclick="selTimerMood('limit')">😵<br>かなり重い</button>
+          <button class="mood-btn" id="tmb-limit" onclick="selTimerMood('limit')">😵<br>重い</button>
         </div>
         <button class="btn-primary" onclick="timerSave()">✅ 記録として保存する</button>
       </div>
@@ -1515,7 +1522,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
     </div>
     <!-- 昼休み時間外：カテゴリ選択 -->
     <div id="ylunch-cat-wrap" style="display:none;margin-bottom:12px;">
-      <div style="font-size:11px;color:var(--text-s);margin-bottom:5px;">昼休みに何をしていましたか？</div>
+      <div style="font-size:11px;color:var(--text-s);margin-bottom:5px;">昼休みに何をしていましたか？<span style="font-weight:400;color:var(--text-s);">（複数選択可）</span></div>
       <div class="cat-grid" id="ylunch-cat-grid" style="margin-bottom:0;">
         <button class="cat-btn" data-n="分掌" onclick="togYLunchCat(this)">分掌</button>
         <button class="cat-btn" data-n="保護者対応" onclick="togYLunchCat(this)">保護者対応</button>
@@ -3612,7 +3619,7 @@ function doExport(allTasks, daily) {
 
   // 日次記録＋タスク完了をマージして日付でソート
   const moodLabel = {great:'😄 快調', ok:'🙂 まあまあ', hard:'😣 しんどい', limit:'🚨 限界'};
-  const lunchLabel = {ok:'✅ していない', '10':'⚠️ 15分した', '20':'😓 30分した', ng:'🚨 45分した'};
+  const lunchLabel = {ok:'✅ なし', '10':'☕ 15分', '20':'😓 30分', ng:'😵 45分'};
 
   // 日次記録をdate→オブジェクトのマップに
   const dailyMap = {};
@@ -3773,16 +3780,16 @@ function doExport(allTasks, daily) {
       {v:'突発\n対応',bg:C.amber},
       {v:'体😄\n快調',bg:C.blue},
       {v:'体🙂\nまあまあ',bg:C.blue},
-      {v:'体😓\nしんどい',bg:C.red},
+      {v:'体😣\nしんどい',bg:C.red},
       {v:'体🚨\n限界',bg:'991B1B'},
       {v:'心😄\n快調',bg:'7C3AED'},
       {v:'心🙂\nまあまあ',bg:'7C3AED'},
-      {v:'心😓\nしんどい',bg:'B91C1C'},
+      {v:'心😣\nしんどい',bg:'B91C1C'},
       {v:'心🚨\n限界',bg:'7F1D1D'},
-      {v:'🍱 昼休み\nしていない',bg:C.green},
-      {v:'⚠️ 昼休み\n15分した',bg:C.amber},
-      {v:'😓 昼休み\n30分した',bg:C.amber},
-      {v:'🚨 昼休み\n45分した',bg:C.red},
+      {v:'✅ 昼休み\nなし',bg:C.green},
+      {v:'☕ 昼休み\n15分',bg:C.amber},
+      {v:'😓 昼休み\n30分',bg:C.amber},
+      {v:'😵 昼休み\n45分',bg:C.red},
     ];
     gh.forEach((h,ci) => {
       const addr = XLSX.utils.encode_cell({r:r2,c:ci});
