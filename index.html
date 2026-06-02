@@ -158,7 +158,7 @@ input,textarea{font-family:inherit;}
 
 /* 昼休み・しんどさ */
 .lunch-row{display:grid;grid-template-columns:1fr 1fr;gap:6px;margin-bottom:6px;}
-.lunch-btn{padding:10px 6px;border-radius:var(--radius-s);border:1.5px solid var(--border);background:var(--gray-l);font-size:12px;font-weight:600;color:var(--text-s);text-align:center;line-height:1.4;}
+.lunch-btn{padding:12px 6px;border-radius:var(--radius-s);border:1.5px solid var(--border);background:var(--gray-l);font-size:16px;font-weight:600;color:var(--text-s);text-align:center;line-height:1.4;display:flex;align-items:center;justify-content:center;gap:4px;}
 .lunch-btn.ok{background:#EAF3DE;border-color:#97C459;color:#3B6B0C;}
 .lunch-btn.half{background:var(--amber-l);border-color:#EF9F27;color:#7A4B08;}
 .lunch-btn.ng{background:var(--red-l);border-color:#F09595;color:#891616;}
@@ -214,7 +214,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
 .type-btn.task{background:var(--green-l);border-color:var(--green-b);color:var(--green-d);}
 .type-btn.tokk{background:var(--coral-l);border-color:var(--coral-b);color:#4A1B0C;}
 .cat-grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-bottom:8px;}
-.cat-btn{padding:9px 4px;border-radius:var(--radius-s);border:1.5px solid var(--border);background:var(--gray-l);font-size:12px;font-weight:600;color:var(--text-s);text-align:center;}
+.cat-btn{padding:12px 4px;border-radius:var(--radius-s);border:1.5px solid var(--border);background:var(--gray-l);font-size:16px;font-weight:600;color:var(--text-s);text-align:center;}
 .cat-btn.sel-g{background:var(--green-l);border-color:var(--green-b);color:var(--green-d);}
 .cat-btn.sel-b{background:var(--blue-l);border-color:#93C5FD;color:var(--blue);}
 .cat-btn.sel-r{background:var(--red-l);border-color:#FCA5A5;color:var(--red);}
@@ -539,10 +539,10 @@ textarea{resize:none;height:56px;line-height:1.5;}
     <div id="workday-only-wrap">
     <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:7px;">🍱 昼休みに業務をしたか</div>
     <div class="lunch-row">
-      <button class="lunch-btn" id="lb-ok" onclick="selLunch('ok')">✅<br>なし</button>
-      <button class="lunch-btn" id="lb-10" onclick="selLunch('10')">⚠️<br>15分</button>
-      <button class="lunch-btn" id="lb-20" onclick="selLunch('20')">😓<br>30分</button>
-      <button class="lunch-btn" id="lb-ng" onclick="selLunch('ng')">🚨<br>45分</button>
+      <button class="lunch-btn" id="lb-ok" onclick="selLunch('ok')">✅ なし</button>
+      <button class="lunch-btn" id="lb-10" onclick="selLunch('10')">☕ 15分</button>
+      <button class="lunch-btn" id="lb-20" onclick="selLunch('20')">😓 30分</button>
+      <button class="lunch-btn" id="lb-ng" onclick="selLunch('ng')">😵 45分</button>
     </div>
     <!-- 昼休み時間外：カテゴリ選択（した（ほぼ休めず）・少しの時のみ表示） -->
     <div id="lunch-cat-wrap" class="hidden" style="margin-bottom:8px;">
@@ -641,14 +641,14 @@ textarea{resize:none;height:56px;line-height:1.5;}
     <div class="mood-row" style="margin-bottom:12px;">
       <button class="mood-btn" id="mb-body-great" onclick="selMood('body','great')">😄<br>快調</button>
       <button class="mood-btn" id="mb-body-ok" onclick="selMood('body','ok')">🙂<br>まあまあ</button>
-      <button class="mood-btn" id="mb-body-hard" onclick="selMood('body','hard')">😓<br>しんどい</button>
+      <button class="mood-btn" id="mb-body-hard" onclick="selMood('body','hard')">😣<br>しんどい</button>
       <button class="mood-btn" id="mb-body-limit" onclick="selMood('body','limit')">🚨<br>限界</button>
     </div>
     <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;">今日のしんどさ（心）❤️</div>
     <div class="mood-row">
       <button class="mood-btn" id="mb-mind-great" onclick="selMood('mind','great')">😄<br>快調</button>
       <button class="mood-btn" id="mb-mind-ok" onclick="selMood('mind','ok')">🙂<br>まあまあ</button>
-      <button class="mood-btn" id="mb-mind-hard" onclick="selMood('mind','hard')">😓<br>しんどい</button>
+      <button class="mood-btn" id="mb-mind-hard" onclick="selMood('mind','hard')">😣<br>しんどい</button>
       <button class="mood-btn" id="mb-mind-limit" onclick="selMood('mind','limit')">🚨<br>限界</button>
     </div>
     <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;">📝 体調メモ <span style="font-weight:400;font-size:11px;">（任意・自由記述）</span></div>
@@ -696,7 +696,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
     <div class="modal-handle"></div>
     <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:4px;">
       <div class="modal-title" id="ms-title" style="margin-bottom:0;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;"></div>
-      <button onclick="openEditFromModal()" style="flex-shrink:0;background:var(--gray-l);border:1px solid var(--border);border-radius:var(--radius-s);padding:5px 10px;font-size:12px;color:var(--text-s);margin-left:8px;">✏️ 編集</button>
+      <button onclick="openEditFromModal()" style="flex-shrink:0;background:var(--gray-l);border:1.5px solid var(--border);border-radius:var(--radius-s);padding:10px 16px;font-size:16px;color:var(--text-s);margin-left:8px;font-weight:600;">✏️ 編集</button>
     </div>
     <div class="modal-sub" id="ms-sub"></div>
     <div style="font-size:18px;font-weight:600;color:var(--text-s);margin-bottom:6px;">📅 完了日</div>
@@ -748,10 +748,10 @@ textarea{resize:none;height:56px;line-height:1.5;}
       🐤 負担感（任意）
     </div>
     <div class="mood-row" id="s-mood-row" style="margin-bottom:12px;">
-      <button class="mood-btn" id="smb-great" onclick="selTaskMoodS('great')">😄<br>軽い</button>
-      <button class="mood-btn" id="smb-ok"    onclick="selTaskMoodS('ok')">🙂<br>普通</button>
-      <button class="mood-btn" id="smb-hard"  onclick="selTaskMoodS('hard')">😓<br>重い</button>
-      <button class="mood-btn" id="smb-limit" onclick="selTaskMoodS('limit')">🚨<br>かなり重い</button>
+      <button class="mood-btn" id="smb-great" onclick="selTaskMoodS('great')">😄<br>楽しい</button>
+      <button class="mood-btn" id="smb-ok"    onclick="selTaskMoodS('ok')">🙂<br>やりがい◎</button>
+      <button class="mood-btn" id="smb-hard"  onclick="selTaskMoodS('hard')">😩<br>面倒</button>
+      <button class="mood-btn" id="smb-limit" onclick="selTaskMoodS('limit')">😵<br>かなり重い</button>
     </div>
     <button class="btn-primary" onclick="saveTaskDone()">完了として保存</button>
     <button class="btn-cancel" onclick="closeM('modal-start')">あとで</button>
@@ -799,10 +799,10 @@ textarea{resize:none;height:56px;line-height:1.5;}
       🐤 負担感（任意）
     </div>
     <div class="mood-row" id="e-mood-row" style="margin-bottom:12px;">
-      <button class="mood-btn" id="emb-great" onclick="selTaskMood('great')">😄<br>軽い</button>
-      <button class="mood-btn" id="emb-ok"    onclick="selTaskMood('ok')">🙂<br>普通</button>
-      <button class="mood-btn" id="emb-hard"  onclick="selTaskMood('hard')">😓<br>重い</button>
-      <button class="mood-btn" id="emb-limit" onclick="selTaskMood('limit')">🚨<br>かなり重い</button>
+      <button class="mood-btn" id="emb-great" onclick="selTaskMood('great')">😄<br>楽しい</button>
+      <button class="mood-btn" id="emb-ok"    onclick="selTaskMood('ok')">🙂<br>やりがい◎</button>
+      <button class="mood-btn" id="emb-hard"  onclick="selTaskMood('hard')">😩<br>面倒</button>
+      <button class="mood-btn" id="emb-limit" onclick="selTaskMood('limit')">😵<br>かなり重い</button>
     </div>
     <button class="btn-primary" onclick="completeTask()">完了として保存</button>
     <button class="btn-cancel" onclick="closeM('modal-end')">キャンセル</button>
@@ -878,10 +878,10 @@ textarea{resize:none;height:56px;line-height:1.5;}
       </div>
       <div style="font-size:16px;font-weight:600;color:var(--text-s);margin-bottom:6px;margin-top:12px;">🐤 負担感（任意）</div>
       <div class="mood-row" id="past-mood-row" style="margin-bottom:12px;">
-        <button class="mood-btn" id="pmb-great" onclick="selPastMood('great')">😄<br>軽い</button>
-        <button class="mood-btn" id="pmb-ok"    onclick="selPastMood('ok')">🙂<br>普通</button>
-        <button class="mood-btn" id="pmb-hard"  onclick="selPastMood('hard')">😓<br>重い</button>
-        <button class="mood-btn" id="pmb-limit" onclick="selPastMood('limit')">🚨<br>かなり重い</button>
+        <button class="mood-btn" id="pmb-great" onclick="selPastMood('great')">😄<br>楽しい</button>
+        <button class="mood-btn" id="pmb-ok"    onclick="selPastMood('ok')">🙂<br>やりがい◎</button>
+        <button class="mood-btn" id="pmb-hard"  onclick="selPastMood('hard')">😩<br>面倒</button>
+        <button class="mood-btn" id="pmb-limit" onclick="selPastMood('limit')">😵<br>かなり重い</button>
       </div>
       <div style="display:flex;gap:8px;margin-top:10px;">
         <button class="btn-primary" style="flex:1;" onclick="addPastTask(false)">完了済みとして登録</button>
@@ -921,10 +921,10 @@ textarea{resize:none;height:56px;line-height:1.5;}
         </div>
         <div style="font-size:14px;font-weight:600;color:var(--text-s);margin-bottom:6px;margin-top:12px;">🐤 負担感（任意）</div>
         <div class="mood-row" style="margin-bottom:16px;">
-          <button class="mood-btn" id="tmb-great" onclick="selTimerMood('great')">😄<br>軽い</button>
-          <button class="mood-btn" id="tmb-ok"    onclick="selTimerMood('ok')">🙂<br>普通</button>
-          <button class="mood-btn" id="tmb-hard"  onclick="selTimerMood('hard')">😓<br>重い</button>
-          <button class="mood-btn" id="tmb-limit" onclick="selTimerMood('limit')">🚨<br>かなり重い</button>
+          <button class="mood-btn" id="tmb-great" onclick="selTimerMood('great')">😄<br>楽しい</button>
+          <button class="mood-btn" id="tmb-ok"    onclick="selTimerMood('ok')">🙂<br>やりがい◎</button>
+          <button class="mood-btn" id="tmb-hard"  onclick="selTimerMood('hard')">😩<br>面倒</button>
+          <button class="mood-btn" id="tmb-limit" onclick="selTimerMood('limit')">😵<br>かなり重い</button>
         </div>
         <button class="btn-primary" onclick="timerSave()">✅ 記録として保存する</button>
       </div>
@@ -1151,10 +1151,10 @@ textarea{resize:none;height:56px;line-height:1.5;}
 
     <div class="field-label">昼休み業務時間のデフォルト</div>
     <div style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:16px;" id="default-lunch-btns">
-      <button class="lunch-btn" id="dlb-ok" onclick="selDefaultLunch('ok')">✅<br>なし</button>
-      <button class="lunch-btn" id="dlb-10" onclick="selDefaultLunch('10')">⚠️<br>15分</button>
-      <button class="lunch-btn" id="dlb-20" onclick="selDefaultLunch('20')">😓<br>30分</button>
-      <button class="lunch-btn" id="dlb-ng" onclick="selDefaultLunch('ng')">🚨<br>45分</button>
+      <button class="lunch-btn" id="dlb-ok" onclick="selDefaultLunch('ok')">✅ なし</button>
+      <button class="lunch-btn" id="dlb-10" onclick="selDefaultLunch('10')">☕ 15分</button>
+      <button class="lunch-btn" id="dlb-20" onclick="selDefaultLunch('20')">😓 30分</button>
+      <button class="lunch-btn" id="dlb-ng" onclick="selDefaultLunch('ng')">😵 45分</button>
     </div>
 
     <button class="btn-primary" onclick="saveWorkDefault()">保存する</button>
@@ -1321,12 +1321,11 @@ textarea{resize:none;height:56px;line-height:1.5;}
             <div style="background:#DBEAFE;border:1px solid #93C5FD;border-radius:6px;padding:4px 8px;font-size:11px;font-weight:600;color:#1E3A8A;white-space:nowrap;">勤務開始時刻</div>
             <div style="font-size:13px;color:var(--text-s);">－</div>
             <div style="background:var(--green-l);border:1px solid var(--green-b);border-radius:6px;padding:4px 8px;font-size:11px;font-weight:600;color:var(--green-d);white-space:nowrap;">7時間45分</div>
-            <div style="font-size:13px;color:var(--text-s);">＋</div>
-            <div style="background:var(--amber-l);border:1px solid var(--amber-b);border-radius:6px;padding:4px 8px;font-size:11px;font-weight:600;color:#7A4B08;white-space:nowrap;">昼休み業務時間</div>
+            <div style="font-size:13px;color:var(--text-s);">－</div>
+            <div style="background:var(--amber-l);border:1px solid var(--amber-b);border-radius:6px;padding:4px 8px;font-size:11px;font-weight:600;color:#7A4B08;white-space:nowrap;">昼休みに業務をしなかった時間</div>
           </div>
-          <div style="font-size:10px;color:var(--text-s);margin-bottom:2px;">※ 7時間45分＝公立学校の所定勤務時間（実労働7h＋休憩45分）</div>
-          <div style="font-size:10px;color:var(--text-s);margin-bottom:2px;">※ 昼休みに業務した分は時間外在校等時間に加算されます</div>
-          <div style="font-size:10px;color:var(--text-s);margin-bottom:8px;">例）8:00出勤 → 18:30退勤・昼休み業務なし　→　10時間30分 － 7時間45分 ＝ <strong style="color:var(--amber);">2時間45分</strong></div>
+          <div style="font-size:10px;color:var(--text-s);margin-bottom:2px;">※ 7時間45分＝公立学校の所定勤務時間（休憩45分は別途）</div>
+          <div style="font-size:10px;color:var(--text-s);margin-bottom:8px;">例）8:00出勤 → 18:30退勤・昼休みに20分休憩（25分業務）　→　10時間30分 － 7時間45分 － 20分 ＝ <strong style="color:var(--amber);">2時間25分</strong></div>
 
           <!-- 区切り -->
           <div style="border-top:1px dashed var(--border);margin-bottom:8px;"></div>
@@ -1509,10 +1508,10 @@ textarea{resize:none;height:56px;line-height:1.5;}
 
     <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:7px;">🍱 昼休みに業務をしたか</div>
     <div class="lunch-row" style="margin-bottom:8px;">
-      <button class="lunch-btn" id="ylb-ok" onclick="selYLunch('ok')">✅<br>なし</button>
-      <button class="lunch-btn" id="ylb-10" onclick="selYLunch('10')">⚠️<br>15分</button>
-      <button class="lunch-btn" id="ylb-20" onclick="selYLunch('20')">😓<br>30分</button>
-      <button class="lunch-btn" id="ylb-ng" onclick="selYLunch('ng')">🚨<br>45分</button>
+      <button class="lunch-btn" id="ylb-ok" onclick="selYLunch('ok')">✅ なし</button>
+      <button class="lunch-btn" id="ylb-10" onclick="selYLunch('10')">☕ 15分</button>
+      <button class="lunch-btn" id="ylb-20" onclick="selYLunch('20')">😓 30分</button>
+      <button class="lunch-btn" id="ylb-ng" onclick="selYLunch('ng')">😵 45分</button>
     </div>
     <!-- 昼休み時間外：カテゴリ選択 -->
     <div id="ylunch-cat-wrap" style="display:none;margin-bottom:12px;">
@@ -1596,14 +1595,14 @@ textarea{resize:none;height:56px;line-height:1.5;}
     <div class="mood-row" style="margin-bottom:12px;">
       <button class="mood-btn" id="ymb-body-great" onclick="selYMood('body','great')">😄<br>快調</button>
       <button class="mood-btn" id="ymb-body-ok" onclick="selYMood('body','ok')">🙂<br>まあまあ</button>
-      <button class="mood-btn" id="ymb-body-hard" onclick="selYMood('body','hard')">😓<br>しんどい</button>
+      <button class="mood-btn" id="ymb-body-hard" onclick="selYMood('body','hard')">😣<br>しんどい</button>
       <button class="mood-btn" id="ymb-body-limit" onclick="selYMood('body','limit')">🚨<br>限界</button>
     </div>
     <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;">しんどさ（心）❤️</div>
     <div class="mood-row" style="margin-bottom:16px;">
       <button class="mood-btn" id="ymb-mind-great" onclick="selYMood('mind','great')">😄<br>快調</button>
       <button class="mood-btn" id="ymb-mind-ok" onclick="selYMood('mind','ok')">🙂<br>まあまあ</button>
-      <button class="mood-btn" id="ymb-mind-hard" onclick="selYMood('mind','hard')">😓<br>しんどい</button>
+      <button class="mood-btn" id="ymb-mind-hard" onclick="selYMood('mind','hard')">😣<br>しんどい</button>
       <button class="mood-btn" id="ymb-mind-limit" onclick="selYMood('mind','limit')">🚨<br>限界</button>
     </div>
     <div style="font-size:13px;font-weight:600;color:var(--text-s);margin-bottom:6px;">📝 体調メモ <span style="font-weight:400;font-size:11px;">（任意・自由記述）</span></div>
@@ -2605,21 +2604,18 @@ function renderDeadlines(){
       card.className = `dl-card ${cls}`;
       card.dataset.id = t.id;
 
-      // 通常表示
+      // タップで完了モーダル（ホームと同じ）
       card.innerHTML = `
-        <div style="flex:1;min-width:0;cursor:pointer;display:flex;align-items:center;gap:4px;" onclick="tapDlCard('${t.id}')">
-          <span class="cat-initial cat-${t.color==='red'?'red':t.color==='blue'?'blue':'gray'}" style="flex-shrink:0;">${(CAT_INITIAL[t.name]||t.name.charAt(0))}</span>
+        <div style="flex:1;min-width:0;cursor:pointer;display:flex;align-items:center;gap:4px;" onclick="openStartDirect('${t.id}')">
+          <span class="cat-initial cat-${CAT_CLASS[t.name]||'gray'}" style="flex-shrink:0;">${(CAT_INITIAL[t.name]||t.name.charAt(0))}</span>
           <span style="font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
             ${(t.subs&&t.subs.length) ? t.subs.join('・') : t.name}
           </span>
         </div>
-        <div style="text-align:right;flex-shrink:0;cursor:pointer;" onclick="tapDlCard('${t.id}')">
+        <div style="text-align:right;flex-shrink:0;cursor:pointer;" onclick="openStartDirect('${t.id}')">
           <div style="font-size:12px;font-weight:600;color:${col};">${dd.getMonth()+1}月${dd.getDate()}日</div>
           <div style="font-size:11px;color:${col};">${diff<0?Math.abs(diff)+'日超過':diff===0?'今日':diff===1?'明日':'あと'+diff+'日'}</div>
-        </div>
-        <button onclick="openStartDirect('${t.id}')" style="background:var(--green-l);color:var(--green-d);border:none;border-radius:50%;width:28px;height:28px;display:flex;align-items:center;justify-content:center;flex-shrink:0;margin-left:6px;">
-          <i class="ti ti-player-play" style="font-size:13px;"></i>
-        </button>`;
+        </div>`;
       c.appendChild(card);
     });
   }
@@ -2767,7 +2763,7 @@ function drawBarChart(canvasId, labels, data, color='#1D9E75', maxOverride=null)
 }
 
 function moodMiniGrid(dailyArr, moodType) {
-  const moodLabel = {great:'😄',ok:'🙂',hard:'😓',limit:'🚨'};
+  const moodLabel = {great:'😄',ok:'🙂',hard:'😣',limit:'🚨'};
   const count = {great:0,ok:0,hard:0,limit:0};
   dailyArr.forEach(d => {
     const m = moodType==='body' ? (d.moodBody||'') : (d.moodMind||'');
@@ -2983,7 +2979,7 @@ function buildCalTo(outerId, type) {
       const k=`${yr}-${pad(mo+1)}-${pad(d)}`;
       const mood=moodData[k];
       let cls='cal-day'+(mood?' '+mood:'')+(k===tStr?' today':'');
-      const emoji=mood?{great:'😄',ok:'🙂',hard:'😓',limit:'🚨'}[mood]:'';
+      const emoji=mood?{great:'😄',ok:'🙂',hard:'😣',limit:'🚨'}[mood]:'';
       html+=`<div class="${cls}">${emoji||d}</div>`;
     }
     html+='</div>'; md.innerHTML=html; cont.appendChild(md);
@@ -3126,7 +3122,7 @@ function buildCal(type='body'){
       const k=`${yr}-${pad(mo+1)}-${pad(d)}`;
       const mood=moodData[k];
       let cls='cal-day'+(mood?' '+mood:'')+(k===tStr?' today':'');
-      const emoji=mood?{great:'😄',ok:'🙂',hard:'😓',limit:'🚨'}[mood]:'';
+      const emoji=mood?{great:'😄',ok:'🙂',hard:'😣',limit:'🚨'}[mood]:'';
       html+=`<div class="${cls}">${emoji||d}</div>`;
     }
     html+='</div>'; md.innerHTML=html; cont.appendChild(md);
@@ -3177,7 +3173,7 @@ function moodBarHtml(mc) {
   const items = [
     {key:'great', emoji:'😄', color:'#DBEAFE', textColor:'#1E3A8A'},
     {key:'ok',    emoji:'🙂', color:'#D1FAE5', textColor:'#3B6B0C'},
-    {key:'hard',  emoji:'😓', color:'#FEF3C7', textColor:'#92400E'},
+    {key:'hard',  emoji:'😣', color:'#FEF3C7', textColor:'#92400E'},
     {key:'limit', emoji:'🚨', color:' #FEE2E2', textColor:'#991B1B'},
   ];
   return items.map(({key, emoji, color, textColor}) => {
@@ -3615,7 +3611,7 @@ function doExport(allTasks, daily) {
   });
 
   // 日次記録＋タスク完了をマージして日付でソート
-  const moodLabel = {great:'😄 快調', ok:'🙂 まあまあ', hard:'😓 しんどい', limit:'🚨 限界'};
+  const moodLabel = {great:'😄 快調', ok:'🙂 まあまあ', hard:'😣 しんどい', limit:'🚨 限界'};
   const lunchLabel = {ok:'✅ していない', '10':'⚠️ 15分した', '20':'😓 30分した', ng:'🚨 45分した'};
 
   // 日次記録をdate→オブジェクトのマップに
@@ -4846,11 +4842,12 @@ function initTodayOtUI() {
   if (existing && (existing.ot > 0 || existing.schoolOt > 0 || existing.takehome > 0)) {
     const savedSchoolOt = existing.schoolOt || 0;
     const savedTakehome = existing.takehome || 0;
+    const savedLunch = existing.lunch || 'ok';
+    const lunchMin = savedLunch==='ng'?45 : savedLunch==='20'?30 : savedLunch==='10'?15 : 0;
     const [sh, sm] = startDefault.split(':').map(Number);
-    const [eh, em] = endDefault.split(':').map(Number);
     startTotalMin = sh * 60 + sm;
-    // 退勤時刻 = デフォルト退勤時刻 + 時間外在校等時間
-    endTotalMin = (eh * 60 + em) + savedSchoolOt;
+    // 退勤時刻 = 勤務開始 + 7h45m + schoolOt - 昼休み業務
+    endTotalMin = startTotalMin + FIXED_WORK_MIN + savedSchoolOt - lunchMin;
     schoolOtMin = savedSchoolOt;
     takehomeMin = savedTakehome > 0 ? savedTakehome : thDefault;
 
@@ -4927,8 +4924,10 @@ function updateTimeDisp() {
 
 function calcSchoolOt() {
   const workMin = endTotalMin - startTotalMin;
-  const lunchOt = currentLunch==='ng'?45 : currentLunch==='20'?30 : currentLunch==='10'?15 : 0;
-  schoolOtMin = Math.max(0, workMin - FIXED_WORK_MIN + lunchOt);
+  // 昼休みに休憩した時間（業務をしなかった時間）を引く
+  // ng=45分業務→休憩0分 / 20=30分業務→休憩15分 / 10=15分業務→休憩30分 / ok=業務なし→休憩45分
+  const lunchRest = currentLunch==='ng'?0 : currentLunch==='20'?15 : currentLunch==='10'?30 : 45;
+  schoolOtMin = Math.max(0, workMin - FIXED_WORK_MIN - lunchRest);
 
   const resultEl = document.getElementById('school-ot-result');
   const manualEl = document.getElementById('school-ot-manual');
