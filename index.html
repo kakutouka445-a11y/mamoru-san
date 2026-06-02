@@ -701,6 +701,19 @@ textarea{resize:none;height:56px;line-height:1.5;}
     <div class="modal-sub" id="ms-sub"></div>
     <div style="font-size:18px;font-weight:600;color:var(--text-s);margin-bottom:6px;">📅 完了日</div>
     <input type="date" id="s-done-date" style="width:100%;font-size:14px;border:1.5px solid var(--border);border-radius:var(--radius-s);padding:8px 12px;background:var(--gray-l);color:var(--text);outline:none;margin-bottom:12px;">
+    <!-- タスク内タイマー -->
+    <div id="s-timer-box" style="background:var(--green-l);border:1.5px solid var(--green-b);border-radius:var(--radius-s);padding:10px 12px;margin-bottom:12px;">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+        <div style="font-size:13px;font-weight:600;color:var(--green-d);">⏱ タイマーで計測</div>
+        <div id="s-timer-display" style="font-size:20px;font-weight:700;color:var(--green-d);font-family:monospace;">00:00:00</div>
+      </div>
+      <div style="display:flex;gap:8px;">
+        <button id="s-timer-start" onclick="sTimerStart()" style="flex:1;padding:8px;background:var(--green);color:#fff;border:none;border-radius:var(--radius-s);font-size:14px;font-weight:700;">▶ 開始</button>
+        <button id="s-timer-pause" onclick="sTimerPause()" style="flex:1;padding:8px;background:var(--amber);color:#fff;border:none;border-radius:var(--radius-s);font-size:14px;font-weight:700;display:none;">⏸ 一時停止</button>
+        <button id="s-timer-resume" onclick="sTimerResume()" style="flex:1;padding:8px;background:var(--green);color:#fff;border:none;border-radius:var(--radius-s);font-size:14px;font-weight:700;display:none;">▶ 再開</button>
+        <button id="s-timer-stop" onclick="sTimerStop()" style="flex:1;padding:8px;background:var(--red);color:#fff;border:none;border-radius:var(--radius-s);font-size:14px;font-weight:700;display:none;">⏹ 終了</button>
+      </div>
+    </div>
     <div style="font-size:18px;font-weight:600;color:var(--text-s);margin-bottom:10px;">✅ 終わった — 何分かかりましたか？</div>
     <div class="stepper-box">
       <div class="stepper-row">
@@ -804,6 +817,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
     <div class="type-toggle">
       <button class="type-btn task" id="tt-task" onclick="switchType('task')">📋 通常タスク</button>
       <button class="type-btn" id="tt-past" onclick="switchType('past')">🕐 完了済みタスクを記録</button>
+      <button class="type-btn" id="tt-timer" onclick="switchType('timer')">⏱ 業務タイマー</button>
     </div>
     <div class="field-label" style="margin-top:0;">カテゴリ <span style="font-weight:400;color:var(--text-s);">（任意）</span></div>
     <div class="cat-grid" id="cat-grid">
@@ -874,7 +888,49 @@ textarea{resize:none;height:56px;line-height:1.5;}
         <button class="btn-coral" style="flex:1;margin-top:0;" onclick="addPastTask(true)">⚡ 突発として登録</button>
       </div>
     </div>
-    <button class="btn-cancel" onclick="closeM('modal-add')">キャンセル</button>
+
+    <!-- タイマー -->
+    <div id="wrap-timer" style="display:none;">
+      <div style="text-align:center;padding:16px 0 8px;">
+        <div id="timer-display" style="font-size:52px;font-weight:700;color:var(--green-d);font-family:monospace;letter-spacing:2px;">00:00:00</div>
+        <div id="timer-status" style="font-size:13px;color:var(--text-s);margin-top:4px;">待機中</div>
+      </div>
+      <div style="display:flex;gap:10px;margin-bottom:16px;">
+        <button id="timer-btn-start" onclick="timerStart()" style="flex:1;padding:14px;background:var(--green);color:#fff;border:none;border-radius:var(--radius-s);font-size:18px;font-weight:700;">▶ 開始</button>
+        <button id="timer-btn-pause" onclick="timerPause()" style="flex:1;padding:14px;background:var(--amber);color:#fff;border:none;border-radius:var(--radius-s);font-size:18px;font-weight:700;display:none;">⏸ 一時停止</button>
+        <button id="timer-btn-resume" onclick="timerResume()" style="flex:1;padding:14px;background:var(--green);color:#fff;border:none;border-radius:var(--radius-s);font-size:18px;font-weight:700;display:none;">▶ 再開</button>
+        <button id="timer-btn-stop" onclick="timerEnd()" style="flex:1;padding:14px;background:var(--red);color:#fff;border:none;border-radius:var(--radius-s);font-size:18px;font-weight:700;display:none;">⏹ 終了</button>
+      </div>
+      <!-- 終了後の入力欄 -->
+      <div id="timer-result" style="display:none;">
+        <div style="background:var(--green-l);border-radius:var(--radius-s);padding:12px;margin-bottom:12px;text-align:center;">
+          <div style="font-size:12px;color:var(--green-d);margin-bottom:4px;">計測時間</div>
+          <div id="timer-result-time" style="font-size:24px;font-weight:700;color:var(--green-d);"></div>
+        </div>
+        <div style="font-size:16px;font-weight:600;color:var(--text-s);margin-bottom:8px;">📝 何をしましたか？</div>
+        <div style="display:flex;align-items:center;gap:8px;margin-bottom:12px;">
+          <input type="text" id="timer-memo" placeholder="例：安全点検" style="flex:1;font-size:18px;border:1.5px solid var(--border);border-radius:var(--radius-s);padding:10px 12px;background:var(--gray-l);color:var(--text);outline:none;">
+          <button onclick="startVoiceTimer()" style="background:var(--green-l);border:1px solid var(--green-b);border-radius:var(--radius-s);padding:10px 12px;font-size:18px;">🎤</button>
+        </div>
+        <div style="font-size:14px;font-weight:600;color:var(--text-s);margin-bottom:6px;">🕑 いつ実行？</div>
+        <div class="chips" id="timer-when">
+          <div class="chip" onclick="togChip(this)">空きコマ（勤務内）</div>
+          <div class="chip chip-warn" onclick="togChip(this)">昼休み（勤務外）</div>
+          <div class="chip" onclick="togChip(this)">放課後（勤務内）</div>
+          <div class="chip chip-warn" onclick="togChip(this)">勤務時間外</div>
+        </div>
+        <div style="font-size:14px;font-weight:600;color:var(--text-s);margin-bottom:6px;margin-top:12px;">🐤 負担感（任意）</div>
+        <div class="mood-row" style="margin-bottom:16px;">
+          <button class="mood-btn" id="tmb-great" onclick="selTimerMood('great')">😄<br>軽い</button>
+          <button class="mood-btn" id="tmb-ok"    onclick="selTimerMood('ok')">🙂<br>普通</button>
+          <button class="mood-btn" id="tmb-hard"  onclick="selTimerMood('hard')">😓<br>重い</button>
+          <button class="mood-btn" id="tmb-limit" onclick="selTimerMood('limit')">🚨<br>かなり重い</button>
+        </div>
+        <button class="btn-primary" onclick="timerSave()">✅ 記録として保存する</button>
+      </div>
+    </div>
+
+    <button class="btn-cancel" onclick="closeM('modal-add');timerStop()">キャンセル</button>
   </div>
 </div>
 
@@ -1013,7 +1069,15 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <i class="ti ti-user settings-item-icon" style="color:var(--gray);"></i>
       <div class="settings-item-text">
         <div class="settings-item-title">アカウント</div>
-        <div class="settings-item-sub">同期先・ユーザー情報</div>
+        <div class="settings-item-sub" id="settings-username-sub">同期先・ユーザー情報</div>
+      </div>
+      <i class="ti ti-chevron-right settings-item-arrow"></i>
+    </button>
+    <button class="settings-item-btn" onclick="closeM('modal-settings');resetSetup()">
+      <i class="ti ti-refresh settings-item-icon" style="color:var(--amber);"></i>
+      <div class="settings-item-text">
+        <div class="settings-item-title">API URLを変更する</div>
+        <div class="settings-item-sub">セットアップをやり直す</div>
       </div>
       <i class="ti ti-chevron-right settings-item-arrow"></i>
     </button>
@@ -1550,6 +1614,27 @@ textarea{resize:none;height:56px;line-height:1.5;}
 </div>
 
 <!-- modal: サンプルデータ投入 -->
+<!-- modal: 初回セットアップ -->
+<div class="modal-bg center" id="modal-setup" style="z-index:9999;">
+  <div class="modal-center" onclick="event.stopPropagation()" style="max-width:360px;">
+    <div style="text-align:center;margin-bottom:16px;">
+      <img src="https://kakutouka445-a11y.github.io/mamoru-san/mamorusanpng1.png" style="width:80px;height:80px;object-fit:contain;">
+    </div>
+    <div class="modal-center-title">🛡️ まもるさん セットアップ</div>
+    <div style="font-size:13px;color:var(--text-s);margin-bottom:16px;line-height:1.7;">
+      管理者から送られてきた<br><b>あなた専用のAPI URL</b>を貼り付けてください。
+    </div>
+    <div style="font-size:12px;font-weight:600;color:var(--text-s);margin-bottom:6px;">あなたのお名前</div>
+    <input type="text" id="setup-name" placeholder="例：田中　花子" style="width:100%;font-size:16px;border:1.5px solid var(--border);border-radius:var(--radius-s);padding:10px 12px;background:var(--gray-l);color:var(--text);outline:none;margin-bottom:12px;">
+    <div style="font-size:12px;font-weight:600;color:var(--text-s);margin-bottom:6px;">API URL</div>
+    <textarea id="setup-url" placeholder="https://script.google.com/macros/s/..." style="width:100%;font-size:12px;border:1.5px solid var(--border);border-radius:var(--radius-s);padding:10px 12px;background:var(--gray-l);color:var(--text);outline:none;height:80px;resize:none;margin-bottom:16px;"></textarea>
+    <button class="btn-primary" style="width:100%;" onclick="completeSetup()">✅ セットアップ完了</button>
+    <div style="font-size:11px;color:var(--text-s);text-align:center;margin-top:10px;">
+      URLが届いていない場合は管理者にお問い合わせください
+    </div>
+  </div>
+</div>
+
 <div class="modal-bg center" id="modal-sample" onclick="closeBg('modal-sample',event)">
   <div class="modal-center" onclick="event.stopPropagation()">
     <div class="modal-icon">📦</div>
@@ -1566,7 +1651,12 @@ textarea{resize:none;height:56px;line-height:1.5;}
 // =============================================
 // API設定
 // =============================================
-const API_URL = 'https://script.google.com/macros/s/AKfycbxaz3k4NC-LuDRAvFQ9ggdDoP6-2gC6jNB5xPojaT72XTIsGvlohZ1029ck50PhIGXq/exec';
+// API URLはlocalStorageから取得（初回セットアップで設定）
+const DEFAULT_API_URL = 'https://script.google.com/macros/s/AKfycbxaz3k4NC-LuDRAvFQ9ggdDoP6-2gC6jNB5xPojaT72XTIsGvlohZ1029ck50PhIGXq/exec';
+function getApiUrl() {
+  return localStorage.getItem('mamoru_api_url') || DEFAULT_API_URL;
+}
+let API_URL = getApiUrl();
 
 // ── API通信 ──
 async function apiGet(action) {
@@ -2015,6 +2105,8 @@ function openStart(id) {
   // 完了日に今日をセット
   const doneDateEl = document.getElementById('s-done-date');
   if (doneDateEl) doneDateEl.value = todayStr();
+  // タイマーリセット
+  sTimerReset();
 }
 
 function openStartDirect(id) {
@@ -2084,6 +2176,218 @@ function checkArchiveNotice() {
       }
     }, 1500);
   }
+}
+
+// =============================================
+// 業務タイマー
+// =============================================
+let timerInterval = null;
+let timerElapsed = 0; // 累計秒数
+let timerRunning = false;
+let timerMood = '';
+
+// 完了モーダル内タイマー
+let sTimerInterval = null;
+let sTimerElapsed = 0;
+
+function sTimerFmt(sec) {
+  const h = Math.floor(sec/3600), m = Math.floor((sec%3600)/60), s = sec%60;
+  return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+function sTimerStart() {
+  sTimerElapsed = 0; sTimerInterval = setInterval(()=>{ sTimerElapsed++; document.getElementById('s-timer-display').textContent = sTimerFmt(sTimerElapsed); }, 1000);
+  document.getElementById('s-timer-start').style.display='none';
+  document.getElementById('s-timer-pause').style.display='';
+  document.getElementById('s-timer-stop').style.display='';
+}
+function sTimerPause() {
+  clearInterval(sTimerInterval);
+  document.getElementById('s-timer-pause').style.display='none';
+  document.getElementById('s-timer-resume').style.display='';
+}
+function sTimerResume() {
+  sTimerInterval = setInterval(()=>{ sTimerElapsed++; document.getElementById('s-timer-display').textContent = sTimerFmt(sTimerElapsed); }, 1000);
+  document.getElementById('s-timer-resume').style.display='none';
+  document.getElementById('s-timer-pause').style.display='';
+}
+function sTimerStop() {
+  clearInterval(sTimerInterval);
+  // かかった時間ステッパーに反映
+  const min = Math.round(sTimerElapsed/60);
+  const h = Math.floor(min/60), m = min%60;
+  const label = h>0?(m>0?`${h}時間${m}分`:`${h}時間`):`${m}分`;
+  // fmtTimeで使うselMinSを設定
+  selMinS = min;
+  const el = document.getElementById('step-s');
+  if(el) el.textContent = label;
+  document.getElementById('s-timer-start').style.display='';
+  document.getElementById('s-timer-pause').style.display='none';
+  document.getElementById('s-timer-resume').style.display='none';
+  document.getElementById('s-timer-stop').style.display='none';
+  document.getElementById('s-timer-display').textContent = sTimerFmt(sTimerElapsed);
+  showSync(`⏱ ${label}を記録しました`);
+}
+function sTimerReset() {
+  clearInterval(sTimerInterval); sTimerElapsed=0;
+  document.getElementById('s-timer-display').textContent='00:00:00';
+  document.getElementById('s-timer-start').style.display='';
+  document.getElementById('s-timer-pause').style.display='none';
+  document.getElementById('s-timer-resume').style.display='none';
+  document.getElementById('s-timer-stop').style.display='none';
+}
+
+function timerFmt(sec) {
+  const h = Math.floor(sec / 3600);
+  const m = Math.floor((sec % 3600) / 60);
+  const s = sec % 60;
+  return `${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+
+function timerTick() {
+  timerElapsed++;
+  document.getElementById('timer-display').textContent = timerFmt(timerElapsed);
+}
+
+function timerStart() {
+  timerElapsed = 0; timerRunning = true;
+  timerInterval = setInterval(timerTick, 1000);
+  document.getElementById('timer-display').style.color = 'var(--green-d)';
+  document.getElementById('timer-status').textContent = '計測中...';
+  document.getElementById('timer-btn-start').style.display = 'none';
+  document.getElementById('timer-btn-pause').style.display = '';
+  document.getElementById('timer-btn-stop').style.display = '';
+  document.getElementById('timer-result').style.display = 'none';
+}
+
+function timerPause() {
+  clearInterval(timerInterval); timerRunning = false;
+  document.getElementById('timer-display').style.color = 'var(--amber)';
+  document.getElementById('timer-status').textContent = '一時停止中';
+  document.getElementById('timer-btn-pause').style.display = 'none';
+  document.getElementById('timer-btn-resume').style.display = '';
+}
+
+function timerResume() {
+  timerRunning = true;
+  timerInterval = setInterval(timerTick, 1000);
+  document.getElementById('timer-display').style.color = 'var(--green-d)';
+  document.getElementById('timer-status').textContent = '計測中...';
+  document.getElementById('timer-btn-resume').style.display = 'none';
+  document.getElementById('timer-btn-pause').style.display = '';
+}
+
+function timerEnd() {
+  clearInterval(timerInterval); timerRunning = false;
+  document.getElementById('timer-status').textContent = '完了！';
+  document.getElementById('timer-btn-pause').style.display = 'none';
+  document.getElementById('timer-btn-resume').style.display = 'none';
+  document.getElementById('timer-btn-stop').style.display = 'none';
+  // 結果表示
+  const min = Math.round(timerElapsed / 60);
+  const h = Math.floor(min / 60), m = min % 60;
+  const label = h > 0 ? (m > 0 ? `${h}時間${m}分` : `${h}時間`) : `${m}分`;
+  document.getElementById('timer-result-time').textContent = label;
+  document.getElementById('timer-result').style.display = '';
+  document.getElementById('timer-memo').value = '';
+  document.querySelectorAll('#timer-when .chip').forEach(c => c.classList.remove('sel'));
+  timerMood = '';
+  ['great','ok','hard','limit'].forEach(x => { const b=document.getElementById(`tmb-${x}`); if(b) b.className='mood-btn'; });
+}
+
+function timerStop() {
+  clearInterval(timerInterval);
+  timerElapsed = 0; timerRunning = false;
+  document.getElementById('timer-display').textContent = '00:00:00';
+  document.getElementById('timer-status').textContent = '待機中';
+  document.getElementById('timer-btn-start').style.display = '';
+  document.getElementById('timer-btn-pause').style.display = 'none';
+  document.getElementById('timer-btn-resume').style.display = 'none';
+  document.getElementById('timer-btn-stop').style.display = 'none';
+  document.getElementById('timer-result').style.display = 'none';
+}
+
+function selTimerMood(val) {
+  timerMood = val;
+  ['great','ok','hard','limit'].forEach(x => {
+    const b = document.getElementById(`tmb-${x}`);
+    if(b) b.className = 'mood-btn' + (x===val?' sel':'');
+  });
+}
+
+function startVoiceTimer() {
+  const input = document.getElementById('timer-memo');
+  if (!('webkitSpeechRecognition' in window) && !('SpeechRecognition' in window)) {
+    alert('このブラウザは音声入力に対応していません'); return;
+  }
+  const SR = window.SpeechRecognition || window.webkitSpeechRecognition;
+  const r = new SR(); r.lang = 'ja-JP'; r.start();
+  r.onresult = e => { input.value = e.results[0][0].transcript; };
+}
+
+async function timerSave() {
+  const memo = document.getElementById('timer-memo').value.trim() || '業務';
+  const when = [...document.querySelectorAll('#timer-when .chip.sel')].map(c=>c.textContent).join('・');
+  const min = Math.round(timerElapsed / 60);
+  const h = Math.floor(min / 60), m = min % 60;
+  const timeStr = (h>0?(m>0?`${h}時間${m}分`:`${h}時間`):`${m}分`) + (when ? ` · ${when}` : '');
+
+  // 完了済みタスクとして登録
+  const newTask = {
+    id: 'local_' + Date.now(),
+    name: 'その他', color: 'gray',
+    subs: [memo],
+    deadline: '', pinned: false,
+    done: true, doneDate: todayStr(),
+    time: timeStr,
+    tokk: false,
+    taskMood: timerMood || '',
+  };
+  tasks.push(newTask); renderTasks(); saveLocalTasks();
+  closeM('modal-add'); timerStop();
+  try {
+    showSync('保存中...');
+    await apiPost({ action: 'saveTask', data: newTask });
+    showSync('✅ タイマー記録を保存しました');
+    showCelebration();
+  } catch(e) { showSync('⚠ オフライン保存', true); showCelebration(); }
+}
+
+// =============================================
+// 初回セットアップ
+// =============================================
+function checkSetup() {
+  const savedUrl = localStorage.getItem('mamoru_api_url');
+  if (!savedUrl) {
+    // デフォルトURLをそのまま使う場合はセットアップ不要
+    // 初めて使うユーザーのみセットアップ画面を表示
+    const isFirstTime = !localStorage.getItem('mamoru_tasks') && !localStorage.getItem('mamoru_daily');
+    if (isFirstTime) {
+      document.getElementById('modal-setup').classList.add('open');
+    }
+  }
+}
+
+function completeSetup() {
+  const name = document.getElementById('setup-name').value.trim();
+  const url = document.getElementById('setup-url').value.trim();
+  if (!name) { alert('お名前を入力してください'); return; }
+  if (!url || !url.startsWith('https://script.google.com')) {
+    alert('正しいAPI URLを入力してください\n（https://script.google.com/macros/s/...）');
+    return;
+  }
+  localStorage.setItem('mamoru_user_name', name);
+  localStorage.setItem('mamoru_api_url', url);
+  API_URL = url;
+  document.getElementById('modal-setup').classList.remove('open');
+  showSync(`✅ セットアップ完了！ようこそ、${name}さん`);
+  loadTasks();
+}
+
+function resetSetup() {
+  if (!confirm('セットアップ情報をリセットしますか？\nAPI URLと名前の再入力が必要になります。')) return;
+  localStorage.removeItem('mamoru_api_url');
+  localStorage.removeItem('mamoru_user_name');
+  location.reload();
 }
 
 async function saveTaskDone(){
@@ -2157,8 +2461,10 @@ async function completeTask(){
 function switchType(t){
   document.getElementById('tt-task').className = 'type-btn' + (t==='task'?' task':'');
   document.getElementById('tt-past').className = 'type-btn' + (t==='past'?' task':'');
+  document.getElementById('tt-timer').className = 'type-btn' + (t==='timer'?' task':'');
   document.getElementById('task-section').classList.toggle('hidden', t!=='task');
   document.getElementById('past-section').classList.toggle('hidden', t!=='past');
+  document.getElementById('wrap-timer').style.display = t==='timer' ? '' : 'none';
 }
 
 let currentPastMood = '';
@@ -4748,6 +5054,14 @@ setTimeout(initTodayOtUI, 200);
 setTimeout(updateHolidayUI, 100);
 setTimeout(checkYesterdayAutoRecord, 1000);
 setTimeout(checkArchiveNotice, 2000);
+// ユーザー名を設定画面に反映
+const _userName = localStorage.getItem('mamoru_user_name');
+if (_userName) {
+  const subEl = document.getElementById('settings-username-sub');
+  if (subEl) subEl.textContent = `ログイン中：${_userName}`;
+}
+// 未セットアップチェック（少し遅らせる）
+setTimeout(checkSetup, 500);
 </script>
 </body>
 </html>
