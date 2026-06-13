@@ -77,6 +77,8 @@ input,textarea{font-family:inherit;}
 .time-badge{font-size:9px;color:var(--text-s);background:var(--gray-l);padding:1px 5px;border-radius:6px;}
 .pin-btn{width:26px;height:26px;border:none;background:transparent;font-size:13px;opacity:.3;display:flex;align-items:center;justify-content:center;flex-shrink:0;touch-action:manipulation;cursor:pointer;}
 .pin-btn.on{opacity:1;}
+.indent-btn{width:24px;height:24px;border:none;background:transparent;font-size:12px;opacity:.35;display:flex;align-items:center;justify-content:center;flex-shrink:0;touch-action:manipulation;cursor:pointer;}
+.indent-btn:hover{opacity:.8;}
 .play-btn{width:44px;height:44px;border:none;background:var(--green-l);color:var(--green-d);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;touch-action:manipulation;pointer-events:auto;-webkit-tap-highlight-color:transparent;}
 .play-btn i{font-size:18px;}
 
@@ -1251,7 +1253,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
           <b>📌ボタン</b>：ピン固定してリスト先頭に表示。<br>
           <b>並び順</b>：ピン固定→締切7日以内→その他→完了済み。<br>
           <b>並び替え</b>：左の三本線（≡）をドラッグして順番を変更できます。<br>
-          <b>グループ化</b>：カードを右にスワイプすると一段下がり、直前のタスクとグループになります（一緒にドラッグで移動）。左にスワイプで解除。
+          <b>グループ化</b>：カードを右にスワイプ、またはタスク右側の➡️ボタンで一段下がり、直前のタスクとグループになります（一緒にドラッグで移動）。左にスワイプまたは⬅️ボタンで解除。
         </div>
       </div>
     </div>
@@ -1915,6 +1917,7 @@ function renderTasks(){
       <div class="task-right">
         ${!isDoneFlag ? dlBadge(t.deadline) : ''}
         ${t.time ? `<span class="time-badge">${t.time}</span>` : ''}
+        ${(!isDoneFlag && !t.pinned) ? `<button class="indent-btn" onclick="event.stopPropagation();toggleIndent('${t.id}', ${!t.indent})" title="${t.indent?'グループ解除':'グループ化（一段下げ）'}">${t.indent?'⬅️':'➡️'}</button>` : ''}
         <button class="pin-btn ${t.pinned?'on':''}" onclick="event.stopPropagation();togglePin('${t.id}')">📌</button>
       </div>`;
 
