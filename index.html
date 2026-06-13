@@ -45,7 +45,7 @@ input,textarea{font-family:inherit;}
 .active-end{background:var(--green);color:#fff;border:none;padding:4px 10px;border-radius:var(--radius-s);font-size:12px;font-weight:600;}
 
 /* タスクエリア */
-.task-area{padding:6px 14px 0;overflow-y:auto;flex:1;}
+.task-area{padding:6px 14px 80px;overflow-y:auto;flex:1;}
 .task-list{display:flex;flex-direction:column;gap:2px;}
 
 /* タスクアイテム */
@@ -73,7 +73,7 @@ input,textarea{font-family:inherit;}
 .dl-near{background:#FFF7ED;color:#C2410C;}
 .dl-over{background:var(--red-l);color:var(--red);}
 .time-badge{font-size:9px;color:var(--text-s);background:var(--gray-l);padding:1px 5px;border-radius:6px;}
-.pin-btn{width:26px;height:26px;border:none;background:transparent;font-size:13px;opacity:.3;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
+.pin-btn{width:26px;height:26px;border:none;background:transparent;font-size:13px;opacity:.3;display:flex;align-items:center;justify-content:center;flex-shrink:0;touch-action:manipulation;cursor:pointer;}
 .pin-btn.on{opacity:1;}
 .play-btn{width:44px;height:44px;border:none;background:var(--green-l);color:var(--green-d);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;touch-action:manipulation;pointer-events:auto;-webkit-tap-highlight-color:transparent;}
 .play-btn i{font-size:18px;}
@@ -1620,19 +1620,38 @@ textarea{resize:none;height:56px;line-height:1.5;}
 </div>
 
 <!-- modal: サンプルデータ投入 -->
+<!-- modal: Googleログイン -->
+<div class="modal-bg center" id="modal-login" style="z-index:9999;">
+  <div class="modal-center" onclick="event.stopPropagation()" style="max-width:360px;">
+    <div style="text-align:center;margin-bottom:16px;">
+      <img src="https://kakutouka445-a11y.github.io/mamoru-san/mamorusanpng1.png" style="width:80px;height:80px;object-fit:contain;">
+    </div>
+    <div class="modal-center-title">🔑 Googleログインが必要です</div>
+    <div style="font-size:14px;color:var(--text-s);margin-bottom:20px;line-height:1.8;text-align:center;">
+      まもるさんを使うには<br>Googleアカウントでのログインが必要です。
+    </div>
+    <button onclick="location.reload()" style="width:100%;padding:14px;background:var(--green);color:#fff;border:none;border-radius:var(--radius-s);font-size:16px;font-weight:700;margin-bottom:10px;">
+      🔄 ログインして再読み込み
+    </button>
+    <div style="font-size:11px;color:var(--text-s);text-align:center;">
+      ※ Googleアカウントにログインしてからアプリを開いてください
+    </div>
+  </div>
+</div>
+
 <!-- modal: 初回セットアップ -->
 <div class="modal-bg center" id="modal-setup" style="z-index:9999;">
   <div class="modal-center" onclick="event.stopPropagation()" style="max-width:360px;">
     <div style="text-align:center;margin-bottom:16px;">
       <img src="https://kakutouka445-a11y.github.io/mamoru-san/mamorusanpng1.png" style="width:80px;height:80px;object-fit:contain;">
     </div>
-    <div class="modal-center-title">🛡️ まもるさん セットアップ</div>
+    <div class="modal-center-title">🛡️ まもるさん へようこそ！</div>
     <div style="font-size:13px;color:var(--text-s);margin-bottom:16px;line-height:1.7;">
-      管理者から送られてきた<br><b>あなた専用のAPI URL</b>を貼り付けてください。
+      Googleアカウントでログインできました！<br>アプリ内で表示する<b>お名前</b>を入力してください。
     </div>
     <div style="font-size:12px;font-weight:600;color:var(--text-s);margin-bottom:6px;">あなたのお名前</div>
     <input type="text" id="setup-name" placeholder="例：田中　花子" style="width:100%;font-size:16px;border:1.5px solid var(--border);border-radius:var(--radius-s);padding:10px 12px;background:var(--gray-l);color:var(--text);outline:none;margin-bottom:12px;">
-    <div style="font-size:12px;font-weight:600;color:var(--text-s);margin-bottom:6px;">API URL</div>
+    <div id="setup-url-label" style="font-size:12px;font-weight:600;color:var(--text-s);margin-bottom:6px;">API URL</div>
     <textarea id="setup-url" placeholder="https://script.google.com/macros/s/..." style="width:100%;font-size:12px;border:1.5px solid var(--border);border-radius:var(--radius-s);padding:10px 12px;background:var(--gray-l);color:var(--text);outline:none;height:80px;resize:none;margin-bottom:16px;"></textarea>
     <button class="btn-primary" style="width:100%;" onclick="completeSetup()">✅ セットアップ完了</button>
     <div style="font-size:11px;color:var(--text-s);text-align:center;margin-top:10px;">
@@ -2123,7 +2142,9 @@ function openStartDirect(id) {
 function openEditFromModal() {
   const id = selTaskId;
   closeM('modal-start');
-  setTimeout(() => tapTask(id), 100);
+  // ホームタブに切り替えてからtapTask
+  switchTab('home');
+  setTimeout(() => tapTask(id), 150);
 }
 
 function confirmDeleteTask() {
@@ -2359,33 +2380,51 @@ async function timerSave() {
 }
 
 // =============================================
-// 初回セットアップ
+// 初回セットアップ・Googleログイン
 // =============================================
-function checkSetup() {
-  const savedUrl = localStorage.getItem('mamoru_api_url');
-  if (!savedUrl) {
-    // デフォルトURLをそのまま使う場合はセットアップ不要
-    // 初めて使うユーザーのみセットアップ画面を表示
-    const isFirstTime = !localStorage.getItem('mamoru_tasks') && !localStorage.getItem('mamoru_daily');
-    if (isFirstTime) {
-      document.getElementById('modal-setup').classList.add('open');
+let currentUserEmail = '';
+let currentUserName = localStorage.getItem('mamoru_user_name') || '';
+
+async function checkSetup() {
+  try {
+    showSync('ログイン確認中...');
+    const res = await apiGet('getUser');
+    if (res && res.email) {
+      currentUserEmail = res.email;
+      // 名前が未設定の場合のみ名前入力画面
+      if (!currentUserName) {
+        document.getElementById('setup-url').style.display = 'none';
+        document.getElementById('setup-url-label').style.display = 'none';
+        document.getElementById('setup-name').value = '';
+        document.getElementById('modal-setup').classList.add('open');
+      } else {
+        const subEl = document.getElementById('settings-username-sub');
+        if (subEl) subEl.textContent = `${currentUserName}（${currentUserEmail}）`;
+        showSync(`✅ ${currentUserName}さんでログイン中`);
+      }
+    } else {
+      // 未ログイン → Googleログインへ誘導
+      showSync('Googleログインが必要です');
+      setTimeout(() => {
+        document.getElementById('modal-login').classList.add('open');
+      }, 500);
     }
+  } catch(e) {
+    showSync('⚠ オフラインモード', true);
   }
 }
 
 function completeSetup() {
   const name = document.getElementById('setup-name').value.trim();
-  const url = document.getElementById('setup-url').value.trim();
   if (!name) { alert('お名前を入力してください'); return; }
-  if (!url || !url.startsWith('https://script.google.com')) {
-    alert('正しいAPI URLを入力してください\n（https://script.google.com/macros/s/...）');
-    return;
-  }
   localStorage.setItem('mamoru_user_name', name);
-  localStorage.setItem('mamoru_api_url', url);
-  API_URL = url;
+  currentUserName = name;
   document.getElementById('modal-setup').classList.remove('open');
-  showSync(`✅ セットアップ完了！ようこそ、${name}さん`);
+  const subEl = document.getElementById('settings-username-sub');
+  if (subEl) subEl.textContent = currentUserEmail ? `${name}（${currentUserEmail}）` : `ログイン中：${name}`;
+  // GASにも名前を保存
+  apiPost({ action: 'saveUserName', data: { name } }).catch(() => {});
+  showSync(`✅ ようこそ、${name}さん！`);
   loadTasks();
 }
 
