@@ -57,9 +57,9 @@ input,textarea{font-family:inherit;}
 .task-item.dragging{opacity:.5;background:var(--green-l);box-shadow:0 8px 24px rgba(0,0,0,.18);border-color:var(--green);transform:scale(1.02);}
 .task-item.drag-over-top{border-top:3px solid var(--green);}
 .task-item.drag-over-bottom{border-bottom:3px solid var(--green);}
-.drag-handle{display:flex;flex-direction:column;gap:2px;padding:2px 4px;opacity:.25;flex-shrink:0;touch-action:none;cursor:grab;}
+.drag-handle{display:flex;flex-direction:column;gap:4px;padding:8px 10px;opacity:.3;flex-shrink:0;touch-action:none;cursor:grab;}
 .drag-handle:active{cursor:grabbing;}
-.drag-handle span{display:block;width:10px;height:1.5px;background:var(--gray);border-radius:1px;}
+.drag-handle span{display:block;width:16px;height:2.5px;background:var(--gray);border-radius:1.5px;}
 .task-item.indented{margin-left:26px;border-left:3px solid var(--green-b);background:var(--green-l);}
 .task-item.indented .drag-handle{opacity:.15;}
 .task-body{flex:1;min-width:0;display:flex;align-items:center;gap:4px;cursor:pointer;}
@@ -2053,6 +2053,19 @@ async function togglePin(id) {
 // =============================================
 let dragId = null, dragEl = null, touchStartY = 0, touchItem = null;
 let lastSwipeTime = 0;
+let dragGroupIds = [];
+
+// 指定タスクとそれに続くインデント済みタスク群のIDリストを返す
+function getGroupIds(id) {
+  const idx = tasks.findIndex(t => String(t.id) === String(id));
+  if (idx === -1) return [String(id)];
+  const ids = [String(tasks[idx].id)];
+  if (!tasks[idx].indent) {
+    let i = idx + 1;
+    while (i < tasks.length && tasks[i].indent) { ids.push(String(tasks[i].id)); i++; }
+  }
+  return ids;
+}
 
 // 非インデントタスク＋それに続くインデントタスク群を1グループとして移動
 function moveTaskGroup(fromId, toId, after) {
@@ -2101,22 +2114,26 @@ function initDragAndDrop() {
     el.draggable = false; // task-item全体はdraggableにしない
     const handle = el.querySelector('.drag-handle');
     if (handle) handle.draggable = true;
-    if (handle) handle.draggable = true;
     const dragTarget = handle || el;
     dragTarget.addEventListener('dragstart', e => {
       dragId = el.dataset.id;
       dragEl = el;
-      setTimeout(() => el.classList.add('dragging'), 0);
+      // グループ全体（自分＋続くインデント済みタスク）を視覚的にも対象にする
+      dragGroupIds = getGroupIds(dragId);
+      setTimeout(() => {
+        list.querySelectorAll('.task-item').forEach(x => {
+          if (dragGroupIds.includes(x.dataset.id)) x.classList.add('dragging');
+        });
+      }, 0);
       e.dataTransfer.effectAllowed = 'move';
     });
     dragTarget.addEventListener('dragend', () => {
-      el.classList.remove('dragging');
-      list.querySelectorAll('.task-item').forEach(x => x.classList.remove('drag-over-top','drag-over-bottom'));
-      dragId = null; dragEl = null;
+      list.querySelectorAll('.task-item').forEach(x => x.classList.remove('dragging','drag-over-top','drag-over-bottom'));
+      dragId = null; dragEl = null; dragGroupIds = [];
     });
     el.addEventListener('dragover', e => {
       e.preventDefault();
-      if (!dragId || el.dataset.id === dragId) return;
+      if (!dragId || dragGroupIds.includes(el.dataset.id)) return;
       list.querySelectorAll('.task-item').forEach(x => x.classList.remove('drag-over-top','drag-over-bottom'));
       const rect = el.getBoundingClientRect();
       const mid = rect.top + rect.height / 2;
@@ -2124,7 +2141,7 @@ function initDragAndDrop() {
     });
     el.addEventListener('drop', e => {
       e.preventDefault();
-      if (!dragId || el.dataset.id === dragId) return;
+      if (!dragId || dragGroupIds.includes(el.dataset.id)) return;
       const rect    = el.getBoundingClientRect();
       const after   = e.clientY >= rect.top + rect.height / 2;
       moveTaskGroup(dragId, el.dataset.id, after);
@@ -2140,7 +2157,10 @@ function initDragAndDrop() {
       const id = handle.dataset.id;
       touchItem = list.querySelector(`.task-item[data-id="${id}"]`);
       touchStartY = e.touches[0].clientY;
-      touchItem.classList.add('dragging');
+      dragGroupIds = getGroupIds(id);
+      list.querySelectorAll('.task-item').forEach(x => {
+        if (dragGroupIds.includes(x.dataset.id)) x.classList.add('dragging');
+      });
       e.preventDefault();
     }, { passive: false });
 
@@ -2175,12 +2195,13 @@ function initDragAndDrop() {
           break;
         }
       }
-      if (target && target.dataset.id !== fromId) {
+      if (target && !dragGroupIds.includes(target.dataset.id)) {
         moveTaskGroup(fromId, target.dataset.id, after);
       }
       touchItem.classList.remove('dragging');
-      list.querySelectorAll('.task-item').forEach(x => x.classList.remove('drag-over-top','drag-over-bottom'));
+      list.querySelectorAll('.task-item').forEach(x => x.classList.remove('dragging','drag-over-top','drag-over-bottom'));
       touchItem = null;
+      dragGroupIds = [];
       renderTasks();
       saveLocalTasks();
       saveTaskOrderToServer();
