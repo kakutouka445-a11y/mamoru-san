@@ -1056,6 +1056,16 @@ textarea{resize:none;height:56px;line-height:1.5;}
         <div style="position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .2s;" id="hide-far-knob"></div>
       </div>
     </button>
+    <button class="settings-item-btn" onclick="togglePinPosition()">
+      <i class="ti ti-pin settings-item-icon" style="color:var(--green);"></i>
+      <div class="settings-item-text">
+        <div class="settings-item-title">ピン留め時の位置</div>
+        <div class="settings-item-sub" id="pin-pos-sub">現在：一番下に追加</div>
+      </div>
+      <div id="pin-pos-toggle" style="width:36px;height:20px;border-radius:10px;background:var(--gray-m);position:relative;flex-shrink:0;transition:background .2s;">
+        <div style="position:absolute;top:2px;left:2px;width:16px;height:16px;border-radius:50%;background:#fff;transition:left .2s;" id="pin-pos-knob"></div>
+      </div>
+    </button>
 
     <div class="settings-section-label">アプリ</div>
     <button class="settings-item-btn" onclick="closeM('modal-settings');openM('modal-howto')">
@@ -1248,7 +1258,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
           タスクの一覧が表示されます。<br>
           <b>タップ</b>：タスクをタップすると完了モーダルが開きます。完了日・かかった時間・いつ実行したか・負担感を記録して保存できます。<br>
           <b>✏️ 編集</b>：完了モーダルの右上「✏️編集」ボタンでタスク名・締切日の編集・削除ができます。<br>
-          <b>📌ボタン</b>：ピン固定してリスト先頭に表示。<br>
+          <b>📌ボタン</b>：ピン固定してリスト先頭付近に表示。設定で「一番上」「一番下」のどちらに追加するか選べます。<br>
           <b>並び順</b>：ピン固定→締切7日以内→その他→完了済み。<br>
           <b>並び替え</b>：左の三本線（≡）をドラッグして順番を変更できます。<br>
           <b>グループ化</b>：タスクのバーを右にスワイプ（PCはドラッグ）すると一段下がり、直前のタスクとグループになります（一緒にドラッグで移動。ピン固定タスクもグループ化可能）。左にスワイプ／ドラッグで解除。
@@ -1827,16 +1837,48 @@ function toggleHideFar() {
   apiPost({ action: 'saveSettings', data: { hideFarTasks: hideFarTasks } }).catch(() => {});
 }
 
+// ピン留め時の位置（top / bottom）
+function updatePinPosUI() {
+  const toggle = document.getElementById('pin-pos-toggle');
+  const knob   = document.getElementById('pin-pos-knob');
+  const sub    = document.getElementById('pin-pos-sub');
+  if (!toggle) return;
+  const pos = localStorage.getItem('mamoru_pin_position') || 'bottom';
+  if (pos === 'top') {
+    toggle.style.background = 'var(--green)';
+    knob.style.left = '18px';
+    sub.textContent = '現在：一番上に追加';
+  } else {
+    toggle.style.background = 'var(--gray-m)';
+    knob.style.left = '2px';
+    sub.textContent = '現在：一番下に追加';
+  }
+}
+
+function togglePinPosition() {
+  const cur = localStorage.getItem('mamoru_pin_position') || 'bottom';
+  const next = cur === 'top' ? 'bottom' : 'top';
+  localStorage.setItem('mamoru_pin_position', next);
+  updatePinPosUI();
+  apiPost({ action: 'saveSettings', data: { pinPosition: next } }).catch(() => {});
+}
+
 // 起動時：サーバーから設定を取得して反映
 async function loadSettingsFromServer() {
   try {
     const res = await apiGet('getSettings');
-    if (res && res.settings && res.settings.hideFarTasks !== undefined) {
-      hideFarTasks = res.settings.hideFarTasks === 'true' || res.settings.hideFarTasks === true;
-      localStorage.setItem('mamoru_hideFar', hideFarTasks);
-      updateHideFarUI();
-      renderTasks();
-      renderDeadlines();
+    if (res && res.settings) {
+      if (res.settings.hideFarTasks !== undefined) {
+        hideFarTasks = res.settings.hideFarTasks === 'true' || res.settings.hideFarTasks === true;
+        localStorage.setItem('mamoru_hideFar', hideFarTasks);
+        updateHideFarUI();
+        renderTasks();
+        renderDeadlines();
+      }
+      if (res.settings.pinPosition !== undefined) {
+        localStorage.setItem('mamoru_pin_position', res.settings.pinPosition);
+        updatePinPosUI();
+      }
     }
   } catch(e) { /* オフライン時はローカル値を使用 */ }
 }
@@ -2038,8 +2080,32 @@ async function togglePin(id) {
     let i = idx + 1;
     while (i < tasks.length && tasks[i].indent) { tasks[i].pinned = t.pinned; group.push(tasks[i]); i++; }
   }
+
+  // ピン留めON時：設定に応じてピン固定グループの先頭/末尾に移動
+  if (t.pinned) {
+    const pinPos = localStorage.getItem('mamoru_pin_position') || 'bottom'; // 'top' or 'bottom'
+    // グループ（自分＋連動した子）を配列から取り出す
+    const groupIds = new Set(group.map(g => String(g.id)));
+    const removed = [];
+    for (let i = tasks.length - 1; i >= 0; i--) {
+      if (groupIds.has(String(tasks[i].id))) removed.unshift(tasks.splice(i, 1)[0]);
+    }
+    // 現在のピン固定タスクの範囲を探す
+    const pinnedIdxs = tasks.map((x, i) => x.pinned && !x.done ? i : -1).filter(i => i >= 0);
+    let insertAt;
+    if (pinnedIdxs.length === 0) {
+      insertAt = 0; // ピン固定が他になければ先頭
+    } else if (pinPos === 'top') {
+      insertAt = pinnedIdxs[0];
+    } else {
+      insertAt = pinnedIdxs[pinnedIdxs.length - 1] + 1;
+    }
+    tasks.splice(insertAt, 0, ...removed);
+  }
+
   renderTasks();
   saveLocalTasks();
+  saveTaskOrderToServer();
   try {
     await Promise.all(group.map(g => apiPost({ action: 'updateTask', data: { id: g.id, pinned: g.pinned } })));
   } catch(e) {}
@@ -5253,6 +5319,7 @@ setTimeout(updateHolidayUI, 100);
 setTimeout(checkYesterdayAutoRecord, 1000);
 setTimeout(checkArchiveNotice, 2000);
 setTimeout(updateHideFarUI, 100);
+setTimeout(updatePinPosUI, 100);
 setTimeout(loadSettingsFromServer, 600);
 // ユーザー名を設定画面に反映
 const _userName = localStorage.getItem('mamoru_user_name');
