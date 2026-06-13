@@ -77,8 +77,6 @@ input,textarea{font-family:inherit;}
 .time-badge{font-size:9px;color:var(--text-s);background:var(--gray-l);padding:1px 5px;border-radius:6px;}
 .pin-btn{width:26px;height:26px;border:none;background:transparent;font-size:13px;opacity:.3;display:flex;align-items:center;justify-content:center;flex-shrink:0;touch-action:manipulation;cursor:pointer;}
 .pin-btn.on{opacity:1;}
-.indent-btn{width:24px;height:24px;border:none;background:transparent;font-size:12px;opacity:.35;display:flex;align-items:center;justify-content:center;flex-shrink:0;touch-action:manipulation;cursor:pointer;}
-.indent-btn:hover{opacity:.8;}
 .play-btn{width:44px;height:44px;border:none;background:var(--green-l);color:var(--green-d);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;touch-action:manipulation;pointer-events:auto;-webkit-tap-highlight-color:transparent;}
 .play-btn i{font-size:18px;}
 
@@ -1253,7 +1251,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
           <b>📌ボタン</b>：ピン固定してリスト先頭に表示。<br>
           <b>並び順</b>：ピン固定→締切7日以内→その他→完了済み。<br>
           <b>並び替え</b>：左の三本線（≡）をドラッグして順番を変更できます。<br>
-          <b>グループ化</b>：カードを右にスワイプ、またはタスク右側の➡️ボタンで一段下がり、直前のタスクとグループになります（一緒にドラッグで移動。ピン固定タスクもグループ化可能）。左にスワイプまたは⬅️ボタンで解除。
+          <b>グループ化</b>：タスクのバーを右にスワイプ（PCはドラッグ）すると一段下がり、直前のタスクとグループになります（一緒にドラッグで移動。ピン固定タスクもグループ化可能）。左にスワイプ／ドラッグで解除。
         </div>
       </div>
     </div>
@@ -1917,7 +1915,6 @@ function renderTasks(){
       <div class="task-right">
         ${!isDoneFlag ? dlBadge(t.deadline) : ''}
         ${t.time ? `<span class="time-badge">${t.time}</span>` : ''}
-        ${!isDoneFlag ? `<button class="indent-btn" onclick="event.stopPropagation();toggleIndent('${t.id}', ${!t.indent})" title="${t.indent?'グループ解除':'グループ化（一段下げ）'}">${t.indent?'⬅️':'➡️'}</button>` : ''}
         <button class="pin-btn ${t.pinned?'on':''}" onclick="event.stopPropagation();togglePin('${t.id}')">📌</button>
       </div>`;
 
@@ -2054,6 +2051,7 @@ async function togglePin(id) {
 let dragId = null, dragEl = null, touchStartY = 0, touchItem = null;
 let lastSwipeTime = 0;
 let dragGroupIds = [];
+let mouseSwipeState = null;
 
 // 指定タスクとそれに続くインデント済みタスク群のIDリストを返す
 function getGroupIds(id) {
@@ -2208,13 +2206,15 @@ function initDragAndDrop() {
     });
   });
 
-  // タスク本体を左右スワイプ → インデント（グループ化）切り替え
+  // タスク本体を左右スワイプ/ドラッグ → インデント（グループ化）切り替え
   list.querySelectorAll('.task-item').forEach(el => {
     const body = el.querySelector('.task-body');
     if (!body) return;
     const isDoneFlag = el.classList.contains('done');
     if (isDoneFlag) return; // 完了済みは対象外
     let sx = 0, sy = 0, swiping = false;
+
+    // スマホ：タッチ操作
     body.addEventListener('touchstart', e => {
       sx = e.touches[0].clientX; sy = e.touches[0].clientY; swiping = false;
     }, { passive: true });
@@ -2240,7 +2240,44 @@ function initDragAndDrop() {
       }
       swiping = false;
     });
+
+    // PC：マウスドラッグ操作（mousedownのみ要素ごと、move/upはグローバルに一度だけ登録）
+    body.style.cursor = 'grab';
+    body.addEventListener('mousedown', e => {
+      mouseSwipeState = { el, body, sx: e.clientX, sy: e.clientY, swiping: false };
+    });
   });
+
+  // mousemove/mouseupはdocumentに一度だけ登録（重複防止）
+  if (!window._mamoruMouseSwipeInit) {
+    window._mamoruMouseSwipeInit = true;
+    document.addEventListener('mousemove', e => {
+      if (!mouseSwipeState) return;
+      const { body, sx, sy } = mouseSwipeState;
+      const dx = e.clientX - sx;
+      const dy = e.clientY - sy;
+      if (Math.abs(dx) > 12 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+        mouseSwipeState.swiping = true;
+        const shift = Math.max(-30, Math.min(30, dx));
+        body.style.transform = `translateX(${shift}px)`;
+      }
+    });
+    document.addEventListener('mouseup', e => {
+      if (!mouseSwipeState) return;
+      const { el, body, sx, swiping } = mouseSwipeState;
+      body.style.transform = '';
+      if (swiping) {
+        const dx = e.clientX - sx;
+        if (Math.abs(dx) > 36) {
+          const id = el.dataset.id;
+          if (dx > 0) toggleIndent(id, true);
+          else toggleIndent(id, false);
+          lastSwipeTime = Date.now();
+        }
+      }
+      mouseSwipeState = null;
+    });
+  }
 }
 
 // =============================================
