@@ -1253,7 +1253,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
           <b>📌ボタン</b>：ピン固定してリスト先頭に表示。<br>
           <b>並び順</b>：ピン固定→締切7日以内→その他→完了済み。<br>
           <b>並び替え</b>：左の三本線（≡）をドラッグして順番を変更できます。<br>
-          <b>グループ化</b>：カードを右にスワイプ、またはタスク右側の➡️ボタンで一段下がり、直前のタスクとグループになります（一緒にドラッグで移動）。左にスワイプまたは⬅️ボタンで解除。
+          <b>グループ化</b>：カードを右にスワイプ、またはタスク右側の➡️ボタンで一段下がり、直前のタスクとグループになります（一緒にドラッグで移動。ピン固定タスクもグループ化可能）。左にスワイプまたは⬅️ボタンで解除。
         </div>
       </div>
     </div>
@@ -1892,7 +1892,7 @@ function renderTasks(){
 
     const el = document.createElement('div');
     const isDoneFlag = t.done === true || t.done === 'TRUE' || t.done === 'true';
-    el.className = 'task-item' + (t.pinned&&!isDoneFlag?' pinned':'') + (isDoneFlag?' done':'') + (t.indent&&!isDoneFlag&&!t.pinned?' indented':'');
+    el.className = 'task-item' + (t.pinned&&!isDoneFlag?' pinned':'') + (isDoneFlag?' done':'') + (t.indent&&!isDoneFlag?' indented':'');
     el.dataset.id = t.id;
     el.style.flex = '1';
     el.style.minWidth = '0';
@@ -1917,7 +1917,7 @@ function renderTasks(){
       <div class="task-right">
         ${!isDoneFlag ? dlBadge(t.deadline) : ''}
         ${t.time ? `<span class="time-badge">${t.time}</span>` : ''}
-        ${(!isDoneFlag && !t.pinned) ? `<button class="indent-btn" onclick="event.stopPropagation();toggleIndent('${t.id}', ${!t.indent})" title="${t.indent?'グループ解除':'グループ化（一段下げ）'}">${t.indent?'⬅️':'➡️'}</button>` : ''}
+        ${!isDoneFlag ? `<button class="indent-btn" onclick="event.stopPropagation();toggleIndent('${t.id}', ${!t.indent})" title="${t.indent?'グループ解除':'グループ化（一段下げ）'}">${t.indent?'⬅️':'➡️'}</button>` : ''}
         <button class="pin-btn ${t.pinned?'on':''}" onclick="event.stopPropagation();togglePin('${t.id}')">📌</button>
       </div>`;
 
@@ -2034,10 +2034,17 @@ async function togglePin(id) {
   const t = tasks.find(t => String(t.id) === String(id));
   if (!t) return;
   t.pinned = !t.pinned;
+  // グループの先頭タスクなら、続くインデント済みタスクも一緒にピン状態を連動
+  const idx = tasks.findIndex(x => String(x.id) === String(id));
+  const group = [t];
+  if (!t.indent) {
+    let i = idx + 1;
+    while (i < tasks.length && tasks[i].indent) { tasks[i].pinned = t.pinned; group.push(tasks[i]); i++; }
+  }
   renderTasks();
   saveLocalTasks();
   try {
-    await apiPost({ action: 'updateTask', data: { id: t.id, pinned: t.pinned } });
+    await Promise.all(group.map(g => apiPost({ action: 'updateTask', data: { id: g.id, pinned: g.pinned } })));
   } catch(e) {}
 }
 
@@ -2068,14 +2075,21 @@ function moveTaskGroup(fromId, toId, after) {
 async function toggleIndent(id, on) {
   const t = tasks.find(t => String(t.id) === String(id));
   if (!t) return;
-  if (t.pinned || (t.done === true || t.done === 'TRUE')) return; // ピン固定・完了済みは対象外
+  if (t.done === true || t.done === 'TRUE') return; // 完了済みは対象外
   if (!!t.indent === !!on) return;
   t.indent = on;
+  // グループ化ON時：直前のグループ先頭タスクのピン状態を継承
+  if (on) {
+    const idx = tasks.findIndex(x => String(x.id) === String(id));
+    if (idx > 0 && tasks[idx-1].pinned !== t.pinned && (!tasks[idx-1].done)) {
+      t.pinned = tasks[idx-1].pinned;
+    }
+  }
   renderTasks();
   saveLocalTasks();
   saveTaskOrderToServer();
   try {
-    await apiPost({ action: 'updateTask', data: { id: t.id, indent: on } });
+    await apiPost({ action: 'updateTask', data: { id: t.id, indent: on, pinned: t.pinned } });
   } catch(e) { /* オフライン時は無視 */ }
 }
 
@@ -2178,8 +2192,7 @@ function initDragAndDrop() {
     const body = el.querySelector('.task-body');
     if (!body) return;
     const isDoneFlag = el.classList.contains('done');
-    const isPinned = el.classList.contains('pinned');
-    if (isDoneFlag || isPinned) return; // 完了済み・ピン固定は対象外
+    if (isDoneFlag) return; // 完了済みは対象外
     let sx = 0, sy = 0, swiping = false;
     body.addEventListener('touchstart', e => {
       sx = e.touches[0].clientX; sy = e.touches[0].clientY; swiping = false;
