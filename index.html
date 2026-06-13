@@ -2,7 +2,7 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
 <meta name="apple-mobile-web-app-title" content="まもるさん">
@@ -25,7 +25,7 @@
 html,body{height:100%;font-family:'Hiragino Sans','Yu Gothic UI',sans-serif;background:var(--bg);color:var(--text);font-size:14px;-webkit-tap-highlight-color:transparent;}
 button{font-family:inherit;cursor:pointer;}
 input,textarea{font-family:inherit;}
-.app{max-width:430px;margin:0 auto;min-height:100vh;display:flex;flex-direction:column;position:relative;background:var(--bg);}
+.app{max-width:430px;margin:0 auto;min-height:100vh;min-height:100dvh;display:flex;flex-direction:column;position:relative;background:var(--bg);}
 .screen{flex:1;display:none;flex-direction:column;padding-bottom:72px;}
 .screen.active{display:flex;}
 
@@ -45,7 +45,7 @@ input,textarea{font-family:inherit;}
 .active-end{background:var(--green);color:#fff;border:none;padding:4px 10px;border-radius:var(--radius-s);font-size:12px;font-weight:600;}
 
 /* タスクエリア */
-.task-area{padding:6px 14px 80px;overflow-y:auto;flex:1;}
+.task-area{padding:6px 14px calc(140px + env(safe-area-inset-bottom));overflow-y:auto;flex:1;}
 .task-list{display:flex;flex-direction:column;gap:2px;}
 
 /* タスクアイテム */
@@ -60,6 +60,8 @@ input,textarea{font-family:inherit;}
 .drag-handle{display:flex;flex-direction:column;gap:2px;padding:2px 4px;opacity:.25;flex-shrink:0;touch-action:none;cursor:grab;}
 .drag-handle:active{cursor:grabbing;}
 .drag-handle span{display:block;width:10px;height:1.5px;background:var(--gray);border-radius:1px;}
+.task-item.indented{margin-left:26px;border-left:3px solid var(--green-b);background:var(--green-l);}
+.task-item.indented .drag-handle{opacity:.15;}
 .task-body{flex:1;min-width:0;display:flex;align-items:center;gap:4px;cursor:pointer;}
 .cat-initial{font-size:12px;font-weight:700;width:16px;text-align:center;flex-shrink:0;}
 .cat-full{font-size:14px;flex-shrink:0;}
@@ -90,7 +92,7 @@ input,textarea{font-family:inherit;}
 .btn-delete-task{display:flex;align-items:center;justify-content:center;gap:6px;background:transparent;border:none;color:var(--red);font-size:12px;padding:8px;width:100%;opacity:0.7;}
 
 /* タブバー */
-.tab-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--bg-card);border-top:1px solid var(--border);display:flex;align-items:stretch;height:64px;z-index:50;}
+.tab-bar{position:fixed;bottom:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--bg-card);border-top:1px solid var(--border);display:flex;align-items:stretch;height:64px;padding-bottom:env(safe-area-inset-bottom);z-index:50;}
 .tab{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;border:none;background:transparent;padding:6px 0 10px;border-top:3px solid transparent;transition:background .15s;}
 .tab i{font-size:22px;color:var(--text-s);}
 .tab span{font-size:13px;color:var(--text-s);}
@@ -1247,7 +1249,9 @@ textarea{resize:none;height:56px;line-height:1.5;}
           <b>タップ</b>：タスクをタップすると完了モーダルが開きます。完了日・かかった時間・いつ実行したか・負担感を記録して保存できます。<br>
           <b>✏️ 編集</b>：完了モーダルの右上「✏️編集」ボタンでタスク名・締切日の編集・削除ができます。<br>
           <b>📌ボタン</b>：ピン固定してリスト先頭に表示。<br>
-          <b>並び順</b>：ピン固定→締切7日以内→その他→完了済み。
+          <b>並び順</b>：ピン固定→締切7日以内→その他→完了済み。<br>
+          <b>並び替え</b>：左の三本線（≡）をドラッグして順番を変更できます。<br>
+          <b>グループ化</b>：カードを右にスワイプすると一段下がり、直前のタスクとグループになります（一緒にドラッグで移動）。左にスワイプで解除。
         </div>
       </div>
     </div>
@@ -1886,7 +1890,7 @@ function renderTasks(){
 
     const el = document.createElement('div');
     const isDoneFlag = t.done === true || t.done === 'TRUE' || t.done === 'true';
-    el.className = 'task-item' + (t.pinned&&!isDoneFlag?' pinned':'') + (isDoneFlag?' done':'');
+    el.className = 'task-item' + (t.pinned&&!isDoneFlag?' pinned':'') + (isDoneFlag?' done':'') + (t.indent&&!isDoneFlag&&!t.pinned?' indented':'');
     el.dataset.id = t.id;
     el.style.flex = '1';
     el.style.minWidth = '0';
@@ -2038,6 +2042,39 @@ async function togglePin(id) {
 // ドラッグ＆ドロップ（PC + スマホ対応）
 // =============================================
 let dragId = null, dragEl = null, touchStartY = 0, touchItem = null;
+let lastSwipeTime = 0;
+
+// 非インデントタスク＋それに続くインデントタスク群を1グループとして移動
+function moveTaskGroup(fromId, toId, after) {
+  const fromIdx = tasks.findIndex(t => String(t.id) === String(fromId));
+  if (fromIdx === -1) return;
+  let groupEnd = fromIdx;
+  if (!tasks[fromIdx].indent) {
+    while (groupEnd + 1 < tasks.length && tasks[groupEnd+1].indent) groupEnd++;
+  }
+  const group = tasks.splice(fromIdx, groupEnd - fromIdx + 1);
+  let toIdx = tasks.findIndex(t => String(t.id) === String(toId));
+  if (toIdx === -1) toIdx = tasks.length;
+  let insertAt = after ? toIdx + 1 : toIdx;
+  if (insertAt > tasks.length) insertAt = tasks.length;
+  if (insertAt < 0) insertAt = 0;
+  tasks.splice(insertAt, 0, ...group);
+}
+
+// タスクのインデント状態を切り替え（グループ化のON/OFF）
+async function toggleIndent(id, on) {
+  const t = tasks.find(t => String(t.id) === String(id));
+  if (!t) return;
+  if (t.pinned || (t.done === true || t.done === 'TRUE')) return; // ピン固定・完了済みは対象外
+  if (!!t.indent === !!on) return;
+  t.indent = on;
+  renderTasks();
+  saveLocalTasks();
+  saveTaskOrderToServer();
+  try {
+    await apiPost({ action: 'updateTask', data: { id: t.id, indent: on } });
+  } catch(e) { /* オフライン時は無視 */ }
+}
 
 function initDragAndDrop() {
   const list = document.getElementById('task-list');
@@ -2071,13 +2108,9 @@ function initDragAndDrop() {
     el.addEventListener('drop', e => {
       e.preventDefault();
       if (!dragId || el.dataset.id === dragId) return;
-      const fromIdx = tasks.findIndex(t => String(t.id) === String(dragId));
-      const toIdx   = tasks.findIndex(t => String(t.id) === String(el.dataset.id));
       const rect    = el.getBoundingClientRect();
       const after   = e.clientY >= rect.top + rect.height / 2;
-      const [moved] = tasks.splice(fromIdx, 1);
-      const insertAt = toIdx > fromIdx ? (after ? toIdx : toIdx - 1) : (after ? toIdx + 1 : toIdx);
-      tasks.splice(insertAt > tasks.length ? tasks.length : insertAt, 0, moved);
+      moveTaskGroup(dragId, el.dataset.id, after);
       renderTasks();
       saveLocalTasks();
       saveTaskOrderToServer();
@@ -2126,11 +2159,7 @@ function initDragAndDrop() {
         }
       }
       if (target && target.dataset.id !== fromId) {
-        const fromIdx = tasks.findIndex(t => String(t.id) === String(fromId));
-        const toIdx   = tasks.findIndex(t => String(t.id) === String(target.dataset.id));
-        const [moved] = tasks.splice(fromIdx, 1);
-        const insertAt = after ? Math.min(toIdx + 1, tasks.length) : toIdx;
-        tasks.splice(insertAt, 0, moved);
+        moveTaskGroup(fromId, target.dataset.id, after);
       }
       touchItem.classList.remove('dragging');
       list.querySelectorAll('.task-item').forEach(x => x.classList.remove('drag-over-top','drag-over-bottom'));
@@ -2138,6 +2167,41 @@ function initDragAndDrop() {
       renderTasks();
       saveLocalTasks();
       saveTaskOrderToServer();
+    });
+  });
+
+  // タスク本体を左右スワイプ → インデント（グループ化）切り替え
+  list.querySelectorAll('.task-item').forEach(el => {
+    const body = el.querySelector('.task-body');
+    if (!body) return;
+    const isDoneFlag = el.classList.contains('done');
+    const isPinned = el.classList.contains('pinned');
+    if (isDoneFlag || isPinned) return; // 完了済み・ピン固定は対象外
+    let sx = 0, sy = 0, swiping = false;
+    body.addEventListener('touchstart', e => {
+      sx = e.touches[0].clientX; sy = e.touches[0].clientY; swiping = false;
+    }, { passive: true });
+    body.addEventListener('touchmove', e => {
+      const dx = e.touches[0].clientX - sx;
+      const dy = e.touches[0].clientY - sy;
+      if (Math.abs(dx) > 12 && Math.abs(dx) > Math.abs(dy) * 1.5) {
+        swiping = true;
+        const shift = Math.max(-30, Math.min(30, dx));
+        body.style.transform = `translateX(${shift}px)`;
+        e.preventDefault();
+      }
+    }, { passive: false });
+    body.addEventListener('touchend', e => {
+      body.style.transform = '';
+      if (!swiping) return;
+      const dx = e.changedTouches[0].clientX - sx;
+      if (Math.abs(dx) > 36) {
+        const id = el.dataset.id;
+        if (dx > 0) toggleIndent(id, true);
+        else toggleIndent(id, false);
+        lastSwipeTime = Date.now();
+      }
+      swiping = false;
     });
   });
 }
@@ -2169,6 +2233,7 @@ function openStart(id) {
 
 function openStartDirect(id) {
   if (!id || id === 'undefined') { console.warn('invalid id:', id); return; }
+  if (Date.now() - lastSwipeTime < 300) return; // スワイプ直後のタップは無視
   openStart(id);
 }
 
