@@ -1743,6 +1743,7 @@ async function loadTasks() {
       apiGet('getDaily'),
     ]);
     if (taskData.tasks) {
+      // GAS側で並び順（order列）順にソート済み。サーバーの順序を優先する
       tasks = taskData.tasks;
       saveLocalTasks();
     }
@@ -1773,6 +1774,20 @@ function loadLocalTasks() {
 
 function saveLocalTasks() {
   localStorage.setItem('mamoru_tasks', JSON.stringify(tasks));
+  // 並び順（タスクID配列）も保存
+  localStorage.setItem('mamoru_task_order', JSON.stringify(tasks.map(t => t.id)));
+}
+
+// 並び順をサーバー（スプレッドシート）に保存
+let orderSaveTimer = null;
+function saveTaskOrderToServer() {
+  clearTimeout(orderSaveTimer);
+  orderSaveTimer = setTimeout(async () => {
+    const order = tasks.map((t, i) => ({ id: t.id, order: i }));
+    try {
+      await apiPost({ action: 'saveTaskOrder', data: { order } });
+    } catch(e) { /* オフライン時は無視 */ }
+  }, 500);
 }
 
 
@@ -1804,6 +1819,22 @@ function toggleHideFar() {
   updateHideFarUI();
   renderTasks();
   renderDeadlines();
+  // サーバーにも保存（他の端末にも反映）
+  apiPost({ action: 'saveSettings', data: { hideFarTasks: hideFarTasks } }).catch(() => {});
+}
+
+// 起動時：サーバーから設定を取得して反映
+async function loadSettingsFromServer() {
+  try {
+    const res = await apiGet('getSettings');
+    if (res && res.settings && res.settings.hideFarTasks !== undefined) {
+      hideFarTasks = res.settings.hideFarTasks === 'true' || res.settings.hideFarTasks === true;
+      localStorage.setItem('mamoru_hideFar', hideFarTasks);
+      updateHideFarUI();
+      renderTasks();
+      renderDeadlines();
+    }
+  } catch(e) { /* オフライン時はローカル値を使用 */ }
 }
 
 // =============================================
@@ -2049,6 +2080,7 @@ function initDragAndDrop() {
       tasks.splice(insertAt > tasks.length ? tasks.length : insertAt, 0, moved);
       renderTasks();
       saveLocalTasks();
+      saveTaskOrderToServer();
     });
   });
 
@@ -2105,6 +2137,7 @@ function initDragAndDrop() {
       touchItem = null;
       renderTasks();
       saveLocalTasks();
+      saveTaskOrderToServer();
     });
   });
 }
@@ -2386,31 +2419,13 @@ let currentUserEmail = '';
 let currentUserName = localStorage.getItem('mamoru_user_name') || '';
 
 async function checkSetup() {
-  try {
-    showSync('ログイン確認中...');
-    const res = await apiGet('getUser');
-    if (res && res.email) {
-      currentUserEmail = res.email;
-      // 名前が未設定の場合のみ名前入力画面
-      if (!currentUserName) {
-        document.getElementById('setup-url').style.display = 'none';
-        document.getElementById('setup-url-label').style.display = 'none';
-        document.getElementById('setup-name').value = '';
-        document.getElementById('modal-setup').classList.add('open');
-      } else {
-        const subEl = document.getElementById('settings-username-sub');
-        if (subEl) subEl.textContent = `${currentUserName}（${currentUserEmail}）`;
-        showSync(`✅ ${currentUserName}さんでログイン中`);
-      }
-    } else {
-      // 未ログイン → Googleログインへ誘導
-      showSync('Googleログインが必要です');
-      setTimeout(() => {
-        document.getElementById('modal-login').classList.add('open');
-      }, 500);
-    }
-  } catch(e) {
-    showSync('⚠ オフラインモード', true);
+  // 既存データがある場合はそのまま使用
+  const hasData = localStorage.getItem('mamoru_tasks') || localStorage.getItem('mamoru_daily');
+  if (hasData) return;
+  // 初回のみセットアップ画面
+  const savedUrl = localStorage.getItem('mamoru_api_url');
+  if (!savedUrl) {
+    document.getElementById('modal-setup').classList.add('open');
   }
 }
 
@@ -5094,11 +5109,12 @@ history.pushState({ modal: true }, '');
 
 loadTasks();
 setTimeout(renderTodayAchieve, 500);
-setTimeout(updateHideFarUI, 100);
 setTimeout(initTodayOtUI, 200);
 setTimeout(updateHolidayUI, 100);
 setTimeout(checkYesterdayAutoRecord, 1000);
 setTimeout(checkArchiveNotice, 2000);
+setTimeout(updateHideFarUI, 100);
+setTimeout(loadSettingsFromServer, 600);
 // ユーザー名を設定画面に反映
 const _userName = localStorage.getItem('mamoru_user_name');
 if (_userName) {
