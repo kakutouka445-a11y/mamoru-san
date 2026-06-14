@@ -336,14 +336,17 @@ textarea{resize:none;height:56px;line-height:1.5;}
 .confirm-hint{font-size:12px;color:var(--text-s);text-align:center;margin-bottom:14px;}
 .confirm-hint code{background:var(--gray-l);padding:1px 6px;border-radius:4px;font-family:monospace;color:var(--red);font-weight:700;}
 /* 同期インジケーター */
-.sync-bar{position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--green);color:#fff;font-size:12px;font-weight:600;text-align:center;padding:6px;z-index:300;display:none;}
-.sync-bar.show{display:block;}
+.sync-bar{position:fixed;top:0;left:50%;transform:translateX(-50%);width:100%;max-width:430px;background:var(--green);color:#fff;font-size:12px;font-weight:600;text-align:center;padding:6px;z-index:300;display:none;align-items:center;justify-content:center;}
+.sync-bar.show{display:flex;}
 .sync-bar.error{background:var(--red);}
 .hidden{display:none;}
 </style>
 </head>
 <body>
-<div class="sync-bar" id="sync-bar">同期中...</div>
+<div class="sync-bar" id="sync-bar">
+  <span id="sync-bar-text">同期中...</span>
+  <button id="sync-bar-undo" onclick="performUndo()" style="display:none;margin-left:10px;background:rgba(255,255,255,.25);border:none;color:#fff;font-size:12px;font-weight:700;padding:3px 10px;border-radius:10px;">↩️ 元に戻す</button>
+</div>
 <div class="app">
 
 <!-- ホーム -->
@@ -1261,6 +1264,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
           <b>📌ボタン</b>：ピン固定してリスト先頭付近に表示。設定で「一番上」「一番下」のどちらに追加するか選べます。解除すると、ピン無しタスクの一番下に移動します（締切が近いタスクは締切順で表示されます）。<br>
           <b>並び順</b>：ピン固定→締切7日以内→その他→完了済み。<br>
           <b>並び替え</b>：左の三本線（≡）をドラッグして順番を変更できます。<br>
+          <b>↩️ 元に戻す</b>：タスクの完了・編集・削除・並び替え・グループ化、ふりかえりの保存など、操作後に画面上部に「↩️ 元に戻す」が表示されます（数秒間）。タップすると直前の状態に戻せます。<br>
           <b>グループ化</b>：タスクのバーを右にスワイプ（PCはドラッグ）すると一段下がり、直前のタスクとグループになります（一緒にドラッグで移動。ピン固定タスクもグループ化可能）。左にスワイプ／ドラッグで解除。
         </div>
       </div>
@@ -1709,11 +1713,71 @@ async function apiPost(data) {
   });
   return res.json();
 }
-function showSync(msg, isError=false) {
+function showSync(msg, isError=false, showUndo=false) {
   const bar = document.getElementById('sync-bar');
-  bar.textContent = msg;
+  const textEl = document.getElementById('sync-bar-text');
+  const undoBtn = document.getElementById('sync-bar-undo');
+  textEl.textContent = msg;
   bar.className = 'sync-bar show' + (isError ? ' error' : '');
-  setTimeout(() => bar.classList.remove('show'), 2000);
+  undoBtn.style.display = (showUndo && undoStack.length > 0) ? '' : 'none';
+  clearTimeout(window._syncBarTimer);
+  window._syncBarTimer = setTimeout(() => bar.classList.remove('show'), showUndo ? 4000 : 2000);
+}
+
+// =============================================
+// 元に戻す（Undo）機能
+// =============================================
+let undoStack = []; // [{label, snapshot}]
+const UNDO_MAX = 10;
+
+// 操作前のスナップショットを取る
+function snapshotState() {
+  return {
+    tasks: JSON.parse(JSON.stringify(tasks)),
+    daily: JSON.parse(localStorage.getItem('mamoru_daily') || '[]'),
+  };
+}
+
+// 操作前に呼ぶ：スナップショットを記録
+function pushUndo(label) {
+  undoStack.push({ label, snapshot: snapshotState() });
+  if (undoStack.length > UNDO_MAX) undoStack.shift();
+}
+
+// 元に戻すボタン押下時
+async function performUndo() {
+  const entry = undoStack[undoStack.length - 1];
+  if (!entry) return;
+  clearTimeout(window._syncBarTimer); // confirm表示中にバーが消えないようにする
+  if (!confirm(`「${entry.label}」を元に戻しますか？`)) {
+    // キャンセル時はバーを再度消すタイマーを再開
+    window._syncBarTimer = setTimeout(() => document.getElementById('sync-bar').classList.remove('show'), 2000);
+    return;
+  }
+  undoStack.pop();
+  tasks = entry.snapshot.tasks;
+  localStorage.setItem('mamoru_daily', JSON.stringify(entry.snapshot.daily));
+  saveLocalTasks();
+  renderTasks();
+  renderDeadlines();
+  renderMatomeWeek();
+  renderMatomeMonth();
+  document.getElementById('sync-bar-undo').style.display = 'none';
+  document.getElementById('sync-bar').classList.remove('show');
+
+  // サーバーにも反映：タスク・日次記録を上書き保存
+  try {
+    showSync('元に戻しています...');
+    await apiPost({ action: 'replaceAllTasks', data: { tasks } });
+    await apiPost({ action: 'replaceAllDaily', data: { daily: entry.snapshot.daily } });
+    showSync(`↩️「${entry.label}」を元に戻しました`);
+  } catch(e) {
+    showSync('⚠ ローカルのみ復元しました（オフライン）', true);
+  }
+}
+
+function showUndoToast(label) {
+  showSync(`「${label}」を実行しました`, false, true);
 }
 
 // =============================================
@@ -2041,6 +2105,7 @@ async function saveEdit(id) {
   if (!nameEl) return;
   const t = tasks.find(t => String(t.id) === String(id));
   if (!t) return;
+  pushUndo('タスクの編集');
   t.name     = nameEl.value.trim() || t.name;
   t.subs = subEl ? subEl.value.split('・').map(s=>s.trim()).filter(Boolean) : t.subs;
   t.deadline = dlEl ? dlEl.value : t.deadline;
@@ -2049,7 +2114,7 @@ async function saveEdit(id) {
   try {
     showSync('保存中...');
     await apiPost({ action: 'updateTask', data: { id: t.id, name: t.name, subs: t.subs, deadline: t.deadline, cat: t.cat } });
-    showSync('✅ 保存しました');
+    showUndoToast('タスクの編集');
   } catch(e) { showSync('⚠ オフライン保存', true); }
 }
 
@@ -2057,12 +2122,13 @@ function cancelEdit(id) { renderTasks(); }
 
 async function deleteTaskById(id) {
   if (!confirm('このタスクを消去しますか？')) return;
+  pushUndo('タスクの消去');
   tasks = tasks.filter(t => String(t.id) !== String(id));
   renderTasks(); saveLocalTasks();
   try {
     showSync('削除中...');
     await apiPost({ action: 'deleteTask', data: { id } });
-    showSync('✅ タスクを消去しました');
+    showUndoToast('タスクの消去');
   } catch(e) { showSync('⚠ ローカルのみ削除', true); }
 }
 
@@ -2072,6 +2138,7 @@ async function deleteTaskById(id) {
 async function togglePin(id) {
   const t = tasks.find(t => String(t.id) === String(id));
   if (!t) return;
+  pushUndo(t.pinned ? 'ピン留めの解除' : 'ピン留め');
   t.pinned = !t.pinned;
   // グループの先頭タスクなら、続くインデント済みタスクも一緒にピン状態を連動
   const idx = tasks.findIndex(x => String(x.id) === String(id));
@@ -2172,6 +2239,7 @@ async function toggleIndent(id, on) {
   if (!t) return;
   if (t.done === true || t.done === 'TRUE') return; // 完了済みは対象外
   if (!!t.indent === !!on) return;
+  pushUndo(on ? 'グループ化' : 'グループ解除');
   t.indent = on;
   // グループ化ON時：直前のグループ先頭タスクのピン状態を継承
   if (on) {
@@ -2224,12 +2292,14 @@ function initDragAndDrop() {
     el.addEventListener('drop', e => {
       e.preventDefault();
       if (!dragId || dragGroupIds.includes(el.dataset.id)) return;
+      pushUndo('並び替え');
       const rect    = el.getBoundingClientRect();
       const after   = e.clientY >= rect.top + rect.height / 2;
       moveTaskGroup(dragId, el.dataset.id, after);
       renderTasks();
       saveLocalTasks();
       saveTaskOrderToServer();
+      showUndoToast('並び替え');
     });
   });
 
@@ -2278,6 +2348,7 @@ function initDragAndDrop() {
         }
       }
       if (target && !dragGroupIds.includes(target.dataset.id)) {
+        pushUndo('並び替え');
         moveTaskGroup(fromId, target.dataset.id, after);
       }
       touchItem.classList.remove('dragging');
@@ -2287,6 +2358,7 @@ function initDragAndDrop() {
       renderTasks();
       saveLocalTasks();
       saveTaskOrderToServer();
+      if (target) showUndoToast('並び替え');
     });
   });
 
@@ -2625,6 +2697,7 @@ async function timerSave() {
     tokk: false,
     taskMood: timerMood || '',
   };
+  pushUndo('タイマー記録の追加');
   tasks.push(newTask); renderTasks(); saveLocalTasks();
   closeM('modal-add'); timerStop();
   try {
@@ -2677,6 +2750,7 @@ async function saveTaskDone(){
   if(!selTaskId) return;
   const t = tasks.find(t => String(t.id) === String(selTaskId));
   if(!t) return;
+  pushUndo('タスクの完了');
   const ts = fmtTime('s');
   const when = [...document.querySelectorAll('#s-when .chip.sel')].map(c=>c.textContent).join('・');
   const doneDateEl = document.getElementById('s-done-date');
@@ -2688,7 +2762,7 @@ async function saveTaskDone(){
   try {
     showSync('保存中...');
     await apiPost({ action:'updateTask', data:{id:t.id, done:true, doneDate:t.doneDate, time:t.time, pinned:false, taskMood: t.taskMood||''} });
-    showSync('✅ 完了を保存しました');
+    showUndoToast('タスクの完了');
     showCelebration();
   } catch(e) { showSync('⚠ オフライン保存', true); showCelebration(); }
 }
@@ -2786,6 +2860,7 @@ async function addPastTask(isTokk = false){
     tokk: isTokk,
     taskMood: currentPastMood || '',
   };
+  pushUndo('完了済みタスクの記録');
   tasks.push(newTask); renderTasks(); saveLocalTasks(); closeM('modal-add');
   currentPastMood = '';
   ['great','ok','hard','limit'].forEach(x => { const b=document.getElementById(`pmb-${x}`); if(b) b.className='mood-btn'; });
@@ -2846,6 +2921,7 @@ async function addTask(){
   const subs = subVal ? [subVal] : [];
   const dl = document.getElementById('dl-input').value;
   const newTask = { id: 'local_' + Date.now(), name, color, subs, deadline:dl, pinned:false, done:false, doneDate:null, time:'' };
+  pushUndo('タスクの追加');
   tasks.push(newTask); renderTasks(); saveLocalTasks(); closeM('modal-add');
   try {
     showSync('保存中...');
@@ -3362,12 +3438,13 @@ async function saveDaily(){
     ot: totalOt,
     memo: document.getElementById('today-memo')?.value.trim() || '',
   };
+  pushUndo('ふりかえりの保存');
   if (idx >= 0) daily[idx] = record; else daily.push(record);
   localStorage.setItem('mamoru_daily', JSON.stringify(daily));
   try {
     showSync('記録を保存中...');
     await apiPost({ action:'saveDaily', data: record });
-    showSync('✅ 今日の記録を保存しました');
+    showUndoToast('ふりかえりの保存');
     showCelebration();
   } catch(e) { showSync('⚠ オフライン保存', true); showCelebration(); }
   renderMatomeMonth();
