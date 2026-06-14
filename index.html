@@ -1258,7 +1258,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
           タスクの一覧が表示されます。<br>
           <b>タップ</b>：タスクをタップすると完了モーダルが開きます。完了日・かかった時間・いつ実行したか・負担感を記録して保存できます。<br>
           <b>✏️ 編集</b>：完了モーダルの右上「✏️編集」ボタンでタスク名・締切日の編集・削除ができます。<br>
-          <b>📌ボタン</b>：ピン固定してリスト先頭付近に表示。設定で「一番上」「一番下」のどちらに追加するか選べます。<br>
+          <b>📌ボタン</b>：ピン固定してリスト先頭付近に表示。設定で「一番上」「一番下」のどちらに追加するか選べます。解除すると、ピン無しタスクの一番下に移動します（締切が近いタスクは締切順で表示されます）。<br>
           <b>並び順</b>：ピン固定→締切7日以内→その他→完了済み。<br>
           <b>並び替え</b>：左の三本線（≡）をドラッグして順番を変更できます。<br>
           <b>グループ化</b>：タスクのバーを右にスワイプ（PCはドラッグ）すると一段下がり、直前のタスクとグループになります（一緒にドラッグで移動。ピン固定タスクもグループ化可能）。左にスワイプ／ドラッグで解除。
@@ -2099,6 +2099,24 @@ async function togglePin(id) {
       insertAt = pinnedIdxs[0];
     } else {
       insertAt = pinnedIdxs[pinnedIdxs.length - 1] + 1;
+    }
+    tasks.splice(insertAt, 0, ...removed);
+  } else {
+    // ピン留めOFF時：ピン無し・未完了タスク群の末尾に移動
+    const groupIds = new Set(group.map(g => String(g.id)));
+    const removed = [];
+    for (let i = tasks.length - 1; i >= 0; i--) {
+      if (groupIds.has(String(tasks[i].id))) removed.unshift(tasks.splice(i, 1)[0]);
+    }
+    // ピン無し・未完了タスクの範囲を探す
+    const unpinnedIdxs = tasks.map((x, i) => (!x.pinned && !x.done) ? i : -1).filter(i => i >= 0);
+    let insertAt;
+    if (unpinnedIdxs.length === 0) {
+      // ピン無し未完了タスクがなければ、完了済みタスクの直前（末尾）
+      const doneIdx = tasks.findIndex(x => x.done);
+      insertAt = doneIdx === -1 ? tasks.length : doneIdx;
+    } else {
+      insertAt = unpinnedIdxs[unpinnedIdxs.length - 1] + 1;
     }
     tasks.splice(insertAt, 0, ...removed);
   }
