@@ -849,7 +849,10 @@ textarea{resize:none;height:56px;line-height:1.5;}
     <div id="task-section">
       <div class="field-label">締切日 <span style="font-weight:400;color:var(--text-s);">（任意）</span></div>
       <input type="date" id="dl-input">
-      <div style="font-size:26px;font-weight:600;color:var(--text-s);margin-bottom:6px;">やること</div>
+      <div style="display:flex;align-items:center;gap:4px;margin-bottom:6px;">
+        <div style="font-size:26px;font-weight:600;color:var(--text-s);flex:1;">やること</div>
+        <button id="add-pin-btn" class="pin-btn" onclick="toggleAddPin()" title="ピン留め">📌</button>
+      </div>
       <textarea id="sub-single" placeholder="例：安全点検" style="width:100%;font-size:22px;border:1.5px solid var(--border);border-radius:var(--radius-s);padding:10px 12px;background:var(--gray-l);color:var(--text);outline:none;resize:none;height:80px;line-height:1.5;margin-bottom:8px;"></textarea>
       <button class="btn-primary" onclick="addTask()">追加する</button>
     </div>
@@ -2059,6 +2062,16 @@ function tapTask(id) {
         <input class="edit-deadline" type="date" value="${t.deadline||''}" style="flex:1;font-size:12px;border:1px solid var(--border);border-radius:var(--radius-s);padding:4px 8px;background:var(--gray-l);color:var(--text);outline:none;">
         <button class="edit-dl-clear" onclick="clearDeadline('${id}')" title="締切を消去">×</button>
       </div>
+      <div style="display:flex;align-items:center;gap:8px;margin-top:8px;padding:8px 10px;background:var(--green-l);border:1px solid var(--green-b);border-radius:var(--radius-s);">
+        <span style="font-size:15px;">📌</span>
+        <span style="font-size:12px;font-weight:600;color:var(--green-d);flex:1;">ピン留め</span>
+        <label style="position:relative;display:inline-block;width:40px;height:24px;flex-shrink:0;">
+          <input type="checkbox" class="edit-pin-toggle" ${t.pinned?'checked':''} style="opacity:0;width:0;height:0;position:absolute;" onchange="updateEditPinSlider(this)">
+          <span class="edit-pin-slider" style="position:absolute;inset:0;background:${t.pinned?'var(--green)':'var(--border)'};border-radius:12px;transition:.2s;cursor:pointer;">
+            <span style="position:absolute;left:${t.pinned?'18px':'2px'};top:2px;width:20px;height:20px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2);"></span>
+          </span>
+        </label>
+      </div>
       <div class="edit-actions">
         <button class="edit-save" onclick="saveEdit('${id}')">保存</button>
         <button class="edit-cancel" onclick="cancelEdit('${id}')">キャンセル</button>
@@ -2920,7 +2933,8 @@ async function addTask(){
   const subVal = document.getElementById('sub-single').value.trim();
   const subs = subVal ? [subVal] : [];
   const dl = document.getElementById('dl-input').value;
-  const newTask = { id: 'local_' + Date.now(), name, color, subs, deadline:dl, pinned:false, done:false, doneDate:null, time:'' };
+  const pinned = document.getElementById('add-pin-btn') ? document.getElementById('add-pin-btn').classList.contains('on') : false;
+  const newTask = { id: 'local_' + Date.now(), name, color, subs, deadline:dl, pinned, done:false, doneDate:null, time:'' };
   pushUndo('タスクの追加');
   tasks.push(newTask); renderTasks(); saveLocalTasks(); closeM('modal-add');
   try {
@@ -3693,8 +3707,19 @@ function resetStep(mode){
 // =============================================
 function togChip(el){ el.classList.toggle('sel'); }
 function selChip(el,gid){ document.querySelectorAll(`#${gid} .chip`).forEach(c=>c.classList.remove('sel')); el.classList.add('sel'); }
-function openM(id){ document.getElementById(id).classList.add('open'); }
+function openM(id){
+  document.getElementById(id).classList.add('open');
+  if(id==='modal-add'){
+    const btn = document.getElementById('add-pin-btn');
+    if(btn) btn.classList.remove('on');
+  }
+}
 function closeM(id){ document.getElementById(id).classList.remove('open'); }
+
+function toggleAddPin(){
+  const btn = document.getElementById('add-pin-btn');
+  if(btn) btn.classList.toggle('on');
+}
 function closeBg(id,e){ if(e.target===document.getElementById(id)) closeM(id); }
 
 // =============================================
