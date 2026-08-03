@@ -851,14 +851,13 @@ textarea{resize:none;height:56px;line-height:1.5;}
     <div id="task-section">
       <div class="field-label">締切日 <span style="font-weight:400;color:var(--text-s);">（任意）</span></div>
       <input type="date" id="dl-input">
-      <div style="display:flex;align-items:center;gap:4px;margin-bottom:6px;">
+      <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
         <div style="font-size:26px;font-weight:600;color:var(--text-s);flex:1;">やること</div>
+        <span id="add-pin-pos-wrap" style="display:none;align-items:center;gap:4px;">
+          <button type="button" id="add-pinpos-top" class="pinpos-btn on" onclick="setAddPinPos('top')">▲ 一番上</button>
+          <button type="button" id="add-pinpos-bottom" class="pinpos-btn" onclick="setAddPinPos('bottom')">▼ 一番下</button>
+        </span>
         <button id="add-pin-btn" class="pin-btn" onclick="toggleAddPin()" title="ピン留め">📌</button>
-      </div>
-      <div id="add-pin-pos-wrap" class="hidden" style="display:flex;align-items:center;gap:6px;margin-bottom:8px;flex-wrap:wrap;">
-        <span style="font-size:12px;color:var(--text-s);">📌ピンの中での位置：</span>
-        <button type="button" id="add-pinpos-top" class="pinpos-btn on" onclick="setAddPinPos('top')">▲ 一番上</button>
-        <button type="button" id="add-pinpos-bottom" class="pinpos-btn" onclick="setAddPinPos('bottom')">▼ 一番下</button>
       </div>
       <textarea id="sub-single" placeholder="例：安全点検" style="width:100%;font-size:22px;border:1.5px solid var(--border);border-radius:var(--radius-s);padding:10px 12px;background:var(--gray-l);color:var(--text);outline:none;resize:none;height:80px;line-height:1.5;margin-bottom:8px;"></textarea>
       <button class="btn-primary" onclick="addTask()">追加する</button>
@@ -3789,7 +3788,7 @@ function openM(id){
     const btn = document.getElementById('add-pin-btn');
     if(btn) btn.classList.remove('on');
     const posWrap = document.getElementById('add-pin-pos-wrap');
-    if(posWrap) posWrap.classList.add('hidden');
+    if(posWrap) posWrap.style.display = 'none';
     setAddPinPos('top'); // 毎回デフォルトは一番上
   }
 }
@@ -3811,7 +3810,7 @@ function toggleAddPin(){
   btn.classList.toggle('on');
   const on = btn.classList.contains('on');
   const posWrap = document.getElementById('add-pin-pos-wrap');
-  if(posWrap) posWrap.classList.toggle('hidden', !on);
+  if(posWrap) posWrap.style.display = on ? 'flex' : 'none';
   if(on) setAddPinPos('top'); // ピンを付けたら毎回デフォルトで一番上
 }
 function closeBg(id,e){ if(e.target===document.getElementById(id)) closeM(id); }
