@@ -77,6 +77,8 @@ input,textarea{font-family:inherit;}
 .time-badge{font-size:9px;color:var(--text-s);background:var(--gray-l);padding:1px 5px;border-radius:6px;}
 .pin-btn{width:26px;height:26px;border:none;background:transparent;font-size:13px;opacity:.3;display:flex;align-items:center;justify-content:center;flex-shrink:0;touch-action:manipulation;cursor:pointer;}
 .pin-btn.on{opacity:1;}
+.pinpos-btn{font-size:12px;padding:6px 12px;border:1.5px solid var(--border);background:var(--gray-l);color:var(--text-s);border-radius:var(--radius-s);font-weight:600;}
+.pinpos-btn.on{background:var(--green-l);border-color:var(--green-b);color:var(--green-d);}
 .play-btn{width:44px;height:44px;border:none;background:var(--green-l);color:var(--green-d);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;touch-action:manipulation;pointer-events:auto;-webkit-tap-highlight-color:transparent;}
 .play-btn i{font-size:18px;}
 
@@ -852,6 +854,11 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <div style="display:flex;align-items:center;gap:4px;margin-bottom:6px;">
         <div style="font-size:26px;font-weight:600;color:var(--text-s);flex:1;">やること</div>
         <button id="add-pin-btn" class="pin-btn" onclick="toggleAddPin()" title="ピン留め">📌</button>
+      </div>
+      <div id="add-pin-pos-wrap" class="hidden" style="display:flex;align-items:center;gap:6px;margin-bottom:8px;flex-wrap:wrap;">
+        <span style="font-size:12px;color:var(--text-s);">📌ピンの中での位置：</span>
+        <button type="button" id="add-pinpos-top" class="pinpos-btn on" onclick="setAddPinPos('top')">▲ 一番上</button>
+        <button type="button" id="add-pinpos-bottom" class="pinpos-btn" onclick="setAddPinPos('bottom')">▼ 一番下</button>
       </div>
       <textarea id="sub-single" placeholder="例：安全点検" style="width:100%;font-size:22px;border:1.5px solid var(--border);border-radius:var(--radius-s);padding:10px 12px;background:var(--gray-l);color:var(--text);outline:none;resize:none;height:80px;line-height:1.5;margin-bottom:8px;"></textarea>
       <button class="btn-primary" onclick="addTask()">追加する</button>
@@ -2989,11 +2996,27 @@ async function addTask(){
   const pinned = document.getElementById('add-pin-btn') ? document.getElementById('add-pin-btn').classList.contains('on') : false;
   const newTask = { id: newLocalId(), name, color, subs, deadline:dl, pinned, done:false, doneDate:null, time:'' };
   pushUndo('タスクの追加');
-  tasks.push(newTask); renderTasks(); saveLocalTasks(); closeM('modal-add');
+  if (pinned) {
+    // ピン留め：選んだ位置（一番上／一番下）に挿入
+    const pinnedIdxs = tasks.map((x, i) => (x.pinned && !x.done) ? i : -1).filter(i => i >= 0);
+    let insertAt;
+    if (pinnedIdxs.length === 0)        insertAt = 0;
+    else if (addPinPos === 'top')       insertAt = pinnedIdxs[0];
+    else                                insertAt = pinnedIdxs[pinnedIdxs.length - 1] + 1;
+    tasks.splice(insertAt, 0, newTask);
+  } else {
+    tasks.push(newTask);
+  }
+  renderTasks(); saveLocalTasks(); closeM('modal-add');
   try {
     showSync('保存中...');
     const res = await apiPost({ action:'saveTask', data:{name,color,subs,deadline:dl} });
-    if(res.id) { newTask.id = res.id; saveLocalTasks(); }
+    if(res && res.id) { newTask.id = res.id; saveLocalTasks(); }
+    if (pinned && newTask.id && !String(newTask.id).startsWith('local_')) {
+      // サーバーにもピン状態と並び順を反映（saveTaskはpinnedを保存しないため）
+      try { await apiPost({ action:'updateTask', data:{ id:newTask.id, pinned:true } }); } catch(_){}
+      saveTaskOrderToServer();
+    }
     showSync('✅ タスクを追加しました');
   } catch(e) { showSync('⚠ オフライン保存', true); }
 }
@@ -3765,13 +3788,31 @@ function openM(id){
   if(id==='modal-add'){
     const btn = document.getElementById('add-pin-btn');
     if(btn) btn.classList.remove('on');
+    const posWrap = document.getElementById('add-pin-pos-wrap');
+    if(posWrap) posWrap.classList.add('hidden');
+    setAddPinPos('top'); // 毎回デフォルトは一番上
   }
 }
 function closeM(id){ document.getElementById(id).classList.remove('open'); }
 
+// 追加画面でのピン内位置（'top' or 'bottom'）。デフォルトは 'top'
+let addPinPos = 'top';
+function setAddPinPos(pos){
+  addPinPos = (pos === 'bottom') ? 'bottom' : 'top';
+  const t = document.getElementById('add-pinpos-top');
+  const b = document.getElementById('add-pinpos-bottom');
+  if(t) t.classList.toggle('on', addPinPos === 'top');
+  if(b) b.classList.toggle('on', addPinPos === 'bottom');
+}
+
 function toggleAddPin(){
   const btn = document.getElementById('add-pin-btn');
-  if(btn) btn.classList.toggle('on');
+  if(!btn) return;
+  btn.classList.toggle('on');
+  const on = btn.classList.contains('on');
+  const posWrap = document.getElementById('add-pin-pos-wrap');
+  if(posWrap) posWrap.classList.toggle('hidden', !on);
+  if(on) setAddPinPos('top'); // ピンを付けたら毎回デフォルトで一番上
 }
 function closeBg(id,e){ if(e.target===document.getElementById(id)) closeM(id); }
 
