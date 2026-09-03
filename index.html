@@ -4980,6 +4980,7 @@ function scheduleAutoRecord() {
     const existing = daily.find(d => d.date === td);
 
     // 今日すでに記録がある場合はスキップ
+    if (existing && !existing.autoRecorded) return;
     if (existing && (existing.ot > 0 || existing.moodBody || existing.lunch)) return;
 
     // デフォルト設定から自動計算
@@ -5160,17 +5161,28 @@ function updateHolidayUI() {
 // =============================================
 // 翌日起動時の自動記録（昨日分）
 // =============================================
-function checkYesterdayAutoRecord() {
+async function checkYesterdayAutoRecord() {
   const yday = new Date(); yday.setDate(yday.getDate() - 1);
   const ydayStr = `${yday.getFullYear()}-${pad(yday.getMonth()+1)}-${pad(yday.getDate())}`;
 
   // 昨日が非出勤日ならスキップ
   if (isNonWorkday(ydayStr)) return;
 
-  // 昨日の記録があるかチェック
+  // 昨日の記録があるかチェック（ローカル）
   const daily = JSON.parse(localStorage.getItem('mamoru_daily') || '[]');
   const existing = daily.find(d => d.date === ydayStr);
+  if (existing && !existing.autoRecorded) return;
   if (existing && (existing.ot > 0 || existing.moodBody || existing.lunch)) return;
+
+  // サーバー側にも記録がないか確認
+  try {
+    const serverData = await apiGet('getDaily');
+    if (serverData && serverData.daily) {
+      const serverRecord = serverData.daily.find(d => d.date === ydayStr);
+      if (serverRecord && !serverRecord.autoRecorded) return;
+      if (serverRecord && (serverRecord.ot > 0 || serverRecord.moodBody || serverRecord.lunch)) return;
+    }
+  } catch(e) { /* オフライン時はスキップせず続行 */ }
 
   // デフォルト値で自動保存
   const startDefault = localStorage.getItem('mamoru_work_start') || '08:00';
