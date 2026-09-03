@@ -77,8 +77,6 @@ input,textarea{font-family:inherit;}
 .time-badge{font-size:9px;color:var(--text-s);background:var(--gray-l);padding:1px 5px;border-radius:6px;}
 .pin-btn{width:26px;height:26px;border:none;background:transparent;font-size:13px;opacity:.3;display:flex;align-items:center;justify-content:center;flex-shrink:0;touch-action:manipulation;cursor:pointer;}
 .pin-btn.on{opacity:1;}
-.pinpos-btn{font-size:12px;padding:6px 12px;border:1.5px solid var(--border);background:var(--gray-l);color:var(--text-s);border-radius:var(--radius-s);font-weight:600;}
-.pinpos-btn.on{background:var(--green-l);border-color:var(--green-b);color:var(--green-d);}
 .play-btn{width:44px;height:44px;border:none;background:var(--green-l);color:var(--green-d);border-radius:50%;display:flex;align-items:center;justify-content:center;flex-shrink:0;cursor:pointer;touch-action:manipulation;pointer-events:auto;-webkit-tap-highlight-color:transparent;}
 .play-btn i{font-size:18px;}
 
@@ -851,12 +849,8 @@ textarea{resize:none;height:56px;line-height:1.5;}
     <div id="task-section">
       <div class="field-label">締切日 <span style="font-weight:400;color:var(--text-s);">（任意）</span></div>
       <input type="date" id="dl-input">
-      <div style="display:flex;align-items:center;gap:6px;margin-bottom:6px;">
+      <div style="display:flex;align-items:center;gap:4px;margin-bottom:6px;">
         <div style="font-size:26px;font-weight:600;color:var(--text-s);flex:1;">やること</div>
-        <span id="add-pin-pos-wrap" style="display:none;align-items:center;gap:4px;">
-          <button type="button" id="add-pinpos-top" class="pinpos-btn on" onclick="setAddPinPos('top')">▲ 一番上</button>
-          <button type="button" id="add-pinpos-bottom" class="pinpos-btn" onclick="setAddPinPos('bottom')">▼ 一番下</button>
-        </span>
         <button id="add-pin-btn" class="pin-btn" onclick="toggleAddPin()" title="ピン留め">📌</button>
       </div>
       <textarea id="sub-single" placeholder="例：安全点検" style="width:100%;font-size:22px;border:1.5px solid var(--border);border-radius:var(--radius-s);padding:10px 12px;background:var(--gray-l);color:var(--text);outline:none;resize:none;height:80px;line-height:1.5;margin-bottom:8px;"></textarea>
@@ -1053,6 +1047,16 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <div class="settings-item-text">
         <div class="settings-item-title">サンプルデータを削除</div>
         <div class="settings-item-sub">ID が S で始まるデータを削除</div>
+      </div>
+      <i class="ti ti-chevron-right settings-item-arrow"></i>
+    </button>
+
+    <div class="settings-section-label">勤務時刻</div>
+    <button class="settings-item-btn" onclick="closeM('modal-settings');openM('modal-work-default')">
+      <i class="ti ti-clock settings-item-icon" style="color:var(--green);"></i>
+      <div class="settings-item-text">
+        <div class="settings-item-title">デフォルト勤務時刻の設定</div>
+        <div class="settings-item-sub">勤務開始・退勤・持ち帰り業務のデフォルト値</div>
       </div>
       <i class="ti ti-chevron-right settings-item-arrow"></i>
     </button>
@@ -1350,14 +1354,16 @@ textarea{resize:none;height:56px;line-height:1.5;}
           <!-- ① 時間外在校等時間 -->
           <div style="font-size:11px;font-weight:700;color:var(--text-s);margin-bottom:5px;">① 時間外在校等時間</div>
           <div style="display:flex;align-items:center;gap:4px;margin-bottom:4px;flex-wrap:wrap;">
-            <div style="background:#DBEAFE;border:1px solid #93C5FD;border-radius:6px;padding:4px 8px;font-size:11px;font-weight:600;color:#1E3A8A;white-space:nowrap;">定時より早く出勤した分</div>
-            <div style="font-size:13px;color:var(--text-s);">＋</div>
-            <div style="background:#DBEAFE;border:1px solid #93C5FD;border-radius:6px;padding:4px 8px;font-size:11px;font-weight:600;color:#1E3A8A;white-space:nowrap;">定時より遅く退勤した分</div>
-            <div style="font-size:13px;color:var(--text-s);">＋</div>
-            <div style="background:var(--amber-l);border:1px solid var(--amber-b);border-radius:6px;padding:4px 8px;font-size:11px;font-weight:600;color:#7A4B08;white-space:nowrap;">昼休みに業務した分</div>
+            <div style="background:#DBEAFE;border:1px solid #93C5FD;border-radius:6px;padding:4px 8px;font-size:11px;font-weight:600;color:#1E3A8A;white-space:nowrap;">退勤時刻（実際）</div>
+            <div style="font-size:13px;color:var(--text-s);">－</div>
+            <div style="background:#DBEAFE;border:1px solid #93C5FD;border-radius:6px;padding:4px 8px;font-size:11px;font-weight:600;color:#1E3A8A;white-space:nowrap;">勤務開始時刻</div>
+            <div style="font-size:13px;color:var(--text-s);">－</div>
+            <div style="background:var(--green-l);border:1px solid var(--green-b);border-radius:6px;padding:4px 8px;font-size:11px;font-weight:600;color:var(--green-d);white-space:nowrap;">7時間45分</div>
+            <div style="font-size:13px;color:var(--text-s);">－</div>
+            <div style="background:var(--amber-l);border:1px solid var(--amber-b);border-radius:6px;padding:4px 8px;font-size:11px;font-weight:600;color:#7A4B08;white-space:nowrap;">昼休みに業務をしなかった時間</div>
           </div>
-          <div style="font-size:10px;color:var(--text-s);margin-bottom:2px;">※ 定時（出勤・退勤の基本時刻）は設定画面で変更できます。定時どおりに出退勤し、昼休みに業務がなければ 0 分です。</div>
-          <div style="font-size:10px;color:var(--text-s);margin-bottom:8px;">例）定時16:35のところ18:30退勤（1時間55分オーバー）＋昼休みに30分業務　→　1時間55分 ＋ 30分 ＝ <strong style="color:var(--amber);">2時間25分</strong></div>
+          <div style="font-size:10px;color:var(--text-s);margin-bottom:2px;">※ 7時間45分＝公立学校の所定勤務時間（休憩45分は別途）</div>
+          <div style="font-size:10px;color:var(--text-s);margin-bottom:8px;">例）8:00出勤 → 18:30退勤・昼休みに20分休憩（25分業務）　→　10時間30分 － 7時間45分 － 20分 ＝ <strong style="color:var(--amber);">2時間25分</strong></div>
 
           <!-- 区切り -->
           <div style="border-top:1px dashed var(--border);margin-bottom:8px;"></div>
@@ -1672,15 +1678,15 @@ textarea{resize:none;height:56px;line-height:1.5;}
     </div>
     <div class="modal-center-title">🛡️ まもるさん へようこそ！</div>
     <div style="font-size:13px;color:var(--text-s);margin-bottom:16px;line-height:1.7;">
-      アプリ内で表示する<b>お名前</b>と、管理者から受け取った<b>アクセスキー</b>を入力してください。
+      Googleアカウントでログインできました！<br>アプリ内で表示する<b>お名前</b>を入力してください。
     </div>
     <div style="font-size:12px;font-weight:600;color:var(--text-s);margin-bottom:6px;">あなたのお名前</div>
     <input type="text" id="setup-name" placeholder="例：田中　花子" style="width:100%;font-size:16px;border:1.5px solid var(--border);border-radius:var(--radius-s);padding:10px 12px;background:var(--gray-l);color:var(--text);outline:none;margin-bottom:12px;">
-    <div id="setup-url-label" style="font-size:12px;font-weight:600;color:var(--text-s);margin-bottom:6px;">アクセスキー（管理者から受け取ったもの）</div>
-    <input type="text" id="setup-url" placeholder="例：k_xxxxxxxxxxxx" autocapitalize="off" autocorrect="off" spellcheck="false" style="width:100%;font-size:14px;border:1.5px solid var(--border);border-radius:var(--radius-s);padding:10px 12px;background:var(--gray-l);color:var(--text);outline:none;margin-bottom:16px;">
+    <div id="setup-url-label" style="font-size:12px;font-weight:600;color:var(--text-s);margin-bottom:6px;">API URL</div>
+    <textarea id="setup-url" placeholder="https://script.google.com/macros/s/..." style="width:100%;font-size:12px;border:1.5px solid var(--border);border-radius:var(--radius-s);padding:10px 12px;background:var(--gray-l);color:var(--text);outline:none;height:80px;resize:none;margin-bottom:16px;"></textarea>
     <button class="btn-primary" style="width:100%;" onclick="completeSetup()">✅ セットアップ完了</button>
     <div style="font-size:11px;color:var(--text-s);text-align:center;margin-top:10px;">
-      アクセスキーが届いていない場合は管理者にお問い合わせください
+      URLが届いていない場合は管理者にお問い合わせください
     </div>
   </div>
 </div>
@@ -1701,50 +1707,24 @@ textarea{resize:none;height:56px;line-height:1.5;}
 // =============================================
 // API設定
 // =============================================
-// API URLは全員共通の1つ（この方式では“秘密ではない”）。秘密は各自の「アクセスキー」。
-const API_URL = 'https://script.google.com/macros/s/AKfycbyaA17BHZbZAvwh038Qu3XDrUTIGnj-CNV6LgfdHZMEMES7LRFn6Sb76Qa2lFpwfvee/exec';
-let ACCESS_KEY = localStorage.getItem('mamoru_access_key') || '';
-
-// 同一ミリ秒の連続作成でもidが衝突しないための連番
-let _localSeq = 0;
-function newLocalId() { return `local_${Date.now()}_${_localSeq++}`; }
-
-// innerHTMLに差し込むユーザー入力をエスケープ（XSS対策・属性値の " ' も対象）
-function escapeHtml(s) {
-  return String(s == null ? '' : s).replace(/[&<>"']/g, c =>
-    ({ '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]));
+// API URLはlocalStorageから取得（初回セットアップで設定）
+const DEFAULT_API_URL = 'https://script.google.com/macros/s/AKfycbxaz3k4NC-LuDRAvFQ9ggdDoP6-2gC6jNB5xPojaT72XTIsGvlohZ1029ck50PhIGXq/exec';
+function getApiUrl() {
+  return localStorage.getItem('mamoru_api_url') || DEFAULT_API_URL;
 }
+let API_URL = getApiUrl();
 
-// ── API通信（全リクエストにアクセスキーを付与）──
+// ── API通信 ──
 async function apiGet(action) {
-  const res = await fetch(`${API_URL}?action=${action}&key=${encodeURIComponent(ACCESS_KEY)}`);
-  const json = await res.json();
-  if (json && json.error) {
-    if (json.error === 'unauthorized') handleUnauthorized();
-    throw new Error(json.error); // サーバーがエラーを返したら成功扱いにしない
-  }
-  return json;
+  const res = await fetch(`${API_URL}?action=${action}`);
+  return res.json();
 }
 async function apiPost(data) {
   const res = await fetch(API_URL, {
     method: 'POST',
-    body: JSON.stringify({ ...data, key: ACCESS_KEY }),
+    body: JSON.stringify(data),
   });
-  const json = await res.json();
-  if (json && json.error) {
-    if (json.error === 'unauthorized') handleUnauthorized();
-    throw new Error(json.error); // サーバーがエラーを返したら成功扱いにしない
-  }
-  return json;
-}
-
-// アクセスキーが無効だったとき：セットアップ画面を出して再入力を促す
-function handleUnauthorized() {
-  const modal = document.getElementById('modal-setup');
-  if (modal && !modal.classList.contains('open')) {
-    modal.classList.add('open');
-    try { showSync('アクセスキーが正しくありません。再入力してください', true); } catch(e){}
-  }
+  return res.json();
 }
 function showSync(msg, isError=false, showUndo=false) {
   const bar = document.getElementById('sync-bar');
@@ -1853,21 +1833,9 @@ async function loadTasks() {
       apiGet('getTasks'),
       apiGet('getDaily'),
     ]);
-    if (Array.isArray(taskData.tasks)) {
-      // サーバーの順序を優先しつつ、未同期のローカルタスク（local_）を失わないよう取り込む
-      const serverTasks = taskData.tasks;
-      const serverIds = new Set(serverTasks.map(s => String(s.id)));
-      const unsynced = tasks.filter(t => String(t.id).startsWith('local_') && !serverIds.has(String(t.id)));
-      tasks = [...serverTasks];
-      // 未同期分はサーバーに作成して正式idを取り込む（失敗時はローカルのまま保持し、消さない）
-      for (const lt of unsynced) {
-        try {
-          const res = await apiPost({ action: 'saveTask', data: lt });
-          tasks.push({ ...lt, id: (res && res.id) ? res.id : lt.id });
-        } catch (e) {
-          tasks.push(lt);
-        }
-      }
+    if (taskData.tasks) {
+      // GAS側で並び順（order列）順にソート済み。サーバーの順序を優先する
+      tasks = taskData.tasks;
       saveLocalTasks();
     }
     if (dailyData.daily) {
@@ -2054,10 +2022,10 @@ function renderTasks(){
       const init = CAT_INITIAL[t.name] || t.name.charAt(0);
       const nameText = t.subs.join('・');
       const nameFontSize = nameText.length > 15 ? '12px' : nameText.length > 11 ? '14px' : '17px';
-      body = `<div class="task-body" onclick="openStartDirect('${t.id}')"><span class="cat-initial ${catCls}">${escapeHtml(init)}</span><span class="task-name" style="font-size:${nameFontSize};">${escapeHtml(nameText)}</span></div>`;
+      body = `<div class="task-body" onclick="openStartDirect('${t.id}')"><span class="cat-initial ${catCls}">${init}</span><span class="task-name" style="font-size:${nameFontSize};">${nameText}</span></div>`;
     } else {
       const nameFontSize = t.name.length > 15 ? '12px' : t.name.length > 11 ? '14px' : '17px';
-      body = `<div class="task-body" onclick="openStartDirect('${t.id}')"><span class="cat-full ${catCls}" style="font-size:${nameFontSize};">${escapeHtml(t.name)}</span></div>`;
+      body = `<div class="task-body" onclick="openStartDirect('${t.id}')"><span class="cat-full ${catCls}" style="font-size:${nameFontSize};">${t.name}</span></div>`;
     }
 
     el.innerHTML = `
@@ -2096,23 +2064,13 @@ function tapTask(id) {
   el.querySelector('.task-body').outerHTML = `
     <div class="edit-area">
       <div style="font-size:10px;color:var(--text-s);margin-bottom:2px;">カテゴリ名</div>
-      <input class="edit-name" type="text" value="${escapeHtml(t.name)}" placeholder="カテゴリ名">
+      <input class="edit-name" type="text" value="${t.name}" placeholder="カテゴリ名">
       <div style="font-size:10px;color:var(--text-s);margin-bottom:2px;">タスク内容</div>
-      <textarea class="edit-sub" placeholder="タスク内容（・区切り）" rows="3">${escapeHtml(subsText)}</textarea>
+      <textarea class="edit-sub" placeholder="タスク内容（・区切り）" rows="3">${subsText}</textarea>
       <div style="display:flex;align-items:center;gap:6px;margin-top:6px;">
         <span style="font-size:11px;color:var(--text-s);flex-shrink:0;">締切</span>
         <input class="edit-deadline" type="date" value="${t.deadline||''}" style="flex:1;font-size:12px;border:1px solid var(--border);border-radius:var(--radius-s);padding:4px 8px;background:var(--gray-l);color:var(--text);outline:none;">
         <button class="edit-dl-clear" onclick="clearDeadline('${id}')" title="締切を消去">×</button>
-      </div>
-      <div style="display:flex;align-items:center;gap:8px;margin-top:8px;padding:8px 10px;background:var(--green-l);border:1px solid var(--green-b);border-radius:var(--radius-s);">
-        <span style="font-size:15px;">📌</span>
-        <span style="font-size:12px;font-weight:600;color:var(--green-d);flex:1;">ピン留め</span>
-        <label style="position:relative;display:inline-block;width:40px;height:24px;flex-shrink:0;">
-          <input type="checkbox" class="edit-pin-toggle" ${t.pinned?'checked':''} style="opacity:0;width:0;height:0;position:absolute;" onchange="updateEditPinSlider(this)">
-          <span class="edit-pin-slider" style="position:absolute;inset:0;background:${t.pinned?'var(--green)':'var(--border)'};border-radius:12px;transition:.2s;cursor:pointer;">
-            <span style="position:absolute;left:${t.pinned?'18px':'2px'};top:2px;width:20px;height:20px;background:#fff;border-radius:50%;transition:.2s;box-shadow:0 1px 3px rgba(0,0,0,.2);"></span>
-          </span>
-        </label>
       </div>
       <div class="edit-actions">
         <button class="edit-save" onclick="saveEdit('${id}')">保存</button>
@@ -2554,7 +2512,7 @@ async function archiveTasks() {
     showSync('アーカイブ中...');
     const res = await apiPost({ action: 'archiveTasks' });
     showSync(`✅ ${res.count || 0}件のタスクをアーカイブしました`);
-    await loadTasks();
+    await loadData();
   } catch(e) { showSync('⚠ エラーが発生しました', true); }
 }
 
@@ -2564,7 +2522,7 @@ async function archiveDaily() {
     showSync('アーカイブ中...');
     const res = await apiPost({ action: 'archiveDaily' });
     showSync(`✅ ${res.count || 0}件の日次記録をアーカイブしました`);
-    await loadTasks();
+    await loadData();
   } catch(e) { showSync('⚠ エラーが発生しました', true); }
 }
 
@@ -2743,7 +2701,7 @@ async function timerSave() {
 
   // 完了済みタスクとして登録
   const newTask = {
-    id: newLocalId(),
+    id: 'local_' + Date.now(),
     name: 'その他', color: 'gray',
     subs: [memo],
     deadline: '', pinned: false,
@@ -2757,8 +2715,7 @@ async function timerSave() {
   closeM('modal-add'); timerStop();
   try {
     showSync('保存中...');
-    const res = await apiPost({ action: 'saveTask', data: newTask });
-    if (res && res.id) { newTask.id = res.id; saveLocalTasks(); }
+    await apiPost({ action: 'saveTask', data: newTask });
     showSync('✅ タイマー記録を保存しました');
     showCelebration();
   } catch(e) { showSync('⚠ オフライン保存', true); showCelebration(); }
@@ -2775,45 +2732,29 @@ async function checkSetup() {
   const hasData = localStorage.getItem('mamoru_tasks') || localStorage.getItem('mamoru_daily');
   if (hasData) return;
   // 初回のみセットアップ画面
-  const savedKey = localStorage.getItem('mamoru_access_key');
-  if (!savedKey) {
+  const savedUrl = localStorage.getItem('mamoru_api_url');
+  if (!savedUrl) {
     document.getElementById('modal-setup').classList.add('open');
   }
 }
 
-async function completeSetup() {
+function completeSetup() {
   const name = document.getElementById('setup-name').value.trim();
-  const key  = document.getElementById('setup-url').value.trim();
   if (!name) { alert('お名前を入力してください'); return; }
-  if (!key)  { alert('アクセスキーを入力してください'); return; }
-  // サーバーにキーの正誤を確認（checkKeyはデータに触れない）
-  let res;
-  try {
-    res = await (await fetch(`${API_URL}?action=checkKey&key=${encodeURIComponent(key)}`)).json();
-  } catch (e) {
-    alert('通信に失敗しました。ネットワークを確認して、もう一度お試しください。');
-    return;
-  }
-  if (!res || !res.ok) {
-    alert('アクセスキーが正しくありません。\n管理者から受け取ったキーをご確認ください。');
-    return;
-  }
-  // キーを保存し、以降の全リクエストに付与する
-  localStorage.setItem('mamoru_access_key', key);
-  ACCESS_KEY = key;
   localStorage.setItem('mamoru_user_name', name);
   currentUserName = name;
   document.getElementById('modal-setup').classList.remove('open');
   const subEl = document.getElementById('settings-username-sub');
-  if (subEl) subEl.textContent = `ログイン中：${name}`;
+  if (subEl) subEl.textContent = currentUserEmail ? `${name}（${currentUserEmail}）` : `ログイン中：${name}`;
+  // GASにも名前を保存
+  apiPost({ action: 'saveUserName', data: { name } }).catch(() => {});
   showSync(`✅ ようこそ、${name}さん！`);
   loadTasks();
-  loadSettingsFromServer();
 }
 
 function resetSetup() {
-  if (!confirm('セットアップ情報をリセットしますか？\nアクセスキーと名前の再入力が必要になります。')) return;
-  localStorage.removeItem('mamoru_access_key');
+  if (!confirm('セットアップ情報をリセットしますか？\nAPI URLと名前の再入力が必要になります。')) return;
+  localStorage.removeItem('mamoru_api_url');
   localStorage.removeItem('mamoru_user_name');
   location.reload();
 }
@@ -2921,7 +2862,7 @@ async function addPastTask(isTokk = false){
   const time = (ts||'') + (when ? ' · '+when : '');
 
   const newTask = {
-    id: newLocalId(),
+    id: 'local_' + Date.now(),
     name, color,
     subs: sub ? [sub] : [],
     deadline: '',
@@ -2993,29 +2934,13 @@ async function addTask(){
   const subs = subVal ? [subVal] : [];
   const dl = document.getElementById('dl-input').value;
   const pinned = document.getElementById('add-pin-btn') ? document.getElementById('add-pin-btn').classList.contains('on') : false;
-  const newTask = { id: newLocalId(), name, color, subs, deadline:dl, pinned, done:false, doneDate:null, time:'' };
+  const newTask = { id: 'local_' + Date.now(), name, color, subs, deadline:dl, pinned, done:false, doneDate:null, time:'' };
   pushUndo('タスクの追加');
-  if (pinned) {
-    // ピン留め：選んだ位置（一番上／一番下）に挿入
-    const pinnedIdxs = tasks.map((x, i) => (x.pinned && !x.done) ? i : -1).filter(i => i >= 0);
-    let insertAt;
-    if (pinnedIdxs.length === 0)        insertAt = 0;
-    else if (addPinPos === 'top')       insertAt = pinnedIdxs[0];
-    else                                insertAt = pinnedIdxs[pinnedIdxs.length - 1] + 1;
-    tasks.splice(insertAt, 0, newTask);
-  } else {
-    tasks.push(newTask);
-  }
-  renderTasks(); saveLocalTasks(); closeM('modal-add');
+  tasks.push(newTask); renderTasks(); saveLocalTasks(); closeM('modal-add');
   try {
     showSync('保存中...');
     const res = await apiPost({ action:'saveTask', data:{name,color,subs,deadline:dl} });
-    if(res && res.id) { newTask.id = res.id; saveLocalTasks(); }
-    if (pinned && newTask.id && !String(newTask.id).startsWith('local_')) {
-      // サーバーにもピン状態と並び順を反映（saveTaskはpinnedを保存しないため）
-      try { await apiPost({ action:'updateTask', data:{ id:newTask.id, pinned:true } }); } catch(_){}
-      saveTaskOrderToServer();
-    }
+    if(res.id) { newTask.id = res.id; saveLocalTasks(); }
     showSync('✅ タスクを追加しました');
   } catch(e) { showSync('⚠ オフライン保存', true); }
 }
@@ -3056,9 +2981,9 @@ function renderDeadlines(){
       // タップで完了モーダル（ホームと同じ）
       card.innerHTML = `
         <div style="flex:1;min-width:0;cursor:pointer;display:flex;align-items:center;gap:4px;" onclick="openStartDirect('${t.id}')">
-          <span class="cat-initial cat-${CAT_CLASS[t.name]||'gray'}" style="flex-shrink:0;">${escapeHtml(CAT_INITIAL[t.name]||t.name.charAt(0))}</span>
+          <span class="cat-initial cat-${CAT_CLASS[t.name]||'gray'}" style="flex-shrink:0;">${(CAT_INITIAL[t.name]||t.name.charAt(0))}</span>
           <span style="font-size:13px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">
-            ${escapeHtml((t.subs&&t.subs.length) ? t.subs.join('・') : t.name)}
+            ${(t.subs&&t.subs.length) ? t.subs.join('・') : t.name}
           </span>
         </div>
         <div style="text-align:right;flex-shrink:0;cursor:pointer;" onclick="openStartDirect('${t.id}')">
@@ -3090,8 +3015,8 @@ function tapDlCard(id) {
   const subsText = (t.subs||[]).join('・');
   card.innerHTML = `
     <div style="flex:1;min-width:0;">
-      <input class="dl-edit-name" type="text" value="${escapeHtml(t.name)}" placeholder="タスク名" style="width:100%;font-size:14px;font-weight:600;border:none;border-bottom:1.5px solid var(--green);background:transparent;outline:none;padding:2px 0;margin-bottom:5px;">
-      <input class="dl-edit-sub" type="text" value="${escapeHtml(subsText)}" placeholder="やること" style="width:100%;font-size:12px;border:none;border-bottom:1px solid var(--border);background:transparent;outline:none;padding:2px 0;margin-bottom:6px;color:var(--text-s);">
+      <input class="dl-edit-name" type="text" value="${t.name}" placeholder="タスク名" style="width:100%;font-size:14px;font-weight:600;border:none;border-bottom:1.5px solid var(--green);background:transparent;outline:none;padding:2px 0;margin-bottom:5px;">
+      <input class="dl-edit-sub" type="text" value="${subsText}" placeholder="やること" style="width:100%;font-size:12px;border:none;border-bottom:1px solid var(--border);background:transparent;outline:none;padding:2px 0;margin-bottom:6px;color:var(--text-s);">
       <div style="display:flex;align-items:center;gap:6px;margin-bottom:8px;">
         <span style="font-size:11px;color:var(--text-s);flex-shrink:0;">締切</span>
         <input class="dl-edit-dl" type="date" value="${t.deadline||''}" style="flex:1;font-size:12px;border:1px solid var(--border);border-radius:var(--radius-s);padding:4px 8px;background:var(--gray-l);color:var(--text);outline:none;">
@@ -3705,9 +3630,9 @@ function renderDeadlineCalendar() {
           : dlTasks[0].name.slice(0,5);
         const moreCount = dlTasks.length > 1 ? `+${dlTasks.length-1}` : '';
         const title = dlTasks.map(t => t.name + (t.subs&&t.subs.length?' / '+t.subs.join('・'):'')).join('・');
-        html += `<div class="${cls}" title="${escapeHtml(title)}">
+        html += `<div class="${cls}" title="${title}">
           <span class="dl-cal-day-num">${d}</span>
-          <span class="dl-cal-task-name">${escapeHtml(detail)}${moreCount}</span>
+          <span class="dl-cal-task-name">${detail}${moreCount}</span>
         </div>`;
       } else {
         html += `<div class="${cls}"><span class="dl-cal-day-num">${d}</span></div>`;
@@ -3787,31 +3712,13 @@ function openM(id){
   if(id==='modal-add'){
     const btn = document.getElementById('add-pin-btn');
     if(btn) btn.classList.remove('on');
-    const posWrap = document.getElementById('add-pin-pos-wrap');
-    if(posWrap) posWrap.style.display = 'none';
-    setAddPinPos('top'); // 毎回デフォルトは一番上
   }
 }
 function closeM(id){ document.getElementById(id).classList.remove('open'); }
 
-// 追加画面でのピン内位置（'top' or 'bottom'）。デフォルトは 'top'
-let addPinPos = 'top';
-function setAddPinPos(pos){
-  addPinPos = (pos === 'bottom') ? 'bottom' : 'top';
-  const t = document.getElementById('add-pinpos-top');
-  const b = document.getElementById('add-pinpos-bottom');
-  if(t) t.classList.toggle('on', addPinPos === 'top');
-  if(b) b.classList.toggle('on', addPinPos === 'bottom');
-}
-
 function toggleAddPin(){
   const btn = document.getElementById('add-pin-btn');
-  if(!btn) return;
-  btn.classList.toggle('on');
-  const on = btn.classList.contains('on');
-  const posWrap = document.getElementById('add-pin-pos-wrap');
-  if(posWrap) posWrap.style.display = on ? 'flex' : 'none';
-  if(on) setAddPinPos('top'); // ピンを付けたら毎回デフォルトで一番上
+  if(btn) btn.classList.toggle('on');
 }
 function closeBg(id,e){ if(e.target===document.getElementById(id)) closeM(id); }
 
@@ -3878,7 +3785,7 @@ function renderTodayAchieve() {
     footer.style.display = 'none';
   } else {
     list.innerHTML = doneTasks.map(t =>
-      `<div class="achieve-item"><div class="achieve-emoji">🎯</div><div class="achieve-name">${escapeHtml(t.name)}</div><div class="achieve-time">${escapeHtml(t.time||'')}</div></div>`
+      `<div class="achieve-item"><div class="achieve-emoji">🎯</div><div class="achieve-name">${t.name}</div><div class="achieve-time">${t.time||''}</div></div>`
     ).join('');
     footer.textContent = `👏 今日も${doneTasks.length}件対応できました！`;
     footer.style.display = '';
@@ -4454,7 +4361,9 @@ function updateYdayTimeDisp() {
 }
 
 function calcYdaySchoolOt() {
-  ydaySchoolOtMin = calcSchoolOtFrom(ydayStartMin, ydayEndMin, ydayLunch);
+  const workMin = ydayEndMin - ydayStartMin;
+  const lunchOt = ydayLunch==='ng'?45 : ydayLunch==='20'?30 : ydayLunch==='10'?15 : 0;
+  ydaySchoolOtMin = Math.max(0, workMin - FIXED_WORK_MIN + lunchOt);
   const resultEl = document.getElementById('yday-school-ot-result');
   const manualEl = document.getElementById('yday-school-ot-manual');
   const h = Math.floor(ydaySchoolOtMin/60), m = ydaySchoolOtMin%60;
@@ -4927,9 +4836,9 @@ function _parseImportFile(file) {
           <th style="padding:5px 8px;text-align:left;font-size:11px;color:var(--green-d);">締切</th>
         </tr></thead>
         <tbody>${preview.map(t=>`<tr>
-          <td style="padding:4px 8px;border-bottom:1px solid var(--border);font-size:11px;">${escapeHtml(t.name)}</td>
-          <td style="padding:4px 8px;border-bottom:1px solid var(--border);font-size:11px;">${escapeHtml(t.subs.join('・')||'—')}</td>
-          <td style="padding:4px 8px;border-bottom:1px solid var(--border);font-size:11px;">${escapeHtml(t.deadline||'—')}</td>
+          <td style="padding:4px 8px;border-bottom:1px solid var(--border);font-size:11px;">${t.name}</td>
+          <td style="padding:4px 8px;border-bottom:1px solid var(--border);font-size:11px;">${t.subs.join('・')||'—'}</td>
+          <td style="padding:4px 8px;border-bottom:1px solid var(--border);font-size:11px;">${t.deadline||'—'}</td>
         </tr>`).join('')}</tbody>`;
 
       document.getElementById('import-summary-text').textContent = `${importedTasks.length}件のタスクが見つかりました`;
@@ -5077,9 +4986,10 @@ function scheduleAutoRecord() {
 
     const [sh, sm] = startDefault.split(':').map(Number);
     const [eh, em] = endDefault.split(':').map(Number);
-    // デフォルト＝定時なので、昼休み業務がなければ 0 分になる
-    const autoSchoolOt = calcSchoolOtFrom(sh*60+sm, eh*60+em, lunchDefault);
-    const autoTotal    = autoSchoolOt + thDefault;
+    const workMin = (eh*60+em) - (sh*60+sm);
+    const autoSchoolOt = Math.max(0, workMin - FIXED_WORK_MIN);
+    const autoLunchOt  = lunchDefault==='ng'?45 : lunchDefault==='20'?30 : lunchDefault==='10'?15 : 0;
+    const autoTotal    = autoSchoolOt + thDefault + autoLunchOt;
 
     const record = {
       date: td,
@@ -5266,9 +5176,10 @@ function checkYesterdayAutoRecord() {
 
   const [sh, sm] = startDefault.split(':').map(Number);
   const [eh, em] = endDefault.split(':').map(Number);
-  // デフォルト＝定時なので、昼休み業務がなければ 0 分になる
-  const autoSchoolOt = calcSchoolOtFrom(sh*60+sm, eh*60+em, lunchDefault);
-  const autoTotal    = autoSchoolOt + thDefault;
+  const workMin = (eh*60+em) - (sh*60+sm);
+  const autoSchoolOt = Math.max(0, workMin - FIXED_WORK_MIN);
+  const autoLunchOt  = lunchDefault==='ng'?45 : lunchDefault==='20'?30 : lunchDefault==='10'?15 : 0;
+  const autoTotal    = autoSchoolOt + thDefault + autoLunchOt;
 
   const record = {
     date: ydayStr,
@@ -5307,22 +5218,7 @@ const _endParts   = _endDef.split(':').map(Number);
 let startTotalMin = _startParts[0] * 60 + _startParts[1];
 let endTotalMin   = _endParts[0]   * 60 + _endParts[1];
 
-const FIXED_WORK_MIN = 7 * 60 + 45; // 所定勤務時間 7時間45分（公立標準・参考用）
-
-// 設定した「定時」の窓（出勤・退勤）を分で返す
-function getSchedWindow() {
-  const s = (localStorage.getItem('mamoru_work_start') || '08:00').split(':').map(Number);
-  const e = (localStorage.getItem('mamoru_work_end')   || '16:45').split(':').map(Number);
-  return { start: s[0]*60 + s[1], end: e[0]*60 + e[1] };
-}
-// 昼休みに業務をした分（分）
-function lunchWorkMin(v) { return v==='ng'?45 : v==='20'?30 : v==='10'?15 : 0; }
-// 時間外在校等時間＝定時より早く来た分＋定時より遅く帰った分＋昼休み業務分
-// （定時ちょうど・昼休み業務なしなら 0 分になる）
-function calcSchoolOtFrom(actualStart, actualEnd, lunch) {
-  const w = getSchedWindow();
-  return Math.max(0, actualEnd - w.end) + Math.max(0, w.start - actualStart) + lunchWorkMin(lunch);
-}
+const FIXED_WORK_MIN = 7 * 60 + 45; // 所定勤務時間 7時間45分（公立標準）
 
 function timeToDisp(totalMin) {
   const h = Math.floor(totalMin / 60);
@@ -5344,12 +5240,11 @@ function initTodayOtUI() {
     const savedSchoolOt = existing.schoolOt || 0;
     const savedTakehome = existing.takehome || 0;
     const savedLunch = existing.lunch || 'ok';
-    const lunchMin = lunchWorkMin(savedLunch);
-    const w = getSchedWindow();
-    // 出勤は定時どおりと仮定し、退勤時刻を保存済みschoolOtから逆算
-    // schoolOt = (退勤 − 定時退勤) + 昼休み業務 → 退勤 = 定時退勤 + (schoolOt − 昼休み業務)
-    startTotalMin = w.start;
-    endTotalMin   = w.end + Math.max(0, savedSchoolOt - lunchMin);
+    const lunchMin = savedLunch==='ng'?45 : savedLunch==='20'?30 : savedLunch==='10'?15 : 0;
+    const [sh, sm] = startDefault.split(':').map(Number);
+    startTotalMin = sh * 60 + sm;
+    // 退勤時刻 = 勤務開始 + 7h45m + schoolOt - 昼休み業務
+    endTotalMin = startTotalMin + FIXED_WORK_MIN + savedSchoolOt - lunchMin;
     schoolOtMin = savedSchoolOt;
     takehomeMin = savedTakehome > 0 ? savedTakehome : thDefault;
 
@@ -5425,7 +5320,11 @@ function updateTimeDisp() {
 }
 
 function calcSchoolOt() {
-  schoolOtMin = calcSchoolOtFrom(startTotalMin, endTotalMin, currentLunch);
+  const workMin = endTotalMin - startTotalMin;
+  // 昼休みに休憩した時間（業務をしなかった時間）を引く
+  // ng=45分業務→休憩0分 / 20=30分業務→休憩15分 / 10=15分業務→休憩30分 / ok=業務なし→休憩45分
+  const lunchRest = currentLunch==='ng'?0 : currentLunch==='20'?15 : currentLunch==='10'?30 : 45;
+  schoolOtMin = Math.max(0, workMin - FIXED_WORK_MIN - lunchRest);
 
   const resultEl = document.getElementById('school-ot-result');
   const manualEl = document.getElementById('school-ot-manual');
@@ -5544,13 +5443,7 @@ window.addEventListener('popstate', () => {
 // 初期状態を履歴に積む
 history.pushState({ modal: true }, '');
 
-// アクセスキー未設定なら、セットアップ完了までサーバー通信しない（キー無しの通信は全て拒否される）。
-if (localStorage.getItem('mamoru_access_key')) {
-  loadTasks();
-  setTimeout(loadSettingsFromServer, 600);
-} else {
-  document.getElementById('modal-setup').classList.add('open');
-}
+loadTasks();
 setTimeout(renderTodayAchieve, 500);
 setTimeout(initTodayOtUI, 200);
 setTimeout(updateHolidayUI, 100);
@@ -5558,12 +5451,15 @@ setTimeout(checkYesterdayAutoRecord, 1000);
 setTimeout(checkArchiveNotice, 2000);
 setTimeout(updateHideFarUI, 100);
 setTimeout(updatePinPosUI, 100);
+setTimeout(loadSettingsFromServer, 600);
 // ユーザー名を設定画面に反映
 const _userName = localStorage.getItem('mamoru_user_name');
 if (_userName) {
   const subEl = document.getElementById('settings-username-sub');
   if (subEl) subEl.textContent = `ログイン中：${_userName}`;
 }
+// 未セットアップチェック（少し遅らせる）
+setTimeout(checkSetup, 500);
 </script>
 </body>
 </html>
