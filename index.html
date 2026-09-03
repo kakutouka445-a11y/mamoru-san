@@ -1716,16 +1716,20 @@ let API_URL = getApiUrl();
 
 // ── API通信 ──
 async function apiGet(action) {
-  const res = await fetch(`${API_URL}?action=${action}`);
+  const key = localStorage.getItem('mamoru_access_key') || '';
+  const res = await fetch(`${API_URL}?action=${action}&key=${key}`, { redirect: 'follow' });
   return res.json();
 }
 async function apiPost(data) {
+  const key = localStorage.getItem('mamoru_access_key') || '';
   const res = await fetch(API_URL, {
     method: 'POST',
-    body: JSON.stringify(data),
+    redirect: 'follow',
+    body: JSON.stringify({ ...data, key }),
   });
   return res.json();
 }
+
 function showSync(msg, isError=false, showUndo=false) {
   const bar = document.getElementById('sync-bar');
   const textEl = document.getElementById('sync-bar-text');
