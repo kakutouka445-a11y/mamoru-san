@@ -851,6 +851,10 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <input type="date" id="dl-input">
       <div style="display:flex;align-items:center;gap:4px;margin-bottom:6px;">
         <div style="font-size:26px;font-weight:600;color:var(--text-s);flex:1;">やること</div>
+        <div id="add-pin-pos-btns" style="display:none;gap:4px;align-items:center;">
+          <button onclick="setAddPinPos('top')" id="add-pin-top-btn" style="font-size:11px;padding:3px 8px;border-radius:6px;border:1.5px solid var(--border);background:var(--gray-l);color:var(--text-s);cursor:pointer;">一番上</button>
+          <button onclick="setAddPinPos('bottom')" id="add-pin-bottom-btn" style="font-size:11px;padding:3px 8px;border-radius:6px;border:1.5px solid var(--border);background:var(--gray-l);color:var(--text-s);cursor:pointer;">一番下</button>
+        </div>
         <button id="add-pin-btn" class="pin-btn" onclick="toggleAddPin()" title="ピン留め">📌</button>
       </div>
       <textarea id="sub-single" placeholder="例：安全点検" style="width:100%;font-size:22px;border:1.5px solid var(--border);border-radius:var(--radius-s);padding:10px 12px;background:var(--gray-l);color:var(--text);outline:none;resize:none;height:80px;line-height:1.5;margin-bottom:8px;"></textarea>
@@ -3715,14 +3719,41 @@ function openM(id){
   document.getElementById(id).classList.add('open');
   if(id==='modal-add'){
     const btn = document.getElementById('add-pin-btn');
+    const posbtns = document.getElementById('add-pin-pos-btns');
     if(btn) btn.classList.remove('on');
+    if(posbtns) posbtns.style.display = 'none';
   }
 }
 function closeM(id){ document.getElementById(id).classList.remove('open'); }
 
 function toggleAddPin(){
   const btn = document.getElementById('add-pin-btn');
-  if(btn) btn.classList.toggle('on');
+  const posbtns = document.getElementById('add-pin-pos-btns');
+  if(!btn) return;
+  const isOn = btn.classList.toggle('on');
+  if(posbtns){
+    posbtns.style.display = isOn ? 'flex' : 'none';
+    // 現在の設定を反映してハイライト
+    const curPos = localStorage.getItem('mamoru_pin_position') || 'top';
+    updateAddPinPosHighlight(curPos);
+  }
+}
+
+function setAddPinPos(pos){
+  localStorage.setItem('mamoru_pin_position', pos);
+  updateAddPinPosHighlight(pos);
+  // 設定画面のトグルも更新
+  if(typeof updatePinPositionUI === 'function') updatePinPositionUI();
+}
+
+function updateAddPinPosHighlight(pos){
+  const topBtn    = document.getElementById('add-pin-top-btn');
+  const bottomBtn = document.getElementById('add-pin-bottom-btn');
+  if(!topBtn || !bottomBtn) return;
+  const sel = 'background:var(--green);color:#fff;border-color:var(--green);';
+  const def = 'background:var(--gray-l);color:var(--text-s);border-color:var(--border);';
+  topBtn.style.cssText    = topBtn.style.cssText.replace(/background:[^;]+;|color:[^;]+;|border-color:[^;]+;/g,'') + (pos==='top' ? sel : def);
+  bottomBtn.style.cssText = bottomBtn.style.cssText.replace(/background:[^;]+;|color:[^;]+;|border-color:[^;]+;/g,'') + (pos==='bottom' ? sel : def);
 }
 function closeBg(id,e){ if(e.target===document.getElementById(id)) closeM(id); }
 
