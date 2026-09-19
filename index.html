@@ -1157,7 +1157,9 @@ textarea{resize:none;height:56px;line-height:1.5;}
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
     <div class="modal-title">⚙️ 勤務時刻（学校規定の定時）の設定</div>
-    <div style="font-size:12px;color:var(--text-s);margin-bottom:14px;line-height:1.7;">学校が定める始業・終業時刻（定時）を入力します。ここで入れた時刻が<b>時間外勤務の計算の基準</b>になり、毎日「今日のふりかえり」を開いた時にも自動でセットされます。<br>※「自分がいつも出勤する時刻」ではなく、<b>学校規定の定時</b>を入れてください。</div>
+    <div style="font-size:12px;color:var(--text-s);margin-bottom:14px;line-height:1.7;">2種類の時刻を設定します。<br><b>①学校規定の定時</b>＝時間外勤務の計算の基準（学校が定める始業・終業）。<br><b>②いつもの出勤・退勤時刻</b>＝毎日「ふりかえり」を開いた時に自動で入る初期値（あなたが普段そのくらいに出退勤する時刻）。</div>
+
+    <div style="font-size:13px;font-weight:700;color:var(--green-d);margin:4px 0 8px;border-left:4px solid var(--green);padding-left:8px;">① 学校規定の定時（時間外計算の基準）</div>
 
     <div class="field-label">学校規定の始業時刻</div>
     <div style="background:var(--gray-l);border-radius:var(--radius-s);padding:8px 10px;margin-bottom:14px;">
@@ -1171,13 +1173,37 @@ textarea{resize:none;height:56px;line-height:1.5;}
     </div>
 
     <div class="field-label">学校規定の終業時刻（定時）</div>
-    <div style="background:var(--gray-l);border-radius:var(--radius-s);padding:8px 10px;margin-bottom:14px;">
+    <div style="background:var(--gray-l);border-radius:var(--radius-s);padding:8px 10px;margin-bottom:16px;">
       <div style="font-size:24px;font-weight:700;color:var(--amber);text-align:center;margin-bottom:6px;" id="def-end-disp">16:45</div>
       <div style="display:flex;gap:6px;justify-content:center;">
         <button type="button" onclick="adjDefTime('end',-60)" style="flex:1;background:#DBEAFE;border:1px solid #93C5FD;border-radius:20px;font-size:12px;padding:8px 0;color:#1E3A8A;font-weight:700;">－1h</button>
         <button type="button" onclick="adjDefTime('end',60)" style="flex:1;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:20px;font-size:12px;padding:8px 0;color:#991B1B;font-weight:700;">＋1h</button>
         <button type="button" onclick="adjDefTime('end',-5)" style="flex:1;background:#DBEAFE;border:1px solid #93C5FD;border-radius:20px;font-size:12px;padding:8px 0;color:#1E3A8A;font-weight:700;">－5分</button>
         <button type="button" onclick="adjDefTime('end',5)" style="flex:1;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:20px;font-size:12px;padding:8px 0;color:#991B1B;font-weight:700;">＋5分</button>
+      </div>
+    </div>
+
+    <div style="font-size:13px;font-weight:700;color:#1E3A8A;margin:4px 0 8px;border-left:4px solid #2563EB;padding-left:8px;">② いつもの出勤・退勤時刻（毎日の初期値）</div>
+
+    <div class="field-label">いつもの出勤時刻（デフォルト）</div>
+    <div style="background:var(--gray-l);border-radius:var(--radius-s);padding:8px 10px;margin-bottom:14px;">
+      <div style="font-size:24px;font-weight:700;color:var(--text);text-align:center;margin-bottom:6px;" id="def-ustart-disp">08:00</div>
+      <div style="display:flex;gap:6px;justify-content:center;">
+        <button type="button" onclick="adjDefTime('ustart',-60)" style="flex:1;background:#DBEAFE;border:1px solid #93C5FD;border-radius:20px;font-size:12px;padding:8px 0;color:#1E3A8A;font-weight:700;">－1h</button>
+        <button type="button" onclick="adjDefTime('ustart',60)" style="flex:1;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:20px;font-size:12px;padding:8px 0;color:#991B1B;font-weight:700;">＋1h</button>
+        <button type="button" onclick="adjDefTime('ustart',-5)" style="flex:1;background:#DBEAFE;border:1px solid #93C5FD;border-radius:20px;font-size:12px;padding:8px 0;color:#1E3A8A;font-weight:700;">－5分</button>
+        <button type="button" onclick="adjDefTime('ustart',5)" style="flex:1;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:20px;font-size:12px;padding:8px 0;color:#991B1B;font-weight:700;">＋5分</button>
+      </div>
+    </div>
+
+    <div class="field-label">いつもの退勤時刻（デフォルト）</div>
+    <div style="background:var(--gray-l);border-radius:var(--radius-s);padding:8px 10px;margin-bottom:14px;">
+      <div style="font-size:24px;font-weight:700;color:var(--text);text-align:center;margin-bottom:6px;" id="def-uend-disp">16:45</div>
+      <div style="display:flex;gap:6px;justify-content:center;">
+        <button type="button" onclick="adjDefTime('uend',-60)" style="flex:1;background:#DBEAFE;border:1px solid #93C5FD;border-radius:20px;font-size:12px;padding:8px 0;color:#1E3A8A;font-weight:700;">－1h</button>
+        <button type="button" onclick="adjDefTime('uend',60)" style="flex:1;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:20px;font-size:12px;padding:8px 0;color:#991B1B;font-weight:700;">＋1h</button>
+        <button type="button" onclick="adjDefTime('uend',-5)" style="flex:1;background:#DBEAFE;border:1px solid #93C5FD;border-radius:20px;font-size:12px;padding:8px 0;color:#1E3A8A;font-weight:700;">－5分</button>
+        <button type="button" onclick="adjDefTime('uend',5)" style="flex:1;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:20px;font-size:12px;padding:8px 0;color:#991B1B;font-weight:700;">＋5分</button>
       </div>
     </div>
 
@@ -4980,26 +5006,38 @@ const _origSaveDaily = saveDaily;
 // デフォルト勤務時刻設定
 // =============================================
 let defaultLunch = 'ok';
-let defStartMin = 8*60, defEndMin = 16*60+45;
+let defStartMin = 8*60, defEndMin = 16*60+45;      // ①学校規定の定時（時間外計算の基準）
+let defUStartMin = 8*60, defUEndMin = 16*60+45;    // ②いつもの出退勤（毎日の初期値）
 
 function updateDefTimeDisp() {
-  const ds = document.getElementById('def-start-disp'); if (ds) ds.textContent = timeToDisp(defStartMin);
-  const de = document.getElementById('def-end-disp');   if (de) de.textContent = timeToDisp(defEndMin);
+  const set = (id,v)=>{ const el=document.getElementById(id); if(el) el.textContent=timeToDisp(v); };
+  set('def-start-disp',  defStartMin);
+  set('def-end-disp',    defEndMin);
+  set('def-ustart-disp', defUStartMin);
+  set('def-uend-disp',   defUEndMin);
 }
 function adjDefTime(which, delta) {
-  if (which === 'start') defStartMin = Math.max(0, Math.min(23*60+59, defStartMin + delta));
-  else                   defEndMin   = Math.max(0, Math.min(23*60+59, defEndMin + delta));
+  const cl = v => Math.max(0, Math.min(23*60+59, v + delta));
+  if      (which === 'start')  defStartMin  = cl(defStartMin);
+  else if (which === 'end')    defEndMin    = cl(defEndMin);
+  else if (which === 'ustart') defUStartMin = cl(defUStartMin);
+  else if (which === 'uend')   defUEndMin   = cl(defUEndMin);
   updateDefTimeDisp();
 }
 
 function openWorkDefaultModal() {
-  const start = localStorage.getItem('mamoru_work_start') || '08:00';
-  const end   = localStorage.getItem('mamoru_work_end')   || '16:45';
+  const p = s => { const [h,m] = s.split(':').map(Number); return h*60 + m; };
+  // ①学校規定の定時（未設定なら従来のwork値→既定へフォールバック）
+  const schedS = localStorage.getItem('mamoru_sched_start') || localStorage.getItem('mamoru_work_start') || '08:00';
+  const schedE = localStorage.getItem('mamoru_sched_end')   || localStorage.getItem('mamoru_work_end')   || '16:45';
+  // ②いつもの出退勤
+  const usualS = localStorage.getItem('mamoru_work_start') || '08:00';
+  const usualE = localStorage.getItem('mamoru_work_end')   || '16:45';
   const th    = Number(localStorage.getItem('mamoru_takehome_default') || 0);
   const lunch = localStorage.getItem('mamoru_default_lunch') || 'ok';
 
-  const [sh, sm] = start.split(':').map(Number); defStartMin = sh*60 + sm;
-  const [eh, em] = end.split(':').map(Number);   defEndMin   = eh*60 + em;
+  defStartMin  = p(schedS); defEndMin  = p(schedE);
+  defUStartMin = p(usualS); defUEndMin = p(usualE);
   updateDefTimeDisp();
 
   // 持ち帰りデフォルトをステッパーに反映
@@ -5025,12 +5063,14 @@ function selDefaultLunch(t) {
 }
 
 function saveWorkDefault() {
-  const start = timeToDisp(defStartMin);
-  const end   = timeToDisp(defEndMin);
   const thVal = step.dt.h * 60 + step.dt.m;
 
-  localStorage.setItem('mamoru_work_start', start);
-  localStorage.setItem('mamoru_work_end', end);
+  // ①学校規定の定時（時間外計算の基準）
+  localStorage.setItem('mamoru_sched_start', timeToDisp(defStartMin));
+  localStorage.setItem('mamoru_sched_end',   timeToDisp(defEndMin));
+  // ②いつもの出退勤（毎日のふりかえりの初期値）
+  localStorage.setItem('mamoru_work_start',  timeToDisp(defUStartMin));
+  localStorage.setItem('mamoru_work_end',    timeToDisp(defUEndMin));
   localStorage.setItem('mamoru_takehome_default', thVal);
   localStorage.setItem('mamoru_default_lunch', defaultLunch);
 
@@ -5310,8 +5350,9 @@ const FIXED_WORK_MIN = 7 * 60 + 45; // 所定勤務時間 7時間45分（公立�
 
 // 設定した「定時」の窓（出勤・退勤）を分で返す
 function getSchedWindow() {
-  const s = (localStorage.getItem('mamoru_work_start') || '08:00').split(':').map(Number);
-  const e = (localStorage.getItem('mamoru_work_end')   || '16:45').split(':').map(Number);
+  // 時間外計算の基準は①学校規定の定時。未設定なら従来のwork値→既定へフォールバック
+  const s = (localStorage.getItem('mamoru_sched_start') || localStorage.getItem('mamoru_work_start') || '08:00').split(':').map(Number);
+  const e = (localStorage.getItem('mamoru_sched_end')   || localStorage.getItem('mamoru_work_end')   || '16:45').split(':').map(Number);
   return { start: s[0]*60 + s[1], end: e[0]*60 + e[1] };
 }
 // 昼休みに業務をした分（分）
