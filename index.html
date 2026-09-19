@@ -1160,10 +1160,26 @@ textarea{resize:none;height:56px;line-height:1.5;}
     <div style="font-size:12px;color:var(--text-s);margin-bottom:14px;line-height:1.7;">学校が定める始業・終業時刻（定時）を入力します。ここで入れた時刻が<b>時間外勤務の計算の基準</b>になり、毎日「今日のふりかえり」を開いた時にも自動でセットされます。<br>※「自分がいつも出勤する時刻」ではなく、<b>学校規定の定時</b>を入れてください。</div>
 
     <div class="field-label">学校規定の始業時刻</div>
-    <input type="time" id="default-start-input" style="width:100%;font-size:16px;border:1px solid var(--border);border-radius:var(--radius-s);padding:8px 12px;background:var(--gray-l);color:var(--text);outline:none;margin-bottom:14px;">
+    <div style="background:var(--gray-l);border-radius:var(--radius-s);padding:8px 10px;margin-bottom:14px;">
+      <div style="font-size:24px;font-weight:700;color:var(--text);text-align:center;margin-bottom:6px;" id="def-start-disp">08:00</div>
+      <div style="display:flex;gap:6px;justify-content:center;">
+        <button type="button" onclick="adjDefTime('start',-60)" style="flex:1;background:#DBEAFE;border:1px solid #93C5FD;border-radius:20px;font-size:12px;padding:8px 0;color:#1E3A8A;font-weight:700;">－1h</button>
+        <button type="button" onclick="adjDefTime('start',60)" style="flex:1;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:20px;font-size:12px;padding:8px 0;color:#991B1B;font-weight:700;">＋1h</button>
+        <button type="button" onclick="adjDefTime('start',-5)" style="flex:1;background:#DBEAFE;border:1px solid #93C5FD;border-radius:20px;font-size:12px;padding:8px 0;color:#1E3A8A;font-weight:700;">－5分</button>
+        <button type="button" onclick="adjDefTime('start',5)" style="flex:1;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:20px;font-size:12px;padding:8px 0;color:#991B1B;font-weight:700;">＋5分</button>
+      </div>
+    </div>
 
     <div class="field-label">学校規定の終業時刻（定時）</div>
-    <input type="time" id="default-end-input" style="width:100%;font-size:16px;border:1px solid var(--border);border-radius:var(--radius-s);padding:8px 12px;background:var(--gray-l);color:var(--text);outline:none;margin-bottom:14px;">
+    <div style="background:var(--gray-l);border-radius:var(--radius-s);padding:8px 10px;margin-bottom:14px;">
+      <div style="font-size:24px;font-weight:700;color:var(--amber);text-align:center;margin-bottom:6px;" id="def-end-disp">16:45</div>
+      <div style="display:flex;gap:6px;justify-content:center;">
+        <button type="button" onclick="adjDefTime('end',-60)" style="flex:1;background:#DBEAFE;border:1px solid #93C5FD;border-radius:20px;font-size:12px;padding:8px 0;color:#1E3A8A;font-weight:700;">－1h</button>
+        <button type="button" onclick="adjDefTime('end',60)" style="flex:1;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:20px;font-size:12px;padding:8px 0;color:#991B1B;font-weight:700;">＋1h</button>
+        <button type="button" onclick="adjDefTime('end',-5)" style="flex:1;background:#DBEAFE;border:1px solid #93C5FD;border-radius:20px;font-size:12px;padding:8px 0;color:#1E3A8A;font-weight:700;">－5分</button>
+        <button type="button" onclick="adjDefTime('end',5)" style="flex:1;background:#FEE2E2;border:1px solid #FCA5A5;border-radius:20px;font-size:12px;padding:8px 0;color:#991B1B;font-weight:700;">＋5分</button>
+      </div>
+    </div>
 
     <div class="field-label">持ち帰り業務のデフォルト</div>
     <div class="stepper-box" style="margin-bottom:16px;">
@@ -4964,6 +4980,17 @@ const _origSaveDaily = saveDaily;
 // デフォルト勤務時刻設定
 // =============================================
 let defaultLunch = 'ok';
+let defStartMin = 8*60, defEndMin = 16*60+45;
+
+function updateDefTimeDisp() {
+  const ds = document.getElementById('def-start-disp'); if (ds) ds.textContent = timeToDisp(defStartMin);
+  const de = document.getElementById('def-end-disp');   if (de) de.textContent = timeToDisp(defEndMin);
+}
+function adjDefTime(which, delta) {
+  if (which === 'start') defStartMin = Math.max(0, Math.min(23*60+59, defStartMin + delta));
+  else                   defEndMin   = Math.max(0, Math.min(23*60+59, defEndMin + delta));
+  updateDefTimeDisp();
+}
 
 function openWorkDefaultModal() {
   const start = localStorage.getItem('mamoru_work_start') || '08:00';
@@ -4971,8 +4998,9 @@ function openWorkDefaultModal() {
   const th    = Number(localStorage.getItem('mamoru_takehome_default') || 0);
   const lunch = localStorage.getItem('mamoru_default_lunch') || 'ok';
 
-  document.getElementById('default-start-input').value = start;
-  document.getElementById('default-end-input').value   = end;
+  const [sh, sm] = start.split(':').map(Number); defStartMin = sh*60 + sm;
+  const [eh, em] = end.split(':').map(Number);   defEndMin   = eh*60 + em;
+  updateDefTimeDisp();
 
   // 持ち帰りデフォルトをステッパーに反映
   step.dt.h = Math.floor(th / 60);
@@ -4997,8 +5025,8 @@ function selDefaultLunch(t) {
 }
 
 function saveWorkDefault() {
-  const start = document.getElementById('default-start-input').value;
-  const end   = document.getElementById('default-end-input').value;
+  const start = timeToDisp(defStartMin);
+  const end   = timeToDisp(defEndMin);
   const thVal = step.dt.h * 60 + step.dt.m;
 
   localStorage.setItem('mamoru_work_start', start);
