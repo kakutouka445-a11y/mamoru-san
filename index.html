@@ -1059,8 +1059,8 @@ textarea{resize:none;height:56px;line-height:1.5;}
     <button class="settings-item-btn" onclick="closeM('modal-settings');openM('modal-work-default')">
       <i class="ti ti-clock settings-item-icon" style="color:var(--green);"></i>
       <div class="settings-item-text">
-        <div class="settings-item-title">デフォルト勤務時刻の設定</div>
-        <div class="settings-item-sub">勤務開始・退勤・持ち帰り業務のデフォルト値</div>
+        <div class="settings-item-title">勤務時刻（学校規定の定時）の設定</div>
+        <div class="settings-item-sub">学校規定の始業・終業（定時）・持ち帰り業務など</div>
       </div>
       <i class="ti ti-chevron-right settings-item-arrow"></i>
     </button>
@@ -1156,13 +1156,13 @@ textarea{resize:none;height:56px;line-height:1.5;}
 <div class="modal-bg" id="modal-work-default" onclick="closeBg('modal-work-default',event)">
   <div class="modal" onclick="event.stopPropagation()">
     <div class="modal-handle"></div>
-    <div class="modal-title">⚙️ デフォルト勤務時刻の設定</div>
-    <div style="font-size:12px;color:var(--text-s);margin-bottom:14px;line-height:1.7;">毎日の基本時刻を設定しておくと、「今日のふりかえり」を開いた時に自動でセットされます。</div>
+    <div class="modal-title">⚙️ 勤務時刻（学校規定の定時）の設定</div>
+    <div style="font-size:12px;color:var(--text-s);margin-bottom:14px;line-height:1.7;">学校が定める始業・終業時刻（定時）を入力します。ここで入れた時刻が<b>時間外勤務の計算の基準</b>になり、毎日「今日のふりかえり」を開いた時にも自動でセットされます。<br>※「自分がいつも出勤する時刻」ではなく、<b>学校規定の定時</b>を入れてください。</div>
 
-    <div class="field-label">勤務開始時刻</div>
+    <div class="field-label">学校規定の始業時刻</div>
     <input type="time" id="default-start-input" style="width:100%;font-size:16px;border:1px solid var(--border);border-radius:var(--radius-s);padding:8px 12px;background:var(--gray-l);color:var(--text);outline:none;margin-bottom:14px;">
 
-    <div class="field-label">退勤の基本時刻（定時）</div>
+    <div class="field-label">学校規定の終業時刻（定時）</div>
     <input type="time" id="default-end-input" style="width:100%;font-size:16px;border:1px solid var(--border);border-radius:var(--radius-s);padding:8px 12px;background:var(--gray-l);color:var(--text);outline:none;margin-bottom:14px;">
 
     <div class="field-label">持ち帰り業務のデフォルト</div>
@@ -1337,7 +1337,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
       <div>
         <div class="howto-title">設定（右上⚙️ボタン）</div>
         <div class="howto-desc">
-          <b>デフォルト勤務時刻の設定</b>：勤務開始・退勤・持ち帰り業務のデフォルト値を設定できます。<br>
+          <b>勤務時刻（学校規定の定時）の設定</b>：学校規定の始業・終業（定時）・持ち帰り業務などを設定できます。<br>
           <b>Excelに出力</b>：日次記録・月次まとめを.xlsxで保存。管理職報告・相談資料に。<br>
           <b>スプレッドシートで確認</b>：データは自動同期中。記録はGoogleスプレッドシートにも保存されます。
         </div>
@@ -1390,7 +1390,7 @@ textarea{resize:none;height:56px;line-height:1.5;}
         </div>
 
         <div class="howto-desc">
-          <b>自動セット</b>：「ふりかえり」タブを開くと、設定したデフォルト勤務時刻が自動で入ります。今日すでに記録を保存している場合は、その内容が表示されます。<br>
+          <b>自動セット</b>：「ふりかえり」タブを開くと、設定した学校規定の始業・終業（定時）が自動で入ります。今日すでに記録を保存している場合は、その内容が表示されます。<br>
           <b>時刻変更</b>：－1h・＋1h・－10分・＋10分ボタンで調整できます。
         </div>
       </div>
