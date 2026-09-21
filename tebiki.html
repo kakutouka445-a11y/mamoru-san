@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>まもるさん 使い方ガイド</title>
+<style>
+:root{
+  --green:#1D9E75; --green-d:#085041; --green-l:#E1F5EE; --green-b:#9FE1CB;
+  --amber:#BA7517; --amber-l:#FAEEDA; --blue:#2563EB; --blue-l:#DBEAFE;
+  --text:#1F2937; --text-s:#6B7280; --bg:#F6FBF9; --card:#FFFFFF; --border:#E5E7EB;
+}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'Hiragino Sans','Yu Gothic UI',sans-serif;background:var(--bg);color:var(--text);line-height:1.75;-webkit-text-size-adjust:100%;}
+.wrap{max-width:680px;margin:0 auto;padding:0 16px 64px;}
+header{background:var(--green-l);border-bottom:2px solid var(--green-b);padding:22px 16px;text-align:center;}
+header .logo{font-size:30px;font-weight:800;color:var(--green-d);}
+header .sub{font-size:14px;color:var(--green-d);margin-top:4px;font-weight:600;}
+h2{font-size:19px;color:var(--green-d);margin:30px 0 12px;padding-bottom:6px;border-bottom:2px solid var(--green-b);}
+h3{font-size:16px;color:var(--text);margin:16px 0 6px;}
+p{margin:8px 0;font-size:15px;}
+.lead{font-size:15px;color:var(--text-s);margin-top:14px;}
+.card{background:var(--card);border:1px solid var(--border);border-radius:12px;padding:16px 16px;margin:12px 0;box-shadow:0 1px 3px rgba(0,0,0,.04);}
+.step{display:flex;gap:12px;align-items:flex-start;}
+.step .num{flex-shrink:0;width:34px;height:34px;border-radius:50%;background:var(--green);color:#fff;font-weight:800;font-size:17px;display:flex;align-items:center;justify-content:center;}
+.step .body{flex:1;min-width:0;}
+.step .body h3{margin-top:2px;}
+.btn-app{display:block;text-align:center;background:var(--green);color:#fff;font-size:17px;font-weight:700;text-decoration:none;padding:15px;border-radius:12px;margin:16px 0;box-shadow:0 2px 6px rgba(29,158,117,.35);}
+.note{background:var(--amber-l);border-left:4px solid var(--amber);border-radius:0 8px 8px 0;padding:10px 14px;margin:12px 0;font-size:14px;}
+.tip{background:var(--blue-l);border-left:4px solid var(--blue);border-radius:0 8px 8px 0;padding:10px 14px;margin:12px 0;font-size:14px;}
+.tag{display:inline-block;background:var(--green-l);color:var(--green-d);font-size:13px;font-weight:700;border-radius:6px;padding:2px 8px;margin-right:4px;}
+.tab-item{border:1px solid var(--border);border-radius:10px;padding:10px 14px;margin:8px 0;background:var(--card);}
+.tab-item b{color:var(--green-d);}
+.faq{border:1px solid var(--border);border-radius:10px;padding:12px 14px;margin:8px 0;background:var(--card);}
+.faq .q{font-weight:700;color:var(--text);}
+.faq .a{font-size:14px;color:var(--text-s);margin-top:4px;}
+.small{font-size:13px;color:var(--text-s);}
+footer{text-align:center;color:var(--text-s);font-size:12px;margin-top:36px;}
+ul{margin:6px 0 6px 22px;} li{margin:4px 0;font-size:15px;}
+@media print{ body{background:#fff;} .btn-app{display:none;} .card,.faq,.tab-item{box-shadow:none;} }
+</style>
+</head>
+<body>
+<header>
+  <div class="logo">🛡️ まもるさん</div>
+  <div class="sub">はじめての方へ ― 使い方ガイド</div>
+</header>
+<div class="wrap">
+
+  <p class="lead">「まもるさん」は、毎日の仕事や時間外勤務・体調を記録して、自分の働き方を“見える化”するアプリです。<b>スマホでもパソコンでも</b>使えます。まずはこのガイドの3ステップから。</p>
+
+  <a class="btn-app" href="https://kakutouka445-a11y.github.io/mamoru-san/">▶ まもるさんを開く</a>
+
+  <h2>まず使い始める（3ステップ）</h2>
+
+  <div class="card step">
+    <div class="num">1</div>
+    <div class="body">
+      <h3>アプリを開く</h3>
+      <p>管理者から届いた<b>アプリのURL</b>を開きます。毎日使うので、<b>ホーム画面に追加</b>しておくと便利です。</p>
+      <p class="small">iPhone(Safari)：共有ボタン → 「ホーム画面に追加」<br>Android(Chrome)：右上メニュー → 「ホーム画面に追加」</p>
+    </div>
+  </div>
+
+  <div class="card step">
+    <div class="num">2</div>
+    <div class="body">
+      <h3>お名前とアクセスキーを入力</h3>
+      <p>初回だけ「セットアップ画面」が出ます。<b>お名前</b>と、管理者から受け取った<b>アクセスキー</b>（<span class="small">k_ で始まる文字列</span>）を入力して「セットアップ完了」を押します。</p>
+      <div class="note">アクセスキーは<b>あなた専用</b>です。他の人に教えないでください（パスワードと同じ扱い）。あなたのデータはあなただけのものとして保存されます。</div>
+    </div>
+  </div>
+
+  <div class="card step">
+    <div class="num">3</div>
+    <div class="body">
+      <h3>最初に「勤務時刻」を設定</h3>
+      <p>右上の <b>⚙️（歯車）</b> → <b>「勤務時刻（学校規定の定時）の設定」</b>を開き、2種類の時刻を入れます（ボタンで5分ずつ調整）。</p>
+      <ul>
+        <li><span class="tag">①学校規定の定時</span> 学校が定める<b>始業・終業</b>時刻。<b>時間外の計算基準</b>になります（例 8:15〜16:45）。</li>
+        <li><span class="tag">②いつもの出勤・退勤</span> あなたが<b>いつもだいたい出勤・退勤する時刻</b>。毎日「ふりかえり」を開いたときに自動で入る初期値です（例 7:40〜18:00）。</li>
+      </ul>
+      <p>入れたら「保存する」。<b>①どおりに出退勤・昼休み業務なしなら時間外は0分</b>で計算されます。</p>
+    </div>
+  </div>
+
+  <h2>毎日の使い方</h2>
+  <p>画面の下のタブで切り替えます。</p>
+
+  <div class="tab-item"><b>🏠 ホーム</b>：今日のタスク一覧。タスクを<b>タップ</b>すると完了を記録。よく使うものは📌ピンで上に固定。<b>＋追加</b>から新しいタスクやタイマーも。</div>
+  <div class="tab-item"><b>📅 締切</b>：締切のあるタスクをカレンダーと一覧で確認。</div>
+  <div class="tab-item"><b>🌙 ふりかえり</b>：一日の終わりに記録します。<br>・🍱 昼休みに業務したか　・⏱ 勤務開始／退勤時刻（時間外を自動計算）　・🏠 持ち帰り業務　・😄 しんどさ（体・心）・体調メモ<br>→「今日の記録を保存する」。過去の日も「過去の記録を修正する」から入力できます。</div>
+  <div class="tab-item"><b>📊 まとめ</b>：日・週・月のグラフで、自分の時間外勤務を振り返れます。</div>
+
+  <div class="tip"><b>時間外の考え方</b>：時間外在校等時間＝（定時より早く出勤した分）＋（定時より遅く退勤した分）＋（昼休みに業務した分）。①の定時を基準に自動で計算されます。</div>
+
+  <h2>困ったとき</h2>
+
+  <div class="faq">
+    <div class="q">「アクセスキーが正しくありません」と出る</div>
+    <div class="a">キーの前後に余分な空白が入っていないか確認してください（k_ から最後まで正確に）。直らなければ管理者にキーを再確認。</div>
+  </div>
+  <div class="faq">
+    <div class="q">画面が真っ白／古いまま変わらない</div>
+    <div class="a">再読み込みしてください。パソコンは Ctrl+Shift+R、スマホはアプリ（タブ）を一度閉じて開き直します。</div>
+  </div>
+  <div class="faq">
+    <div class="q">データが表示されない</div>
+    <div class="a">入力したキーが「自分用のキー」か確認してください。別の人のキーだと自分のデータは出ません。</div>
+  </div>
+  <div class="faq">
+    <div class="q">時間外が思ったより多い／少ない</div>
+    <div class="a">⚙️設定の「①学校規定の定時」が正しいか確認してください。定時が実際と違うと計算がずれます。</div>
+  </div>
+
+  <h2>安心して使うために</h2>
+  <ul>
+    <li>入力したデータは<b>あなた専用</b>に保存され、他の利用者からは見えません。</li>
+    <li>記録は<b>自分の働き方を守るため</b>のもの。無理せず、続けられる範囲で。</li>
+    <li>困ったら、いつでも管理者に相談してください。</li>
+  </ul>
+
+  <a class="btn-app" href="https://kakutouka445-a11y.github.io/mamoru-san/">▶ まもるさんを開く</a>
+
+  <footer>🛡️ 私のタスク まもるさん ／ 使い方ガイド<br>© 2026 Wadaobachan</footer>
+</div>
+</body>
+</html>
